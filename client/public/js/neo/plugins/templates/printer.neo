@@ -1,0 +1,263 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+        display: none;
+    }
+    
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes opacity-off {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @{{ media }}keyframes opacity-on {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @{{ media }}keyframes loading {
+            0% {
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: rotate(0deg);
+                {$ endeach $}
+            }
+            100% {
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: rotate(360deg);
+                {$ endeach $}
+            }
+        }
+    {$ endeach $}
+
+    :host {
+        inset: 0;
+        width: 100%;
+        display: flex;
+        height: 100dvh;
+        position: fixed;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+        {$ if !@props.expand $}
+            pointer-events: none;
+        {$ endif $}
+        z-index: {{ @Theme.layer() }};
+        background: {{ @Theme.colors("BLACK", 60) }};
+        {$ if @state.init $}
+            opacity: 0;
+        {$ else $}
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}animation: opacity-{{ @state.show ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        {$ endif $}
+    }
+
+    {$ if @state.show $}
+        [part="loader"] {
+            width: 40px;
+            height: 40px;
+            display: block;
+            margin: 2rem auto;
+            position: relative;
+            color: {{ @Theme.colors("PRIME") }};
+        }
+
+        [part="loader"] span {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 50%;
+            position: absolute;
+            box-sizing: border-box;
+            border: 5px solid currentColor;
+            border-color: currentColor transparent transparent transparent;
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            {$ endeach $}
+        }
+
+        [part="loader"] span:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        [part="loader"] span:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        [part="loader"] span:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+    {$ endif $}
+
+    [part="page"] {
+        display: none;
+    }
+</style>
+
+<template name="neo-printer">
+    {$ if @state.show $}
+        <div ref="loader" part="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    {$ endif $}
+    <section ref="page" part="page">
+        <style> body { margin: 0; } #page { width: 100% } @page { size: {{ @props.size }}; margin: {{ @props.margin }}; }</style>
+        <slot ref="printStyles" name="styles" part="styles"></slot>
+        <table id="page">
+            <thead>
+                <tr>
+                    <td>
+                        <div id="header">
+                            <slot ref="printHeader" name="header" part="header"></slot>
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <main id="main">
+                            <slot ref="printTop" name="top" part="top"></slot>
+                            <slot ref="printMain" part="main"></slot>
+                            <slot ref="printBottom" name="bottom" part="bottom"></slot>
+                        </main>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <div id="footer">
+                            <slot ref="printFooter" name="footer" part="footer"></slot>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+</template>
+
+<script>
+    export default {
+        attrs: ["margin", "size"],
+        dense: {
+            globals: [],
+        },
+        props: {
+            margin: "5mm 5mm 5mm 5mm",
+            size: "A4",
+        },
+        state: {
+            show: false,
+            init: true
+        },
+        rules: {
+            print() {
+                const Page = this.rules.createPage();
+                const Frame = this.rules.createFrame();
+
+                this.rules.insertStyles(Page);
+                this.rules.insertContent(Page);
+
+                this.rules.writeContent(Frame, Page);
+                this.rules.execOnLoad(Frame);
+            },
+            createPage() {
+                this.setState({
+                    show: true,
+                    init: false
+                });
+                Neo.Wrapper && Neo.Wrapper.rules.closed();
+
+                const page = (new DOMParser).parseFromString(this.refs.page.innerHTML, "text/html");
+                page.documentElement.dir = document.documentElement.lang === "ar" ? "rtl" : "ltr";
+                page.documentElement.lang = document.documentElement.lang;
+                return page;
+            },
+            createFrame() {
+                const frame = document.createElement("iframe");
+                this.root.appendChild(frame);
+                return frame;
+            },
+            insertStyles(page) {
+                const styles = [page.querySelector("style"), ...this.refs.printStyles.assignedNodes()];
+                
+                this.constructor.globals.forEach(link => {
+                    const style = document.createElement("link");
+                    style.rel = "stylesheet";
+                    style.href = link;
+
+                    page.head.appendChild(style.cloneNode(true));
+                });
+
+                styles.forEach(style => {
+                    if (style instanceof HTMLElement) {
+                        page.head.appendChild(style.cloneNode(true));
+                    }
+                });
+            },
+            insertContent(page) {
+                const sections = [
+                    { id: "top", ref: this.refs.printTop },
+                    { id: "main", ref: this.refs.printMain },
+                    { id: "header", ref: this.refs.printHeader },
+                    { id: "bottom", ref: this.refs.printBottom },
+                    { id: "footer", ref: this.refs.printFooter }
+                ];
+
+                sections.forEach(section => {
+                    const slot = page.querySelector(`[part=${section.id}]`),
+                        elements = section.ref.assignedNodes();
+                    elements.forEach(element => {
+                        if (element instanceof HTMLElement) {
+                            slot.insertAdjacentElement("beforebegin", element.cloneNode(true));
+                        }
+                    });
+                    slot.remove();
+                });
+            },
+            writeContent(frame, page) {
+                const state = frame.contentDocument || frame.contentWindow.document;
+                state.open();
+                state.write(page.documentElement.outerHTML);
+                state.close();
+            },
+            execOnLoad(frame) {
+                frame.onload = () => {
+                    frame.contentWindow.print();
+                    this.state.show = false;
+                    Neo.Wrapper && Neo.Wrapper.rules.opened();
+                    setTimeout(() => {
+                        frame.remove();
+                        this.emit("close");
+                    }, 1000);
+                };
+            }
+        },
+        cycle: {
+            mounted() {
+                this.print = this.rules.print;
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "size,margin": () => {
+                            this.props[name] = next;
+                        }
+                    },
+                    props: {
+                        "size,margin": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        }
+                    },
+                }[type], name);
+            },
+        },
+    }
+</script>

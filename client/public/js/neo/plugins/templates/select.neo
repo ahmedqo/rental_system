@@ -1,0 +1,480 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes opacity-off {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @{{ media }}keyframes slide-off {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes opacity-on {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @{{ media }}keyframes slide-on {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+        }
+    {$ endeach $}
+
+    ::-webkit-search-cancel-button,
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: none;
+        {$ endeach $}
+        display: none;
+    }
+
+    {$ if @state.show $}
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}appearance: none;
+            {$ endeach $}
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            border-radius: 2px; 
+            background: {{ @Theme.colors("GRAY", 300) }};
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: {{ @Theme.colors("GRAY", 400) }};
+        }
+    {$ endif $}  
+    
+    input {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: textfield;
+        {$ endeach $}
+    }
+
+    :host {
+        gap: .5rem;
+        width: auto;
+        max-width: 100%;
+        flex-wrap: wrap;
+        border-width: 1px;
+        position: relative;
+        align-items: center;
+        border-style: solid;
+        display: inline-flex;
+        border-radius: .25rem;
+        padding: .4rem .75rem;
+        {$ if @props.outline $}
+            border-color: {{ @Theme.colors("BLACK") }};
+        {$ else $}
+            background: {{ @Theme.colors("LIGHT") }};
+            border-color: {{ @Theme.colors("SHADE") }};
+        {$ endif $}
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus),
+        :host(:focus-within) {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    [part="wrapper"] {
+        flex: 1;
+        width: 0%;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+    }
+
+    {$ if @truty(@props.label) $}
+        [part="label"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            font-weight: 600;
+            inset: 0 0 auto 0;  
+            position: absolute; 
+            padding: .437rem 0;
+            white-space: nowrap;
+            pointer-events: none;
+            flex-direction: column;
+            text-overflow: ellipsis;
+            justify-content: center;
+            color: {{ @Theme.colors("BLACK", 50) }};
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("SMALL") }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: 200ms ease-in-out padding, 200ms ease-in-out color, 200ms ease-in-out font-size, 200ms ease-in-out line-height;
+            {$ endeach $}
+        }
+
+        {$ if @props.value $}
+            [part="label"] {
+                padding: 0;
+                overflow: visible;
+                color: {{ @Theme.colors("BLACK", 80) }};
+                font-size: {{ @Theme.sizes("XSMALL") }};
+                line-height: {{ @Theme.lines("THIN") }};
+            }
+        {$ endif $}
+    {$ endif $}
+
+     [part="field"] {
+        padding: 0;
+        width: 100%;
+        outline: none;
+        border: unset;
+        display: block;
+        cursor: default;
+        background: transparent;
+        color: {{ @Theme.colors("BLACK") }};
+        font-size: {{ @Theme.sizes("BASE") }};
+        line-height: {{ @Theme.lines("SMALL") }};
+        caret-color: {{ @Theme.colors("PRIME", 400) }};
+        margin: {{ @truty(@props.label) ? ".75rem 0 0 0" : "0" }};
+    }
+
+    [part="icon"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        display: block;
+        pointer-events: none;
+        color: {{ @Theme.colors("BLACK") }};
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus) [part="icon"],
+        :host(:focus-within) [part="icon"] {
+            color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    {$ if @state.show $}
+        [part="modal"] {
+            inset: 0;
+            width: 100%;
+            display: flex;
+            height: 100dvh;
+            position: fixed;
+            align-items: end;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            {$ if !@props.expand $}
+                pointer-events: none;
+            {$ endif $}
+            z-index: {{ @Theme.layer() }};
+            background: {{ @Theme.colors("BLACK", 60) }};
+            {$ if @state.init $}
+                opacity: 0;
+            {$ else $}
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}animation: opacity-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+                {$ endeach $}
+            {$ endif $}
+        }
+
+        [part="content"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            max-height: 90dvh; 
+            border-radius: .25rem;
+            flex-direction: column;
+            background: {{ @Theme.colors("WHITE") }};
+            border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}box-shadow: 0px 8px 8px -8px {{ @Theme.colors("BLACK", 20) }};
+                {{ _media }}animation: slide-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        }
+
+        {$ if @truty(@props.label) || @truty(@props.placeholder) $}
+            [part="content-label"] {
+                width: 100%;
+                display: block;
+                font-weight: 700;
+                text-align: center;
+                padding: .5rem .75rem;
+                color: {{ @Theme.colors("BLACK") }};
+                font-size: {{ @Theme.sizes("SMALL") }};
+                line-height: {{ @Theme.lines("SMALL") }};
+                border-bottom: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            }
+        {$ endif $}
+
+        {$ if @props.search $}
+            [part="tools"] {
+                width: 100%;
+                display: block;
+                padding: .75rem;
+                text-align: center;
+                border-bottom: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            }
+
+            [part="search"] {
+                width: 100%;
+                display: block;
+                padding: .6rem .75rem;
+                color: {{ @Theme.colors("BLACK") }};
+                font-size: {{ @Theme.sizes("BASE") }};
+                line-height: {{ @Theme.lines("BASE") }};
+                border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            }
+
+            [part="search"]:focus,
+            [part="search"]:focus-within {
+                outline-width: 2px;
+                outline-offset: -2px;
+                outline-style: solid;
+                outline-color: {{ @Theme.colors("PRIME", 400) }};
+            }
+        {$ endif $}
+
+        [part="items"] {
+            width: 100%;
+            display: flex;
+            overflow: overlay;
+            flex-direction: column;
+        }
+    {$ endif $}
+
+    {$ if @state.show $}
+        @media (min-width: 1024px) {    
+            [part="modal"] {
+                position: absolute;
+                height: max-content;
+                inset: auto 0 auto 0;
+                background: transparent;
+                {{ @state.pos ? "bottom" : "top" }}: 0;
+            }
+
+            [part="content"] {
+                max-height: 300px;
+            }
+            
+            {$ if @truty(@props.label) || @truty(@props.placeholder) $}
+                [part="content-label"] {
+                    display: none;
+                }
+            {$ endif $}
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-select" ctl="true">
+    <slot name="start"></slot>
+    <div ref="wrapper" part="wrapper">
+        {$ if @truty(@props.label) $}
+            <label ref="label" part="label" for="{{ @state.uid }}">{{ @props.label }}</label>
+        {$ endif $}
+        <input ref="field" part="field" id="{{ @state.uid }}" 
+            value="{{ @when(Array.isArray(@props.text), () => @props.text.join(' | '), @props.text) }}"
+            {$ if @this.name $} name="{{ @this.name }}" {$ endif $}
+            placeholder="{{ @when(@truty(@props.placeholder), @props.placeholder, ' ') }}"
+            {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}
+            readonly
+        />
+    </div>
+    <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+        <path d="M23.6629 27.4121L37.5629 13.5621C38.2962 12.7954 39.1962 12.4121 40.2629 12.4121C41.3296 12.4121 42.2462 12.7788 43.0129 13.5121C43.7462 14.2788 44.1129 15.2038 44.1129 16.2871C44.1129 17.3704 43.7462 18.2788 43.0129 19.0121L28.4629 33.6121C27.7962 34.2788 27.0546 34.7704 26.2379 35.0871C25.4212 35.4038 24.5629 35.5621 23.6629 35.5621C22.7962 35.5621 21.9546 35.4038 21.1379 35.0871C20.3212 34.7704 19.5629 34.2788 18.8629 33.6121L4.31291 19.0121C3.57958 18.2788 3.22125 17.3788 3.23791 16.3121C3.25458 15.2454 3.62958 14.3288 4.36291 13.5621C5.09625 12.8288 6.00458 12.4621 7.08791 12.4621C8.17125 12.4621 9.07958 12.8288 9.81291 13.5621L23.6629 27.4121Z" />
+    </svg>
+    <slot name="end"></slot>
+    {$ if @state.show $}
+        <div ref="modal" part="modal">
+            <div ref="content" part="content" @click:propagation="{{ () => {} }}">
+                {$ if @truty(@props.label) || @truty(@props.placeholder) $}
+                    <label ref="contentLabel" part="content-label">{{ @props.label || @props.placeholder }}</label>
+                {$ endif $}
+                {$ if @props.search $}
+                    <div ref="tools" part="tools">
+                        <input type="search" ref="search" part="search" @input="{{ @rules.search }}" placeholder="{{ @trans('Search') }}" />
+                    </div>
+                {$ endif $}
+                <div ref="items" part="items">
+                    <slot></slot>
+                </div>
+            </div>
+        </div>
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["label", "search", "multiple", "disable", "outline", "placeholder"],
+        props: {
+            text: "",
+            value: "",
+            label: "",
+            expand: false,
+            search: false,
+            outline: false,
+            disable: false,
+            multiple: false,
+            placeholder: "",
+        },
+        state: {
+            uid: "uid_" + Neo.Helper.random(),
+            show: false,
+            pos: false,
+        },
+        rules: {
+            init() {
+                [...this.querySelectorAll(":scope>:not(neo-select-group,neo-select-item,[slot=start],[slot=end])")].map((other) => other.remove());
+                this.paint();
+            },
+            search(event) {
+                const value = new Set(event.target.value.toUpperCase()
+                                .trim().split(/[-_.\\\/\s]/g));
+                this.emit("search", { data: event.target.value }, () => {
+                    clearTimeout(this.state.time);
+                    this.state.time = setTimeout(() => {
+                        [...this.querySelectorAll("neo-select-item")].map(item => {
+                            const phrase_int = item.innerText.toUpperCase().trim(),
+                                phrase_val = item.value.toUpperCase().trim(),
+                                phrase_txt = item.text.toUpperCase().trim(),
+                                score = [];
+                            for (const niddle of value) {
+                                if (phrase_int.includes(niddle) || phrase_txt.includes(niddle) || phrase_val.includes(niddle)) score.push(1);
+                                else score.push(0);
+                            }
+                            if (score.includes(1)) item.style.display = "";
+                            else item.style.display = "none";
+                        });
+                    }, 500);
+                });
+            },
+            toggle(event) {
+                if (this.props.disable) this.props.expand = false;
+                else if (event.type === "click" || event.keyCode === 13) this.props.expand = !this.props.expand;
+            },
+            blur(event) {
+                if (!this.root.contains(event.target) && event.target !== this && this.props.expand) {
+                    this.rules.toggle({ type: "click" });
+                }
+            },
+            pos() {
+                this.state.show && (this.state.pos = window.innerHeight - this.getBoundingClientRect().top < this.refs.modal.clientHeight);
+            },
+        },
+        cycle: {
+            created() { 
+                this.reset = function() {
+                    this.querySelectorAll("neo-select-item").forEach((option) => {
+                        option.active = false;
+                    });
+                    this.ctl.setFormValue(null);
+                    this.setProps({
+                        text: "",
+                        value: "",
+                    });
+                    this.emit("reset");
+                }
+                this.focus = function() { this.refs.field.focus() }
+                this.blur = function() { this.refs.field.blur() }
+            },
+            mounted() {
+                this.state.observer = new MutationObserver((mutationsList, observer) =>{
+                    for(const mutation of mutationsList)
+                        if (mutation.type === 'childList')
+                            this.rules.init();         
+                });
+
+                this.state.observer.observe(this, { childList: true, subtree: true });
+                this.addEventListener("keydown", this.rules.toggle);
+                window.addEventListener("scroll", this.rules.pos);
+                this.addEventListener("click", this.rules.toggle);
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            removed() {
+                this.state.observer.disconnect();
+                this.removeEventListener("keydown", this.rules.toggle);
+                window.removeEventListener("scroll", this.rules.pos);
+                this.removeEventListener("click", this.rules.toggle);
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "label,placeholder": () => {
+                            this.props[name] = next;
+                        },
+                        "outline,disable,search,multiple": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name));
+                        }
+                    },
+                    state: {
+                        "show": () => {
+                            this.focus(), Neo.Wrapper && Neo.Wrapper.rules[next ? "smonly" : "opened"]();
+                            setTimeout(() => {
+                                window[(next ? "add" : "remove") + "EventListener"]("click", this.rules.blur);
+                            }, 0);
+                            this.emit("change:expand", { 
+                                data: next 
+                            });
+                        },
+                    },
+                    props: {
+                        "label,outline,placeholder,search": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "value": () => {
+                            this.emit("change", { data: next });
+                        },
+                        "disable": () => {
+                            next && (this.props.expand = false);
+                            this.emit("change:disable", { data: next });
+                        },
+                        "expand": () => {
+                            next ? (this.state.show = next, this.rules.pos(),
+                            [...this.querySelectorAll("neo-select-item")].map(item => {
+                                item.style.display = "";
+                            })) :
+                            setTimeout(() => {
+                                this.state.show = next;
+                            }, 250);
+                        },
+                        "multiple": () => {
+                            this.emit("change:multiple", { data: next });
+                            this.reset();
+                        },
+                    }
+                }[type], name);
+            },
+        },
+    }
+</script>

@@ -1,0 +1,73 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    ::slotted(*) {
+        padding-inline-start: 1rem; 
+    }
+
+    :host {
+        border-bottom: 1px solid {{ @Theme.colors("BLACK", 20) }};
+    }
+
+    {$ if @truty(@props.label) $}
+        [part="label"] {
+            width: 100%;
+            display: block;
+            font-weight: 700;
+            padding: .25rem .5rem;
+            color: {{ @Theme.colors("BLACK") }};
+            font-size: {{  @Theme.sizes("BASE") }};
+            line-height: {{  @Theme.lines("BASE") }};
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-select-group">
+    {$ if @truty(@props.label) $}
+        <label ref="label" part="label">{{ @props.label }}</label>
+    {$ endif $}
+    <slot></slot>
+</template>
+
+<script>
+    export default {
+        attrs: ["label"],
+        props: {
+            label: "",
+        },
+        cycle: {
+            mounted() {
+                this.state.observer = new MutationObserver((mutationsList, observer) =>{
+                    for(const mutation of mutationsList){
+                        if (mutation.type === 'childList')
+                            [...this.querySelectorAll(":scope>:not(neo-select-item)")]
+                                .map((other) => other.remove());   
+                    }             
+                });
+                this.state.observer.observe(this, { childList: true, subtree: true });
+            },
+            removed() {
+                this.state.observer.disconnect();
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "label": () => {
+                            this.props[name] = next;
+                        }
+                    },
+                    props: {
+                        "label": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        }
+                    }
+                }[type], name);
+            },    
+        }
+    }
+</script>

@@ -1,0 +1,744 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes opacity-off {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @{{ media }}keyframes slide-off {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes opacity-on {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @{{ media }}keyframes slide-on {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+        }
+    {$ endeach $}
+
+    ::-webkit-search-cancel-button,
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: none;
+        {$ endeach $}
+        display: none;
+    }
+
+    {$ if @state.show $}
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}appearance: none;
+            {$ endeach $}
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            border-radius: 2px; 
+            background: {{ @Theme.colors("GRAY", 300) }};
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: {{ @Theme.colors("GRAY", 400) }};
+        }
+    {$ endif $}  
+    
+    input {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: textfield;
+        {$ endeach $}
+    }
+
+    :host {
+        gap: .5rem;
+        width: auto;
+        max-width: 100%;
+        flex-wrap: wrap;
+        border-width: 1px;
+        position: relative;
+        align-items: center;
+        border-style: solid;
+        display: inline-flex;
+        border-radius: .25rem;
+        padding: .4rem .75rem;
+        {$ if @props.outline $}
+            border-color: {{ @Theme.colors("BLACK") }};
+        {$ else $}
+            background: {{ @Theme.colors("LIGHT") }};
+            border-color: {{ @Theme.colors("SHADE") }};
+        {$ endif $}
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus),
+        :host(:focus-within) {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    [part="wrapper"] {
+        flex: 1;
+        width: 0%;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+    }
+
+    {$ if @truty(@props.label) $}
+        [part="label"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            font-weight: 600;
+            inset: 0 0 auto 0;  
+            position: absolute; 
+            padding: .437rem 0;
+            white-space: nowrap;
+            pointer-events: none;
+            flex-direction: column;
+            text-overflow: ellipsis;
+            justify-content: center;
+            color: {{ @Theme.colors("BLACK", 50) }};
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("SMALL") }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: 200ms ease-in-out padding, 200ms ease-in-out color, 200ms ease-in-out font-size, 200ms ease-in-out line-height;
+            {$ endeach $}
+        }
+
+        {$ if @props.value $}
+            [part="label"] {
+                padding: 0;
+                overflow: visible;
+                color: {{ @Theme.colors("BLACK", 80) }};
+                font-size: {{ @Theme.sizes("XSMALL") }};
+                line-height: {{ @Theme.lines("THIN") }};
+            }
+        {$ endif $}
+    {$ endif $}
+
+     [part="field"] {
+        padding: 0;
+        width: 100%;
+        outline: none;
+        border: unset;
+        display: block;
+        cursor: default;
+        background: transparent;
+        color: {{ @Theme.colors("BLACK") }};
+        font-size: {{ @Theme.sizes("BASE") }};
+        line-height: {{ @Theme.lines("SMALL") }};
+        caret-color: {{ @Theme.colors("PRIME", 400) }};
+        margin: {{ @truty(@props.label) ? ".75rem 0 0 0" : "0" }};
+    }
+
+    [part="icon"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        display: block;
+        pointer-events: none;
+        color: {{ @Theme.colors("BLACK") }};
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus) [part="icon"],
+        :host(:focus-within) [part="icon"] {
+            color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    {$ if @state.show $}
+        [part="modal"] {
+            inset: 0;
+            width: 100%;
+            display: flex;
+            height: 100dvh;
+            position: fixed;
+            align-items: end;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            {$ if !@props.expand $}
+                pointer-events: none;
+            {$ endif $}
+            z-index: {{ @Theme.layer() }};
+            background: {{ @Theme.colors("BLACK", 60) }};
+            {$ if @state.init $}
+                opacity: 0;
+            {$ else $}
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}animation: opacity-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+                {$ endeach $}
+            {$ endif $}
+        }
+
+        [part="content"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            max-height: 90dvh; 
+            border-radius: .25rem;
+            flex-direction: column;
+            background: {{ @Theme.colors("WHITE") }};
+            border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}box-shadow: 0px 8px 8px -8px {{ @Theme.colors("BLACK", 20) }};
+                {{ _media }}animation: slide-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        }
+
+        {$ if @truty(@props.label) || @truty(@props.placeholder) $}
+            [part="content-label"] {
+                width: 100%;
+                display: block;
+                font-weight: 700;
+                text-align: center;
+                padding: .5rem .75rem;
+                color: {{ @Theme.colors("BLACK") }};
+                font-size: {{ @Theme.sizes("SMALL") }};
+                line-height: {{ @Theme.lines("SMALL") }};
+                border-bottom: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            }
+        {$ endif $}
+
+        [part="items"] {
+            width: 100%;
+            display: grid;
+            overflow: overlay;
+            align-items: flex-start;
+            grid-template-rows: 1fr;
+            grid-template-columns: repeat({{ @when(@state.view === "date", 7, 3) }}, 1fr);
+        }
+        
+        [part="control"] {
+            top: 0;
+            width: 100%;
+            display: grid;
+            row-gap: .5rem;
+            position: sticky;
+            grid-template-rows: 1fr;
+            grid-column: span {{ @when(@state.view === "date", 7, 3) }} / span {{ @when(@state.view === "date", 7, 3) }};
+            grid-template-columns: repeat(7, 1fr);
+            background: {{ @Theme.colors("PRIME") }};
+            border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+        }
+
+        [part="content-icon"] {
+            width: 1.2rem;
+            height: 1.2rem;
+            pointer-events: none;
+        }
+
+        [part="month-text"],
+        [part="year-text"], 
+        [part="display"] {
+            gap: .25rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            grid-column: span 5 / span 5;
+        }
+
+        [part="month-text"],
+        [part="year-text"],
+        [part="month"], 
+        [part="year"] {
+            border: unset;
+            font-weight: 600;
+            padding: .25rem;
+            background: transparent;
+            text-transform: capitalize;
+            font-size: {{ @Theme.sizes("MEDIUM") }};
+            line-height: {{ @Theme.lines("MEDIUM") }};
+        }
+
+        [part="day"] {
+            width: 100%;
+            font-weight: 600;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: {{ @Theme.sizes("XSMALL") }};
+            line-height: {{ @Theme.lines("XSMALL") }};
+        }
+
+        [part="month-text"],
+        [part="year-text"],
+        [part="trigger"],
+        [part="month"], 
+        [part="year"],
+        [part="day"] {
+            color: {{ @Theme.colors("WHITE") }};
+        }
+
+        [part="date"],
+        [part="trigger"] {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            border: unset;
+            outline: unset;
+            cursor: pointer;
+            padding: .25rem;
+            font-weight: 500;
+            text-align: center;
+            align-self: center;
+            align-items: center;
+            justify-self: center;
+            pointer-events: auto;
+            justify-content: center;
+            background: transparent;
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("BASE") }};
+        }
+
+        [part="year"]:hover,
+        [part="year"]:focus,
+        [part="month"]:hover,
+        [part="month"]:focus,
+        [part="trigger"]:hover,
+        [part="trigger"]:focus,
+        [part="year"]:focus-within,
+        [part="month"]:focus-within,
+        [part="trigger"]:focus-within  {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("BLACK") }};
+        }
+
+        [part="date"]:hover,
+        [part="date"]:focus,
+        [part="date"]:focus-within {
+            background: {{ @Theme.colors("PRIME", 40) }};
+        }
+
+        [current] {
+            color: {{ @Theme.colors("BLACK") }};
+            background: {{ @Theme.colors("PRIME", 20) }};
+        }
+
+        [selected] {
+            color: {{ @Theme.colors("WHITE") }};
+            background: {{ @Theme.colors("PRIME") }};
+        }
+
+        [disabled] {
+            color: transparent;
+            pointer-events: none;
+            background: {{ @Theme.colors("LIGHT") }};
+        }
+    {$ endif $}
+
+
+    {$ if @state.show $}
+        @media (min-width: 1024px) {    
+            [part="modal"] {
+                position: absolute;
+                height: max-content;
+                inset: auto 0 auto 0;
+                background: transparent;
+                {{ @state.pos ? "bottom" : "top" }}: 0;
+            }
+
+            [part="content"] {
+                max-height: 300px;
+            }
+            
+            {$ if @truty(@props.label) || @truty(@props.placeholder) $}
+                [part="content-label"] {
+                    display: none;
+                }
+            {$ endif $}
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-datepicker" ctl="true">
+    <slot name="start"></slot>
+    <div ref="wrapper" part="wrapper">
+        {$ if @truty(@props.label) $}
+            <label ref="label" part="label" for="{{ @state.uid }}">{{ @props.label }}</label>
+        {$ endif $}
+        <input ref="field" part="field" id="{{ @state.uid }}" 
+            value="{{ @when(@truty(@props.value), () => @Str.moment(@props.value, @props.format), '') }}"
+            {$ if @this.name $} name="{{ @this.name }}" {$ endif $}
+            placeholder="{{ @when(@truty(@props.placeholder), @props.placeholder, ' ') }}"
+            {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}
+            readonly
+        />
+    </div>
+    <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+        <path d="M9.49995 45.0996C8.26078 45.0996 7.19265 44.6394 6.29555 43.719C5.39848 42.7986 4.94995 41.7421 4.94995 40.5496V10.4996C4.94995 9.24668 5.39848 8.16678 6.29555 7.25991C7.19265 6.35304 8.26078 5.89961 9.49995 5.89961H12.45V4.79961C12.45 4.28711 12.6546 3.83398 13.0638 3.44021C13.473 3.04648 13.933 2.84961 14.4438 2.84961C15.0154 2.84961 15.4843 3.04648 15.8506 3.44021C16.2168 3.83398 16.4 4.28711 16.4 4.79961V5.89961H31.6V4.79961C31.6 4.28711 31.7929 3.83398 32.1788 3.44021C32.5647 3.04648 33.028 2.84961 33.5688 2.84961C34.1237 2.84961 34.5927 3.04648 34.9756 3.44021C35.3585 3.83398 35.55 4.28711 35.55 4.79961V5.89961H38.5C39.7529 5.89961 40.8328 6.35304 41.7397 7.25991C42.6465 8.16678 43.1 9.24668 43.1 10.4996V40.5496C43.1 41.7421 42.6465 42.7986 41.7397 43.719C40.8328 44.6394 39.7529 45.0996 38.5 45.0996H9.49995ZM9.49995 40.5496H38.5V19.5996H9.49995V40.5496ZM24.0202 28.2496C23.3928 28.2496 22.8575 28.03 22.4145 27.5908C21.9715 27.1515 21.75 26.6232 21.75 26.0058C21.75 25.3883 21.9729 24.8579 22.4189 24.4146C22.8649 23.9713 23.4015 23.7496 24.0289 23.7496C24.6563 23.7496 25.1833 23.9692 25.61 24.4085C26.0366 24.8477 26.25 25.376 26.25 25.9935C26.25 26.6109 26.0352 27.1413 25.6056 27.5846C25.176 28.0279 24.6475 28.2496 24.0202 28.2496ZM16.0061 28.2496C15.3887 28.2496 14.8583 28.03 14.415 27.5908C13.9716 27.1515 13.75 26.6232 13.75 26.0058C13.75 25.3883 13.9696 24.8579 14.4088 24.4146C14.848 23.9713 15.3764 23.7496 15.9938 23.7496C16.6112 23.7496 17.1416 23.9692 17.585 24.4085C18.0283 24.8477 18.25 25.376 18.25 25.9935C18.25 26.6109 18.0303 27.1413 17.5911 27.5846C17.1519 28.0279 16.6235 28.2496 16.0061 28.2496ZM31.971 28.2496C31.3903 28.2496 30.875 28.03 30.425 27.5908C29.975 27.1515 29.75 26.6232 29.75 26.0058C29.75 25.3883 29.9764 24.8579 30.4294 24.4146C30.8823 23.9713 31.4074 23.7496 32.0048 23.7496C32.6022 23.7496 33.1257 23.9692 33.5754 24.4085C34.0251 24.8477 34.25 25.376 34.25 25.9935C34.25 26.6109 34.027 27.1413 33.581 27.5846C33.135 28.0279 32.5984 28.2496 31.971 28.2496ZM24.0202 36.2496C23.3928 36.2496 22.8575 36.0231 22.4145 35.5702C21.9715 35.1173 21.75 34.5922 21.75 33.9948C21.75 33.3974 21.9729 32.8739 22.4189 32.4242C22.8649 31.9745 23.4015 31.7496 24.0289 31.7496C24.6563 31.7496 25.1833 31.9726 25.61 32.4186C26.0366 32.8645 26.25 33.4012 26.25 34.0286C26.25 34.6093 26.0352 35.1246 25.6056 35.5746C25.176 36.0246 24.6475 36.2496 24.0202 36.2496ZM16.0061 36.2496C15.3887 36.2496 14.8583 36.0231 14.415 35.5702C13.9716 35.1173 13.75 34.5922 13.75 33.9948C13.75 33.3974 13.9696 32.8739 14.4088 32.4242C14.848 31.9745 15.3764 31.7496 15.9938 31.7496C16.6112 31.7496 17.1416 31.9726 17.585 32.4186C18.0283 32.8645 18.25 33.4012 18.25 34.0286C18.25 34.6093 18.0303 35.1246 17.5911 35.5746C17.1519 36.0246 16.6235 36.2496 16.0061 36.2496ZM31.971 36.2496C31.3903 36.2496 30.875 36.0231 30.425 35.5702C29.975 35.1173 29.75 34.5922 29.75 33.9948C29.75 33.3974 29.9764 32.8739 30.4294 32.4242C30.8823 31.9745 31.4074 31.7496 32.0048 31.7496C32.6022 31.7496 33.1257 31.9726 33.5754 32.4186C34.0251 32.8645 34.25 33.4012 34.25 34.0286C34.25 34.6093 34.027 35.1246 33.581 35.5746C33.135 36.0246 32.5984 36.2496 31.971 36.2496Z" />
+    </svg>
+    <slot name="end"></slot>
+    {$ if @state.show $}
+        <div ref="modal" part="modal">
+            <div ref="content" part="content" @click:propagation="{{ () => {} }}">
+                {$ if @truty(@props.label) || @truty(@props.placeholder) $}
+                    <label ref="contentLabel" part="content-label">{{ @props.label || @props.placeholder }}</label>
+                {$ endif $}
+                <div ref="items" part="items">
+                    <div ref="control" part="control">
+                        {$ if @state.view === "date" $}
+                            <button aria-label="prev_trigger" ref="trigger_prev" part="trigger" type="button" @click="{{ @rules.prev }}" @keydown:propagation="{{ () => {} }}">
+                                <svg ref="icon_prev" part="content-icon" fill="currentColor" viewBox="0 0 48 48">
+                                    {$ if document.documentElement.lang === "ar" $} 
+                                        <path d="M27 24.45L13.15 10.55C12.3833 9.81667 12 8.91667 12 7.85C12 6.78333 12.3667 5.86667 13.1 5.1C13.8667 4.36667 14.7917 4 15.875 4C16.9583 4 17.8667 4.36667 18.6 5.1L33.2 19.65C33.8667 20.3167 34.3583 21.0583 34.675 21.875C34.9917 22.6917 35.15 23.55 35.15 24.45C35.15 25.3167 34.9917 26.1583 34.675 26.975C34.3583 27.7917 33.8667 28.55 33.2 29.25L18.6 43.8C17.8667 44.5333 16.9667 44.8917 15.9 44.875C14.8333 44.8583 13.9167 44.4833 13.15 43.75C12.4167 43.0167 12.05 42.1083 12.05 41.025C12.05 39.9417 12.4167 39.0333 13.15 38.3L27 24.45Z" />
+                                    {$ else $}    
+                                        <path d="M20.15 24.426L34 38.326C34.7667 39.0593 35.15 39.9593 35.15 41.026C35.15 42.0926 34.7834 43.0093 34.05 43.776C33.2834 44.5093 32.3584 44.876 31.275 44.876C30.1917 44.876 29.2834 44.5093 28.55 43.776L13.95 29.226C13.2834 28.5593 12.7917 27.8176 12.475 27.001C12.1584 26.1843 12 25.326 12 24.426C12 23.5593 12.1584 22.7176 12.475 21.901C12.7917 21.0843 13.2834 20.326 13.95 19.626L28.55 5.07598C29.2834 4.34264 30.1834 3.98431 31.25 4.00098C32.3167 4.01764 33.2334 4.39264 34 5.12598C34.7334 5.85931 35.1 6.76764 35.1 7.85098C35.1 8.93431 34.7334 9.84264 34 10.576L20.15 24.426Z" />
+                                    {$ endif $}
+                                </svg>
+                            </button>
+                            <div ref="display" part="display">
+                                <button aria-label="month" ref="month" part="month" type="button" @keydown:propagation="{{ () => {} }}" @click="{{ () => (@this.state.view = 'month') }}">
+                                    {{ @rules.slice(@trans(@this.constructor.months[@state.info.month]), @props.fullMonth) }}
+                                </button>
+                                <button aria-label="year" ref="year" part="year" type="button" @keydown:propagation="{{ () => {} }}" @click="{{ () => (@this.state.view = 'year') }}">
+                                    {{ @state.info.year }}
+                                </button>
+                            </div>
+                            <button aria-label="next_trigger" ref="trigger_next" part="trigger" type="button" @click="{{ @rules.next }}" @keydown:propagation="{{ () => {} }}">
+                                <svg ref="icon_next" part="content-icon" fill="currentColor" viewBox="0 0 48 48">
+                                    {$ if document.documentElement.lang === "ar" $}    
+                                        <path d="M20.15 24.426L34 38.326C34.7667 39.0593 35.15 39.9593 35.15 41.026C35.15 42.0926 34.7834 43.0093 34.05 43.776C33.2834 44.5093 32.3584 44.876 31.275 44.876C30.1917 44.876 29.2834 44.5093 28.55 43.776L13.95 29.226C13.2834 28.5593 12.7917 27.8176 12.475 27.001C12.1584 26.1843 12 25.326 12 24.426C12 23.5593 12.1584 22.7176 12.475 21.901C12.7917 21.0843 13.2834 20.326 13.95 19.626L28.55 5.07598C29.2834 4.34264 30.1834 3.98431 31.25 4.00098C32.3167 4.01764 33.2334 4.39264 34 5.12598C34.7334 5.85931 35.1 6.76764 35.1 7.85098C35.1 8.93431 34.7334 9.84264 34 10.576L20.15 24.426Z" />
+                                    {$ else $}
+                                        <path d="M27 24.45L13.15 10.55C12.3833 9.81667 12 8.91667 12 7.85C12 6.78333 12.3667 5.86667 13.1 5.1C13.8667 4.36667 14.7917 4 15.875 4C16.9583 4 17.8667 4.36667 18.6 5.1L33.2 19.65C33.8667 20.3167 34.3583 21.0583 34.675 21.875C34.9917 22.6917 35.15 23.55 35.15 24.45C35.15 25.3167 34.9917 26.1583 34.675 26.975C34.3583 27.7917 33.8667 28.55 33.2 29.25L18.6 43.8C17.8667 44.5333 16.9667 44.8917 15.9 44.875C14.8333 44.8583 13.9167 44.4833 13.15 43.75C12.4167 43.0167 12.05 42.1083 12.05 41.025C12.05 39.9417 12.4167 39.0333 13.15 38.3L27 24.45Z" />
+                                    {$ endif $}
+                                </svg>
+                            </button>
+                            {$ each day into @range(0, 7) $}
+                                <div ref="day" part="day">{{ @rules.slice(@trans(@this.constructor.days[day]), @props.fullDay) }}</div>
+                            {$ endeach $}
+                        {$ else $}
+                            <button aria-label="prev_trigger" ref="trigger_prev" part="trigger" type="button" @keydown:propagation="{{ () => {} }}" @click="{{ () => (@this.state.view = 'date') }}">
+                                <svg ref="icon_prev" part="content-icon" fill="currentColor" viewBox="0 0 48 48">
+                                    {$ if document.documentElement.lang === "ar" $} 
+                                        <path d="M30.5496 10L44.5996 24L30.5496 38L25.7996 33.25L31.6496 27.4L3.99961 27.4V20.6L31.6496 20.6L25.7996 14.75L30.5496 10Z" />
+                                    {$ else $}    
+                                        <path d="M18.05 38L4 24L18.05 10L22.8 14.75L16.95 20.6H44.6V27.4H16.95L22.8 33.25L18.05 38Z" />
+                                    {$ endif $}
+                                </svg>
+                            </button>
+                            <div ref="yearText" part="year-text">
+                                {{ @when(@state.view === "year", @state.info.year, @trans(@this.constructor.months[@state.info.month])) }}
+                            </div>
+                        {$ endif $}
+                    </div>
+                    {$ if @state.view === "date" $}
+                        {$ each day into @state.info.array $}
+                            {$ make [text, date, attr] = day $}
+                            <button aria-label="date" ref="date" part="date" type="button" data-value="{{ date }}" @click="{{ @rules.change }}" @keydown:propagation="{{ () => {} }}" {{ @when(attr, attr + "=true", '') }}>
+                                {{ text }}
+                            </button>
+                        {$ endeach $}
+                    {$ else $}
+                        {$ make arr = @state.view === "year" ? @props.yearRange : [0, 11] $}
+                        {$ each value into @range(arr[0], arr[1] + 1) $}
+                            <button aria-label="date" ref="date" part="date" type="button" data-value="{{ value }}" @click="{{ (event) => @rules.update(event, @state.view) }}" @keydown:propagation="{{ () => {} }}"
+                                {$ if @state.info.month === value || @state.info.year === value $}
+                                    selected="true"
+                                {$ endif $}    
+                            >
+                                {{ @state.view === "year" ? value : @trans(@this.constructor.months[value]) }}
+                            </button>
+                        {$ endeach $}
+                    {$ endif $}
+                </div>
+            </div>
+        </div>
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["label", "format", "outline", "disable", "placeholder", "full-day", "full-month", "year-range", "disable-days", "disable-dates"],
+        dense: {
+            months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        },
+        props: {
+            label: "",
+            value: "",
+            format: "yyyy-mm-dd",
+            expand: false,
+            outline: false,
+            disable: false,
+            placeholder: "",
+            fullDay: true,
+            fullMonth: true,
+            yearRange: [1950, 2150],
+            disableDates: false,
+            disableDays: false,
+        },
+        state: {
+            uid: "uid_" + Neo.Helper.random(),
+            show: false,
+            pos: false,
+            view: "date",
+            date: new Date(),
+            info: {
+                array: [],
+                month: 0,
+                year: 0,
+            }
+        },
+        rules: {
+            init() {
+                const date = this.state.date;
+                date.setDate(1);
+
+                var lastDayIndex = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+                var firstDayIndex = date.getDay();
+
+                var lastDaysIndex = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDay();
+                var nextDaysIndex = 7 - lastDaysIndex - 1;
+
+                const DATA = {
+                    month: date.getMonth(),
+                    year: date.getFullYear(),
+                    array: [],
+                };
+
+                for (var i = firstDayIndex; i > 0; i--) {
+                    DATA.array.push(["00", "00-00-0000", "disabled"]);
+                }
+
+                const now = new Date();
+                for (var i = 1; i <= lastDayIndex; i++) {
+                    const current = new Date(this.state.date);
+                    current.setDate(i);
+                    const currarr = ["" + (i < 10 ? "0" + i : i), this.rules.format(current)];
+
+                    if (
+                        (this.props.disableDates && this.props.disableDates.includes(this.rules.format(current))) ||
+                        (this.props.disableDays && this.props.disableDays.includes(current.getDay() + 1))                   
+                    ) {
+                        currarr[2] = "disabled";
+                    } else {
+                        if (i === now.getDate() && this.state.date.getMonth() === now.getMonth() && this.state.date.getFullYear() === now.getFullYear())
+                            currarr[2] = "current";
+
+                        if (this.props.value === this.rules.format(current)) currarr[2] = "selected";
+                    }
+
+                    DATA.array.push(currarr);
+                }
+
+                for (var i = 1; i <= nextDaysIndex; i++) {
+                    DATA.array.push(["00", "00-00-0000", "disabled"]);
+                }
+
+                this.state.info = DATA;
+            },
+            slice(str, len) {
+                return /\d/.test(len) ? str.substring(0, len) : str;
+            },
+            format(date) {
+                var year = date.getFullYear();
+                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                var day = ("0" + date.getDate()).slice(-2);
+                return year + "-" + month + "-" + day;
+            },
+            change(event) {
+                const date = event.target.dataset.value.split("-");
+                this.state.date.setMonth(Number(date[1]) - 1);
+                this.state.date.setFullYear(Number(date[0]));
+                this.state.date.setDate(Number(date[2]));
+                this.setProps({
+                    value: event.target.dataset.value,
+                    expand: false,
+                });
+                this.rules.init();
+            },
+            toggle(event) {
+                if (this.props.disable) this.props.expand = false;
+                else if (event.type === "click" || event.keyCode === 13) this.props.expand = !this.props.expand;
+            },
+            blur(event) {
+                if (!this.root.contains(event.target) && event.target !== this && this.props.expand) {
+                    this.rules.toggle({ type: "click" });
+                }
+            },
+            prev() {
+                const year = this.state.date.getFullYear();
+                this.state.date.setMonth(this.state.date.getMonth() - 1);
+                this.emit((year !== this.state.date.getFullYear() ? "year" : "month") + ":change");
+                this.rules.init();
+            },
+            next() {
+                const year = this.state.date.getFullYear();
+                this.state.date.setMonth(this.state.date.getMonth() + 1);
+                this.emit((year !== this.state.date.getFullYear() ? "year" : "month") + ":change");
+                this.rules.init();
+            },
+            pos() {
+                this.state.show && (this.state.pos = window.innerHeight - this.getBoundingClientRect().top < this.refs.modal.clientHeight);
+            },
+            update(event, view) {
+                if (view === "year") {
+                    this.state.date.setFullYear(event.target.dataset.value);
+                    this.emit("year:change");
+                }
+                if (view === "month") {
+                    this.state.date.setMonth(event.target.dataset.value);
+                    this.emit("month:change");
+                }
+                
+                this.state.view = "date";
+                this.rules.init();
+                this.paint();
+            },
+        },
+        cycle: {
+            created() { 
+                this.reset = function() {
+                    this.props.value = "";
+                    this.state.date = new Date();
+                    this.rules.init();
+                    this.emit("reset");
+                }
+                this.focus = function() { this.refs.field.focus() }
+                this.blur = function() { this.refs.field.blur() }
+            },
+            mounted() {
+                if (this.hasAttribute("value")) {
+                    let value = this.getAttribute("value");
+                    const regex = /#now\s*([+-]?\s*\d+)*/;
+                    const now = new Date();
+                    const match = value.match(regex);
+                    if (match) {
+                        const num = parseInt(match[1]);
+                        value = new Date(now.setDate(now.getDate() + (num || 0)));
+                    }
+                    const date = new Date(value);
+                    if (!isNaN(date) && date.toString() !== "Invalid Date") {
+                        this.state.date.setFullYear(date.getFullYear());
+                        this.state.date.setMonth(date.getMonth());
+                        this.state.date.setDate(date.getDate());
+
+                        this.props.value = this.rules.format(date);
+                    }
+                    this.removeAttribute("value");
+                }
+
+                this.rules.init();
+                this.addEventListener("keydown", this.rules.toggle);
+                window.addEventListener("scroll", this.rules.pos);
+                this.addEventListener("click", this.rules.toggle);
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            removed() {
+                this.removeEventListener("keydown", this.rules.toggle);
+                window.removeEventListener("scroll", this.rules.pos);
+                this.removeEventListener("click", this.rules.toggle);
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "format": () => {
+                            this.props.format = next || "yyyy-mm-dd";
+                        },
+                        "year-range": () => {
+                            var range = (next || "")
+                                .split(",")
+                                .map((e) => +e.trim())
+                                .filter((e) => !Number.isNaN(+e));
+                            this.props.yearRange = range.length === 2 ? range : [1950, 2150];
+                        },
+                        "label,placeholder": () => {
+                            this.props[name] = next;
+                        },
+                        "outline,disable": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name));
+                        },
+                        "full-month,full-day": () => {
+                            this.props[Neo.Helper.Str.snake(name)] = next || true;
+                        },
+                        "disable-dates,disable-days": () => {
+                            var data = (next || "").split(",").map((e) => e.trim()).filter(Boolean);
+                            name === "disable-days" && (data = data.map(e => +e));
+                            this.props[Neo.Helper.Str.snake(name)] = data;
+                        }
+                    },
+                    state: {
+                        "show": () => {
+                            this.focus(), Neo.Wrapper && Neo.Wrapper.rules[next ? "smonly" : "opened"]();
+                            setTimeout(() => {
+                                window[(next ? "add" : "remove") + "EventListener"]("click", this.rules.blur);
+                                !next && (this.state.view = "date");
+                            }, 0);
+                            this.emit("change:expand", { 
+                                data: next 
+                            });
+                        },
+                        "view": () => {
+                            const selected = this.refs.items && this.refs.items.querySelector("[selected]");
+                            selected && this.refs.items.scroll(0, selected.offsetTop - this.refs.items.clientHeight / 2);
+                        }
+                    },
+                    props: {
+                        "label,format,outline,placeholder,fullMonth,fullDay,yearRange,disableDates,disableDays": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "value": () => {
+                            this.ctl.setFormValue(next ? next : null);
+                            this.emit("change", { data: next });
+                        },
+                        "disable": () => {
+                            next && (this.props.expand = false);
+                            this.emit("change:disable", { data: next });
+                        },
+                        "expand": () => {
+                            next ? (this.state.show = next, this.rules.pos()) :
+                            setTimeout(() => {
+                                this.state.show = next;
+                            }, 250);
+                        }
+                    }
+                }[type], name);
+
+                if (["date", "value", "yearRange", "disableDates", "disableDays"].includes(name)) {
+                    this.rules.init();
+                    this.paint();
+                }
+            },
+        },
+    }
+</script>

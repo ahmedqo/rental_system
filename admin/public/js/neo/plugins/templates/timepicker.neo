@@ -1,0 +1,571 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes opacity-off {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @{{ media }}keyframes slide-off {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes opacity-on {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @{{ media }}keyframes slide-on {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+        }
+    {$ endeach $}
+
+    ::-webkit-search-cancel-button,
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: none;
+        {$ endeach $}
+        display: none;
+    }
+
+    {$ if @state.show $}
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}appearance: none;
+            {$ endeach $}
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            border-radius: 2px; 
+            background: {{ @Theme.colors("GRAY", 300) }};
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: {{ @Theme.colors("GRAY", 400) }};
+        }
+    {$ endif $}  
+    
+    input {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: textfield;
+        {$ endeach $}
+    }
+
+    :host {
+        gap: .5rem;
+        width: auto;
+        max-width: 100%;
+        flex-wrap: wrap;
+        border-width: 1px;
+        position: relative;
+        align-items: center;
+        border-style: solid;
+        display: inline-flex;
+        border-radius: .25rem;
+        padding: .4rem .75rem;
+        {$ if @props.outline $}
+            border-color: {{ @Theme.colors("BLACK") }};
+        {$ else $}
+            background: {{ @Theme.colors("LIGHT") }};
+            border-color: {{ @Theme.colors("SHADE") }};
+        {$ endif $}
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus),
+        :host(:focus-within) {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    [part="wrapper"] {
+        flex: 1;
+        width: 0%;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+    }
+
+    {$ if @truty(@props.label) $}
+        [part="label"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            font-weight: 600;
+            inset: 0 0 auto 0;  
+            position: absolute; 
+            padding: .437rem 0;
+            white-space: nowrap;
+            pointer-events: none;
+            flex-direction: column;
+            text-overflow: ellipsis;
+            justify-content: center;
+            color: {{ @Theme.colors("BLACK", 50) }};
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("SMALL") }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: 200ms ease-in-out padding, 200ms ease-in-out color, 200ms ease-in-out font-size, 200ms ease-in-out line-height;
+            {$ endeach $}
+        }
+
+        {$ if @props.value $}
+            [part="label"] {
+                padding: 0;
+                overflow: visible;
+                color: {{ @Theme.colors("BLACK", 80) }};
+                font-size: {{ @Theme.sizes("XSMALL") }};
+                line-height: {{ @Theme.lines("THIN") }};
+            }
+        {$ endif $}
+    {$ endif $}
+
+     [part="field"] {
+        padding: 0;
+        width: 100%;
+        outline: none;
+        border: unset;
+        display: block;
+        cursor: default;
+        background: transparent;
+        color: {{ @Theme.colors("BLACK") }};
+        font-size: {{ @Theme.sizes("BASE") }};
+        line-height: {{ @Theme.lines("SMALL") }};
+        caret-color: {{ @Theme.colors("PRIME", 400) }};
+        margin: {{ @truty(@props.label) ? ".75rem 0 0 0" : "0" }};
+    }
+
+    [part="icon"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        display: block;
+        pointer-events: none;
+        color: {{ @Theme.colors("BLACK") }};
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus) [part="icon"],
+        :host(:focus-within) [part="icon"] {
+            color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    {$ if @state.show $}
+        [part="modal"] {
+            inset: 0;
+            width: 100%;
+            display: flex;
+            height: 100dvh;
+            position: fixed;
+            align-items: end;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            {$ if !@props.expand $}
+                pointer-events: none;
+            {$ endif $}
+            z-index: {{ @Theme.layer() }};
+            background: {{ @Theme.colors("BLACK", 60) }};
+            {$ if @state.init $}
+                opacity: 0;
+            {$ else $}
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}animation: opacity-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+                {$ endeach $}
+            {$ endif $}
+        }
+
+        [part="content"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            max-height: 90dvh; 
+            border-radius: .25rem;
+            flex-direction: column;
+            background: {{ @Theme.colors("WHITE") }};
+            border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}box-shadow: 0px 8px 8px -8px {{ @Theme.colors("BLACK", 20) }};
+                {{ _media }}animation: slide-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        }
+
+        {$ if @truty(@props.label) || @truty(@props.placeholder) $}
+            [part="content-label"] {
+                width: 100%;
+                display: block;
+                font-weight: 700;
+                text-align: center;
+                padding: .5rem .75rem;
+                color: {{ @Theme.colors("BLACK") }};
+                font-size: {{ @Theme.sizes("SMALL") }};
+                line-height: {{ @Theme.lines("SMALL") }};
+                border-bottom: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            }
+        {$ endif $}
+
+        [part="items"] {
+            width: 100%;
+            display: grid;
+            overflow: overlay;
+            align-items: flex-start;
+            grid-template-rows: 1fr;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        [part="hours"],
+        [part="minutes"] {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            overflow: overlay;
+            flex-direction: column;
+        }
+
+        [part="hours"] {
+            border-inline-end-width: 1px;
+            border-inline-end-style: solid;
+            border-inline-end-color: {{ @Theme.colors("BLACK", 20) }};
+        }
+
+        [part="time"] {
+            width: 100%;
+            height: auto;
+            border: unset;
+            outline: unset;
+            cursor: pointer;
+            padding: .25rem;
+            font-weight: 500;
+            text-align: center;
+            align-self: center;
+            justify-self: center;
+            pointer-events: auto;
+            background: transparent;
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("BASE") }};
+        }
+
+        [part="time"]:hover,
+        [part="time"]:focus,
+        [part="time"]:focus-within {
+            background: {{ @Theme.colors("PRIME", 40) }};
+        }
+
+        [current] {
+            color: {{ @Theme.colors("BLACK") }};
+            background: {{ @Theme.colors("PRIME", 20) }};
+        }
+
+        [selected] {
+            color: {{ @Theme.colors("WHITE") }};
+            background: {{ @Theme.colors("PRIME") }};
+        }
+
+        [disabled] {
+            color: transparent;
+            pointer-events: none;
+            background: {{ @Theme.colors("LIGHT") }};
+        }
+    {$ endif $}
+
+
+    {$ if @state.show $}
+        @media (min-width: 1024px) {    
+            [part="modal"] {
+                position: absolute;
+                height: max-content;
+                inset: auto 0 auto 0;
+                background: transparent;
+                {{ @state.pos ? "bottom" : "top" }}: 0;
+            }
+
+            [part="content"] {
+                max-height: 300px;
+            }
+            
+            {$ if @truty(@props.label) || @truty(@props.placeholder) $}
+                [part="content-label"] {
+                    display: none;
+                }
+            {$ endif $}
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-timepicker" ctl="true">
+    <slot name="start"></slot>
+    <div ref="wrapper" part="wrapper">
+        {$ if @truty(@props.label) $}
+            <label ref="label" part="label" for="{{ @state.uid }}">{{ @props.label }}</label>
+        {$ endif $}
+        <input ref="field" part="field" id="{{ @state.uid }}" 
+            value="{{ @when(@truty(@props.value), () => @Str.moment("1990-10-10 " + @props.value, @props.format), '') }}"
+            {$ if @this.name $} name="{{ @this.name }}" {$ endif $}
+            placeholder="{{ @when(@truty(@props.placeholder), @props.placeholder, ' ') }}"
+            {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}
+            readonly
+        />
+    </div>
+    <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+        <path d="M15.95 40.6H32.15V34.75C32.15 32.5167 31.3576 30.6 29.7728 29C28.188 27.4 26.2796 26.6 24.0478 26.6C21.8159 26.6 19.9083 27.4 18.325 29C16.7417 30.6 15.95 32.5167 15.95 34.75V40.6ZM7 45.15V40.6H11.4V34.7674C11.4 32.4649 12 30.3698 13.2 28.4819C14.4 26.594 16.0333 25.1333 18.1 24.1C16.0333 23.0667 14.4 21.6007 13.2 19.7022C12 17.8037 11.4 15.6972 11.4 13.3826V7.6H7V3H41.15V7.6H36.75V13.3826C36.75 15.6972 36.15 17.8037 34.95 19.7022C33.75 21.6007 32.1167 23.0667 30.05 24.1C32.1167 25.1333 33.75 26.594 34.95 28.4819C36.15 30.3698 36.75 32.4649 36.75 34.7674V40.6H41.15V45.15H7Z"/>
+    </svg>
+    <slot name="end"></slot>
+    {$ if @state.show $}
+        <div ref="modal" part="modal">
+            <div ref="content" part="content" @click:propagation="{{ () => {} }}">
+                {$ if @truty(@props.label) || @truty(@props.placeholder) $}
+                    <label ref="contentLabel" part="content-label">{{ @props.label || @props.placeholder }}</label>
+                {$ endif $}
+                <div ref="items" part="items">
+                    <div ref="hours" part="hours">
+                        {$ each hour into @state.info.hours $}
+                            {$ make [text, time, attr] = hour $}
+                            <button aria-label="time" ref="time" part="time" role="hour-button" type="button" @click="{{ @rules.change }}" @keydown:propagation="{{ () => {} }}" data-value="{{ time }}" {{ @when(attr, attr + "=true", '') }}>
+                                {{ text }}
+                            </button>
+                        {$ endeach $}
+                    </div>
+                    <div ref="minutes" part="minutes">
+                        {$ each minute into @state.info.minutes $}
+                            {$ make [text, time, attr] = minute $}
+                            <button aria-label="time" ref="time" part="time" role="minute-button" type="button" @click="{{ @rules.change }}" @keydown:propagation="{{ () => {} }}" data-value="{{ time }}" {{ @when(attr, attr + "=true", '') }}>
+                                {{ text }}
+                            </button>
+                        {$ endeach $}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["label", "format", "outline", "disable", "placeholder", "disable-hours", "disable-minutes"],
+        dense: {
+            zeros: function(nbr, len) {
+                for (var sign = nbr < 0 ? "-" : "", output = Math.abs(nbr).toString(); output.length < len;) output = "0" + output;
+                return sign + output;
+            },    
+        },
+        props: {
+            label: "",
+            value: "",
+            format: "HH:MM",
+            expand: false,
+            outline: false,
+            disable: false,
+            placeholder: "",
+            disableHours: false,
+            disableMinutes: false,
+        },
+        state: {
+            uid: "uid_" + Neo.Helper.random(),
+            show: false,
+            pos: false,
+            date: new Date(),
+            info: {
+                hours: [],
+                minutes: []
+            }
+        },
+        rules: {
+            init() {
+                const times = this.props.value.split(":").filter(Boolean).map(e => +e);
+                const now = new Date();
+
+                for (var i = 0; i < 24; i++) {
+                    this.state.info.hours[i] = [
+                        this.constructor.zeros(String(i), 2), i,
+                    ];
+
+                    if (this.props.disableHours && this.props.disableHours.includes(i))
+                        this.state.info.hours[i][2] = "disabled";
+                    else {
+                        if (now.getHours() === i)
+                            this.state.info.hours[i][2] = "current";
+
+                        if (i === times[0])
+                            this.state.info.hours[i][2] = "selected";
+                    }
+                }
+
+                for (var j = 0; j < 60; j++) {
+                    this.state.info.minutes[j] = [
+                        this.constructor.zeros(String(j), 2), j,
+                    ];
+
+                    if (this.props.disableMinutes && this.props.disableMinutes.includes(j))
+                        this.state.info.minutes[j][2] = "disabled";
+                    else {
+                        if (now.getMinutes() === j)
+                            this.state.info.minutes[j][2] = "today";
+
+                        if (j === times[1])
+                            this.state.info.minutes[j][2] = "selected";
+                    }
+                }
+            },
+            format(date) {
+                var hour = ("0" + (date.getHours())).slice(-2);
+                var minute = ("0" + date.getMinutes()).slice(-2);
+                return hour + ":" + minute;
+            },
+            change(event) {
+                const time = event.target.dataset.value;
+                this.state.date[event.target.role === "hour-button" ? "setHours" : "setMinutes"](time);
+                this.props.value = this.rules.format(this.state.date);
+            },
+            toggle(event) {
+                if (this.props.disable) this.props.expand = false;
+                else if (event.type === "click" || event.keyCode === 13) this.props.expand = !this.props.expand;
+            },
+            blur(event) {
+                if (!this.root.contains(event.target) && event.target !== this && this.props.expand) {
+                    this.rules.toggle({ type: "click" });
+                }
+            },
+            pos() {
+                this.state.show && (this.state.pos = window.innerHeight - this.getBoundingClientRect().top < this.refs.modal.clientHeight);
+            },
+        },
+        cycle: {
+            created() { 
+                this.reset = function() {
+                    this.props.value = "";
+                    this.state.date = new Date();
+                    this.rules.init();
+                    this.emit("reset");
+                }
+                this.focus = function() { this.refs.field.focus() }
+                this.blur = function() { this.refs.field.blur() }
+            },
+            mounted() {
+                if (this.hasAttribute("value")) {
+                    let value = this.getAttribute("value");
+                      const regex = /#now\s*([+-]?)\s*(\d+:\d+)?/;
+                    const now = new Date();
+                    const match = value.match(regex);
+                    if (match) {
+                        const all = (match[2] || "").trim().split(":");
+                        const hor = parseInt(match[1] + (all[0] || "").trim());
+                        const min = parseInt(match[1] + (all[1] || "").trim());
+                        now.setHours(now.getHours() + (hor || 0));
+                        now.setMinutes(now.getMinutes() + (min || 0));
+                        value = now.getHours() + ":" + now.getMinutes();
+                    }
+                    value = value.split(":").filter(Boolean).map(e => +e);
+                    if (value.length === 2) {
+                        this.state.date.setHours(value[0]);
+                        this.state.date.setMinutes(value[1]);
+                        this.props.value = this.rules.format(this.state.date);
+                    }
+                    this.removeAttribute("value");
+                }
+
+                this.rules.init();
+                this.addEventListener("keydown", this.rules.toggle);
+                window.addEventListener("scroll", this.rules.pos);
+                this.addEventListener("click", this.rules.toggle);
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            removed() {
+                this.removeEventListener("keydown", this.rules.toggle);
+                window.removeEventListener("scroll", this.rules.pos);
+                this.removeEventListener("click", this.rules.toggle);
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "format": () => {
+                            this.props.format = next || "h:m";
+                        },
+                        "label,placeholder": () => {
+                            this.props[name] = next;
+                        },
+                        "outline,disable": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name));
+                        },
+                        "disable-hours,disable-minutes": () => {
+                            this.props[Neo.Helper.Str.snake(name)] = (next || "").split(",").map((e) => e.trim()).filter(Boolean).map(e => +e);
+                        }
+                    },
+                    state: {
+                        "show": () => {
+                            this.focus(), Neo.Wrapper && Neo.Wrapper.rules[next ? "smonly" : "opened"]();
+                            setTimeout(() => {
+                                window[(next ? "add" : "remove") + "EventListener"]("click", this.rules.blur);
+                            }, 0);
+                            if (next) {
+                                const selected = this.refs.items.querySelectorAll("[selected]");
+                                selected[0] && this.refs.hours.scroll(0, selected[0].offsetTop - this.refs.hours.clientHeight / 2);
+                                selected[1] && this.refs.minutes.scroll(0, selected[1].offsetTop - this.refs.minutes.clientHeight / 2);
+                            }
+                            this.emit("change:expand", { 
+                                data: next 
+                            });
+                        },
+                    },
+                    props: {
+                        "label,format,outline,placeholder,disableHours,disableMinutes": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "value": () => {
+                            this.ctl.setFormValue(next ? next : null);
+                            this.emit("change", { data: next });
+                        },
+                        "disable": () => {
+                            next && (this.props.expand = false);
+                            this.emit("change:disable", { data: next });
+                        },
+                        "expand": () => {
+                            next ? (this.state.show = next, this.rules.pos()) :
+                            setTimeout(() => {
+                                this.state.show = next;
+                            }, 250);
+                        }
+                    }
+                }[type], name);
+
+                if (["date", "value", "disableHours", "disableMinutes"].includes(name)) {
+                    this.rules.init();
+                    this.paint();
+                }
+            },
+        },
+    }
+</script>

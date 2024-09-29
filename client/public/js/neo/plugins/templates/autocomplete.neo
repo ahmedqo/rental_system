@@ -1,0 +1,427 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes animate-off {
+            0% { 
+                opacity: 1;
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+            100% { 
+                opacity: 0;
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes animate-on {
+            0% { 
+                opacity: 0;
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+            100% { 
+                opacity: 1;
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes rotate {
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: rotate(360deg);
+                {$ endeach $}
+            }
+        }
+    {$ endeach $}
+
+    ::-webkit-search-cancel-button,
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: none;
+        {$ endeach $}
+        display: none;
+    }
+
+    {$ if @state.show $}
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}appearance: none;
+            {$ endeach $}
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            border-radius: 2px; 
+            background: {{ @Theme.colors("GRAY", 300) }};
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: {{ @Theme.colors("GRAY", 400) }};
+        }
+    {$ endif $}  
+    
+    input {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: textfield;
+        {$ endeach $}
+    }
+
+    :host {
+        gap: .5rem;
+        width: auto;
+        max-width: 100%;
+        flex-wrap: wrap;
+        border-width: 1px;
+        position: relative;
+        align-items: center;
+        border-style: solid;
+        display: inline-flex;
+        border-radius: .25rem;
+        padding: .4rem .75rem;
+        {$ if @props.outline $}
+            border-color: {{ @Theme.colors("BLACK") }};
+        {$ else $}
+            background: {{ @Theme.colors("LIGHT") }};
+            border-color: {{ @Theme.colors("SHADE") }};
+        {$ endif $}
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus),
+        :host(:focus-within) {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    [part="wrapper"] {
+        flex: 1;
+        width: 0%;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+    }
+
+    {$ if @truty(@props.label) $}
+        [part="label"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            font-weight: 600;
+            inset: 0 0 auto 0;  
+            position: absolute; 
+            padding: .437rem 0;
+            white-space: nowrap;
+            flex-direction: column;
+            text-overflow: ellipsis;
+            justify-content: center;
+            color: {{ @Theme.colors("BLACK", 50) }};
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("SMALL") }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: 200ms ease-in-out padding, 200ms ease-in-out color, 200ms ease-in-out font-size, 200ms ease-in-out line-height;
+            {$ endeach $}
+        }
+
+        [part="label"]:has(+ [part="field"]:not(:placeholder-shown)),
+        [part="label"]:has(+ [part="field"]:focus) {
+            padding: 0;
+            overflow: visible;
+            color: {{ @Theme.colors("BLACK", 80) }};
+            font-size: {{ @Theme.sizes("XSMALL") }};
+            line-height: {{ @Theme.lines("THIN") }};
+        }
+    {$ endif $}
+
+     [part="field"] {
+        padding: 0;
+        width: 100%;
+        outline: none;
+        border: unset;
+        display: block;
+        background: transparent;
+        color: {{ @Theme.colors("BLACK") }};
+        font-size: {{ @Theme.sizes("BASE") }};
+        line-height: {{ @Theme.lines("SMALL") }};
+        caret-color: {{ @Theme.colors("PRIME", 400) }};
+        margin: {{ @truty(@props.label) ? ".75rem 0 0 0" : "0" }};
+    }
+
+    [part="icon"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        display: block;
+        pointer-events: none;
+        color: {{ @Theme.colors("BLACK") }};
+        {$ if @props.loading $}
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}animation: rotate 200ms ease-in-out infinite;
+            {$ endeach $}
+        {$ endif $}
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus) [part="icon"],
+        :host(:focus-within) [part="icon"] {
+            color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    {$ if @state.show $}
+        [part="content"] {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            display: flex;
+            overflow: auto;
+            list-style: none;
+            max-height: 300px;
+            position: absolute;
+            inset: auto 0 auto 0;
+            border-radius: .25rem;
+            flex-direction: column;
+            {$ if !@state.expand $}
+                pointer-events: none;
+            {$ endif $}
+            z-index: {{ @Theme.layer() }};
+            background: {{ @Theme.colors("WHITE") }};
+            border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            {{ @state.pos ? "bottom" : "top" }}: calc(100% + .25rem);
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}box-shadow: 0px 8px 8px -8px {{ @Theme.colors("BLACK", 20) }};
+                {{ _media }}animation: animate-{{ @state.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        }
+
+        [part="item"] {
+            width: 100%;
+            outline: none;
+            display: block;
+            font-family: inherit;
+            padding: .25rem .5rem;
+            font-size: {{ @Theme.sizes("MEDIUM") }};
+            line-height: {{ @Theme.lines("MEDIUM") }};
+        }
+
+        [part="item"]:hover,
+        [part="item"]:focus,
+        [part="item"]:focus-within {
+            color: {{ @Theme.colors("BLACK") }};
+            background: {{ @Theme.colors("PRIME", 40) }};
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-autocomplete" ctl="true">
+    <slot name="start"></slot>
+    <div ref="wrapper" part="wrapper">
+        {$ if @truty(@props.label) $}
+            <label ref="label" part="label" for="{{ @state.uid }}">{{ @props.label }}</label>
+        {$ endif $}
+        <input ref="field" part="field" id="{{ @state.uid }}" 
+            @keypress="{{ @rules.keypress }}" 
+            @keydown="{{ @rules.keydown }}" 
+            @change="{{ @rules.change }}" 
+            @keyup="{{ @rules.keyup }}" 
+            @input="{{ @rules.input }}" 
+            @focus="{{ @rules.focus }}" 
+            @blur="{{ @rules.blur }}" 
+            value="{{ @props.query }}"
+            type="search" 
+            placeholder="{{ @when(@truty(@props.placeholder), @props.placeholder, ' ') }}"
+            {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}
+        />
+    </div>
+    <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+        {$ if @props.loading $}
+            <path d="M7.90396 31.4377C6.84107 30.306 6.09136 29.1249 5.65481 27.8942C5.21827 26.6636 5 25.3693 5 24.0113C5 20.1638 6.86954 16.8467 10.6086 14.0601C14.3477 11.2735 18.7606 9.88014 23.8472 9.88014H26.2957L22.3668 6.90962L24.9291 5L34.0396 11.7898L24.9291 18.5795L22.3099 16.6699L26.2387 13.7418H24.0181C20.26 13.7418 17.0144 14.7603 14.2813 16.7972C11.5481 18.8341 10.1816 21.2389 10.1816 24.0113C10.1816 24.9166 10.3049 25.7724 10.5517 26.5787C10.7984 27.385 11.1306 28.0994 11.5481 28.7217L7.90396 31.4377ZM23.164 43.15L14.0535 36.3602L23.164 29.4856L25.7263 31.4801L21.7404 34.4082H24.1889C27.909 34.4365 31.1356 33.4321 33.8687 31.3952C36.6019 29.3583 37.9684 26.9253 37.9684 24.0962C37.9684 23.2192 37.8451 22.3776 37.5983 21.5713C37.3516 20.765 37.0004 20.0365 36.5449 19.3858L40.246 16.6699C41.271 17.8864 42.0112 19.1029 42.4667 20.3194C42.9222 21.5359 43.15 22.7948 43.15 24.0962C43.15 27.972 41.2805 31.3174 37.5414 34.1323C33.8023 36.9473 29.4084 38.3406 24.3597 38.3123H21.7404L25.7263 41.2828L23.164 43.15Z"/>
+        {$ else $}
+            <path d="M19.25 38.6V34.05H28.9V38.6H19.25ZM11.1 26.55V22.05H37V26.55H11.1ZM5 14.55V10H43.15V14.55H5Z" />
+        {$ endif $}
+    </svg>
+    <slot name="end"></slot>
+    {$ if @state.show $}
+        <ul ref="content" part="content" @click:propagation="{{ () => {} }}">
+            {$ if Array.isArray(@props.data) $}
+                {$ each result into @props.data $}
+                    <li ref="item" part="item" tabindex="0" @click:propagation="{{ (event) => @rules.select(event, result) }}" @keydown:propagation="{{ (event) => @rules.select(event, result) }}">
+                        {{ @rules.write(result, @props.setQuery) }}
+                    </li>
+                {$ endeach $}
+            {$ endif $}
+        </ul>
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["label","loading", "outline", "disable", "placeholder","set-query", "set-value"],
+        props: {
+            data: [],
+            label: "",
+            query: "",
+            value: "",
+            setQuery: null,
+            setValue: null,
+            loading: false,
+            outline: false,
+            disable: false,
+            placeholder: "",
+        },
+        state: {
+            uid: "uid_" + Neo.Helper.random(),
+            expand: false,
+            show: false,
+            pos: false,
+        },
+        rules: {
+            focus() {
+                this.emit("focus", { value: this.props.value, query: this.props.query });
+            },
+            blur() {
+                this.emit("blur", { value: this.props.value, query: this.props.query });
+            },
+            change() {
+                Neo.Helper.falsy(this.props.value) && (this.props.query = "");
+                this.emit("change", { value: this.props.value, query: this.props.query });
+            },
+            keyup() {
+                this.emit("keyup", { value: this.props.value, query: this.props.query });
+            },
+            keydown() {
+                this.emit("keydown", { value: this.props.value, query: this.props.query });
+            },
+            keypress() {
+                this.emit("keypress", { value: this.props.value, query: this.props.query });
+            },
+            input(event) {
+                this.props.value = "", this.props.query = event.target.value;
+                this.emit("input", { value: this.props.value, query: this.props.query });
+            },
+            select(event, result) {
+                if (event.type === "click" || event.keyCode === 13) {
+                    this.emit("select", { data: result }, () => {
+                        this.setProps({
+                            query: this.rules.write(result, this.props.setQuery),
+                            value: this.rules.write(result, this.props.setValue),
+                        });
+                        this.state.expand = false;
+                    });
+                }
+            },
+            write(obj, str) {
+                return !str ? obj : str.split(".").reduce((obj, key) => obj[key], obj);
+            },
+            hide(event) {
+                if (!this.root.contains(event.target) && event.target !== this && this.state.expand) {
+                    this.state.expand = false;
+                }
+            },
+            pos() {
+                this.state.show && (this.state.pos = window.innerHeight - this.getBoundingClientRect().top < this.refs.content.clientHeight);
+            },
+        },
+        cycle: {
+            created() {
+                this.reset = function() {
+                    this.state.expand = false;
+                    this.setProps({
+                        value: "",
+                        query: "",
+                    });
+                    this.emit("reset");
+                }
+                this.focus = function() { this.refs.field.focus() }
+                this.blur = function() { this.refs.field.blur() }
+            },
+            mounted() {
+                if (this.hasAttribute("value")) {
+                    this.props.value = this.getAttribute("value");
+                    this.removeAttribute("value");
+                }
+
+                if (this.hasAttribute("query")) {
+                    this.props.query = this.getAttribute("query");
+                    this.removeAttribute("query");
+                }
+
+                window.addEventListener("click", this.rules.hide);
+                window.addEventListener("scroll", this.rules.pos);
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            removed() {
+                window.removeEventListener("click", this.rules.hide);
+                window.removeEventListener("scroll", this.rules.pos);
+                this.ctl.form && this.ctl.form.removeEventListener("reset", this.reset.bind(this));
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "label,placeholder,set-query,set-value": () => {
+                            this.props[Neo.Helper.Str.snake(name)] = next;
+                        },
+                        "outline,disable,loading": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name)); 
+                        }
+                    },
+                    state: {
+                        "show": () => {
+                            this.focus();
+                            this.emit("change:expand", { 
+                                data: next 
+                            });
+                        },
+                        "expand": () => {
+                            next ? (this.state.show = next, this.rules.pos()) :
+                            setTimeout(() => {
+                                this.state.show = next;
+                            }, 250);
+                        }
+                    },
+                    props: {
+                        "label,setQuery,setValue,outline,loading,placeholder": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "disable": () => {
+                            next && (this.state.expand = false);
+                            this.emit("change:disable", { data: next });
+                        },
+                        "query": () => {
+                            Neo.Helper.falsy(next) && (this.props.value = "");
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "value": () => {
+                            this.ctl.setFormValue(next ? next : null);
+                        },
+                        "data": () => {
+                            this.state.expand = Array.isArray(next) && Boolean(next.length);
+                        }
+                    }
+                }[type], name);
+            },
+        },
+    }
+</script>

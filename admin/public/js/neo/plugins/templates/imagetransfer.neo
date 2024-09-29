@@ -1,0 +1,325 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    :host {
+        width: 100%;
+        overflow: hidden;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: .25rem;
+        {$ if @props.multiple $}
+            gap: .5rem;
+            display: grid;
+            padding: .75rem;
+            grid-template-rows: 1fr; 
+            grid-template-columns: repeat(2, 1fr); 
+        {$ else $}
+            display: flex;
+            position: relative;
+        {$ endif $}
+        {$ if @props.outline $}
+            border-color: {{ @Theme.colors("BLACK") }};
+        {$ else $}
+            background: {{ @Theme.colors("LIGHT") }};
+            border-color: {{ @Theme.colors("SHADE") }};
+        {$ endif $}
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus),
+        :host(:focus-within) {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+     [part="field"] {
+        padding: 0;
+        display: none;
+    }
+
+    [part="item"],
+    [part="upload"] {
+        width: 100%;
+        border: unset;
+        display: flex;
+        outline: none;
+        padding: .5rem;
+        cursor: pointer;
+        overflow: hidden;
+        aspect-ratio: 1/1;
+        align-items: center;
+        border-radius: .25rem;
+        justify-content: center;
+        {$ if @props.multiple $}
+            background: {{ @Theme.colors("SHADE", @props.outline ? 10 : 30) }};
+        {$ else $}
+            background: transparent;
+        {$ endif $}
+    }
+
+    [part="item"] {
+        padding: 0;
+        position: relative;
+    }
+
+    [part="item"]::before {
+        inset: 0;
+        z-index: 1;
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}transition: background 200ms ease-in-out;
+        {$ endeach $}
+    }
+
+    {$ if !@props.disable $}
+        [part="item"]:hover,
+        [part="item"]:focus,
+        [part="upload"]:hover,
+        [part="upload"]:focus,
+        [part="item"]:focus-within,
+        [part="upload"]:focus-within {
+            background: {{ @Theme.colors("SHADE", @props.outline ? @props.multiple ? 30 : 20 : 60) }};
+        }
+
+        [part="upload"]:hover > [part="icon"],
+        [part="upload"]:focus > [part="icon"],
+        [part="upload"]:focus-within > [part="icon"] {
+            color: {{ @Theme.colors("PRIME") }};
+        }
+
+        [part="item"]:hover::before,
+        [part="item"]:focus::before,
+        [part="item"]:focus-within::before {
+            backdrop-filter: blur(5px);
+            background: {{ @Theme.colors("BLACK", 60) }};
+        }
+
+        [part="item"]:hover > [part="icon"],
+        [part="item"]:focus > [part="icon"],
+        [part="item"]:focus-within > [part="icon"] {
+            opacity: 1;
+        }
+
+        [part="item"]:hover > [part="image"],
+        [part="item"]:focus > [part="image"],
+        [part="item"]:focus-within > [part="image"] {
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transform: scale(1.5);
+            {$ endeach $}
+        }
+    {$ endif $}
+
+    [part="icon"] {
+        width: 40%;
+        height: 40%;
+        display: block;
+        max-width: 6rem;
+        pointer-events: none;
+        color: {{ @Theme.colors("BLACK") }};
+    }
+
+    [part="item"] > [part="icon"] {
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+        opacity: 0;
+        position: absolute;
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}transform: translate(-50%, -50%);
+            {{ _media }}transition: opacity 200ms ease-in-out;
+        {$ endeach $}
+        color: {{ @Theme.colors("WHITE") }};
+    }
+
+    [part="image"] {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: contain;
+        pointer-events: none;
+        object-position: center;
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}transition: transform 200ms ease-in-out;
+        {$ endeach $}
+    }
+
+    {$ if @props.multiple $}
+        @media (min-width: 1024px) {
+            :host {
+                grid-template-columns: repeat(5, 1fr); 
+            }
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-imagetransfer" ctl="true">
+    <input type="file" ref="field" part="field"
+        accept="{{ @rules.accept() }}"  
+        @change="{{ @rules.change }}"
+        {$ if @props.multiple $} multiple="{{ @props.multiple }}" {$ endif $}
+        {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}    
+    />
+    {$ if @props.multiple || (@falsy(@props.value) && @falsy(@props.default)) $}
+        <button aria-label="upload_trigger" ref="upload" part="upload" 
+            @click="{{ () => @rules.click() }}"
+            {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}
+        >
+            <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+                <path d="M9.6 43.75C8.31377 43.75 7.22553 43.2898 6.3353 42.3694C5.4451 41.449 5 40.3925 5 39.2V10.15C5 8.89707 5.4451 7.81717 6.3353 6.9103C7.22553 6.00343 8.31377 5.55 9.6 5.55H28.45V15.65H33.1V20.3H43.2V39.2C43.2 40.3925 42.7427 41.449 41.8281 42.3694C40.9135 43.2898 39.8542 43.75 38.65 43.75H9.6ZM12.25 34.45H36.05L28.9 25L22.6 33.3L17.9 27.1L12.25 34.45ZM35.775 17.65V13.05H31.15V9.625H35.75V5H39.175V9.575H43.8V13.025H39.2V17.65H35.775Z" />
+            </svg>
+        </button>
+    {$ endif $}
+    {$ if @truty(@props.value) $}
+        {$ each file into @state.files.slice().reverse() $}
+            <button aria-label="item" ref="item" part="item"
+                @click="{{ () => @rules.remove(@loop.round) }}"
+                {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}
+            >
+                <img ref="image" part="image" src="{{ file[@props.source] }}" />
+                <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+                    <path d="M12.5 43.05C11.2937 43.05 10.2255 42.6015 9.2953 41.7044C8.3651 40.8073 7.9 39.7392 7.9 38.5V10.9H5V6.35H16.4V4H31.25V6.35H42.65V10.9H39.75V38.5C39.75 39.7392 39.2966 40.8073 38.3897 41.7044C37.4828 42.6015 36.4029 43.05 35.15 43.05H12.5ZM17.7 34.6H21.4V14.7H17.7V34.6ZM26.35 34.6H30.1V14.7H26.35V34.6Z" />
+                </svg>
+            </button>
+        {$ endeach $}
+    {$ endif $}
+    {$ if @props.multiple || (@falsy(@props.value) && @truty(@props.default)) $}
+        {$ each file into @props.default.slice().reverse() $}
+            <button aria-label="item" ref="item" part="item"
+                @click="{{ () => @rules.remove(@loop.round, true) }}"
+                {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}
+            >
+                <img ref="image" part="image" src="{{ file[@props.source] }}" />
+                <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+                    <path d="M12.5 43.05C11.2937 43.05 10.2255 42.6015 9.2953 41.7044C8.3651 40.8073 7.9 39.7392 7.9 38.5V10.9H5V6.35H16.4V4H31.25V6.35H42.65V10.9H39.75V38.5C39.75 39.7392 39.2966 40.8073 38.3897 41.7044C37.4828 42.6015 36.4029 43.05 35.15 43.05H12.5ZM17.7 34.6H21.4V14.7H17.7V34.6ZM26.35 34.6H30.1V14.7H26.35V34.6Z" />
+                </svg>
+            </button>
+        {$ endeach $}
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["accept", "source", "multiple", "disable", "outline"],
+        props: {
+            value: "",
+            accept: "*",
+            source: "src",
+            default: [],
+            disable: false,
+            outline: false,
+            multiple: false,
+        },
+        state: {
+            data: null,
+            files: [],
+        },
+        rules: {
+            change(event) {
+                if (this.props.disable) return;
+                const files = this.props.multiple ? [...event.target.files] : (this.rules.clear(), [event.target.files[0]]);
+                files.forEach((file) => {
+                    this.state.files.push({
+                        [this.props.source]: URL.createObjectURL(file)
+                    });
+                    this.state.data.items.add(file);
+                });
+                this.refs.field.value = "";
+                this.props.value = null;
+                this.props.value = this.props.multiple ? (this.paint(), this.state.data.files.length ? this.state.data.files : "") : this.state.data.files[0];
+            },
+            remove(id, def) {
+                if (!this.props.multiple) return this.rules.click();
+                var idx, file;
+                if (def) {
+                    idx = this.props.default.length - +id;
+                    file = this.props.default[idx];
+                } else {
+                    idx = this.state.files.length - +id;
+                    file = this.state.data.files[idx];
+                }
+
+                this.emit("delete", { data: file }, () => {
+                    if (def) {
+                        this.props.default.splice(idx, 1);
+                    } else {
+                        this.state.files.splice(idx, 1);
+                        this.state.data.items.remove(idx);
+                        if (this.state.data.files.length) this.props.value = this.state.data.files;
+                        else this.props.value = "";
+                    }
+                    this.paint();
+                });
+            },
+            click() {
+                if (this.props.disable) return;
+                this.refs.field.click();
+            },
+            accept() {
+                return this.props.accept.split(",").map(e => e.trim()).filter(Boolean).map(e => "image/" + e).join(", ");
+            },
+            clear() {
+                this.props.value = "";
+                this.state.files = [];
+                this.state.data.clearData();
+            }
+        },
+        cycle: {
+            created() {
+                this.reset = function() {
+                    this.ctl.setFormValue(null);
+                    this.rules.clear();
+                    this.emit("reset");
+                }
+                this.state.data = new DataTransfer();
+                this.focus = function() { this.refs.field.focus() }
+                this.blur = function() { this.refs.field.blur() }
+            },
+            mounted() {
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            removed() {
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "accept,source": () => {
+                            this.props[name] = next;
+                        },
+                        "multiple,outline,disable": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name)); 
+                        }
+                    },
+                    props: {
+                        "accept,source,outline,disable": () => {
+                            this.emit("change:" + name, { data: next });
+                        },
+                        "multiple": () => {
+                            this.rules.clear();
+                            this.emit("change:" + name, { data: next });
+                        },
+                        "value": () => {
+                            if (Neo.Helper.falsy(next)) this.ctl.setFormValue(null);
+                            else {
+                                const data = new FormData();
+                                [...(this.props.multiple ? next : [next])].forEach((file) => {
+                                    data.append(this.name, file);
+                                });
+                                this.ctl.setFormValue(data);
+                            }
+                            this.emit("change", { data: next });
+                        }
+                    }
+                }[type], name);
+            }
+        }
+    }
+</script>

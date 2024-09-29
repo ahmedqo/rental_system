@@ -1,0 +1,97 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    :host {
+        width: 100%;
+        display: block;
+        {$ if !@props.transparent $}
+            background: {{ @Theme.colors("PRIME") }};
+        {$ endif $}
+        {$ if @props.stick $}
+            top: 0;
+            position: fixed;
+            z-index: {{ @Theme.layer() }};
+        {$ endif $}
+    }
+
+    [part="content"] {
+        gap: 1rem;
+        width: 100%;
+        display: flex;
+        margin: 0 auto;
+        align-items: center;
+        padding: .75rem 1rem;
+        justify-content: {{ @props.align }};
+    }
+
+    @media (min-width: 640px) {
+        [part="content"] {
+            max-width: 640px;
+        }
+    }
+
+    @media (min-width: 768px) {
+        [part="content"] {
+            max-width: 768px;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        [part="content"] {
+            max-width: 1024px;
+        }
+    }
+
+    @media (min-width: 1280px) {
+        [part="content"] {
+            max-width: 1280px;
+        }
+    }
+
+    @media (min-width: 1536px) {
+        [part="content"] {
+            max-width: 1536px;
+        }
+    }
+</style>
+
+<template name="neo-topbar">
+    <header ref="content" part="content">
+        <slot></slot>
+    </header>
+</template>
+
+<script>
+    export default {
+        attrs: ["stick", "align", "transparent"],
+        props: {
+            stick: false,
+            align: "center",
+            transparent: false,
+        },
+        cycle: {
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "align": () => {
+                            this.props.align = next
+                        },
+                        "stick,transparent": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name));
+                        }
+                    },
+                    props: {
+                        "align,stick,transparent": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        }
+                    }
+                }[type], name);
+            },
+        },
+    }
+</script>

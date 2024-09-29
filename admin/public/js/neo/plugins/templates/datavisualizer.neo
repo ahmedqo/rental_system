@@ -1,0 +1,1017 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    ::-webkit-scrollbar {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: none;
+        {$ endeach $}
+        background: transparent;
+        height: 5px;
+        width: 5px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        border-radius: 2px; 
+        background: {{ @Theme.colors("GRAY", 300) }};
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: {{ @Theme.colors("GRAY", 400) }};
+    }
+
+    ::-webkit-search-cancel-button,
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: none;
+        {$ endeach $}
+        display: none;
+    }
+    
+    input {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: textfield;
+        {$ endeach $}
+    }
+
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes opacity-off {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @{{ media }}keyframes slide-off {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes opacity-on {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @{{ media }}keyframes slide-on {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes loading {
+            0% {
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: rotate(0deg);
+                {$ endeach $}
+            }
+            100% {
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: rotate(360deg);
+                {$ endeach $}
+            }
+        }
+    {$ endeach $}
+
+    :host {
+        width: 100%;
+        display: block;
+    }
+
+    {$ if @truty(@props.title) || @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
+        [part="topbar"] {
+            gap: .5rem;
+            width: 100%;
+            display: flex;
+            margin-bottom: .5rem;
+            flex-direction: column;
+        }
+    {$ endif $}
+
+    {$ if @truty(@props.title) $}
+        [part="title"] {
+            margin: 0 auto;
+            font-weight: 700;
+            font-size: {{ @Theme.sizes("LARGE") }};
+            line-height: {{ @Theme.lines("LARGE") }};
+        }
+    {$ endif $}
+
+    {$ if @props.search $}
+        {$ if @state.search $}
+            [part="topbar"] {
+                gap: .75rem;
+                margin-bottom: 1rem;
+            }
+        {$ endif $}
+
+        [part="search-wrapper"] {
+            order: 2;
+            gap: .5rem;
+            width: 100%;
+            flex-wrap: wrap;
+            border-width: 1px;
+            align-items: center;
+            border-style: solid;
+            display: inline-flex;
+            border-radius: .25rem;
+            padding: .4rem .75rem;
+            {$ if @props.outline $}
+                border-color: {{ @Theme.colors("BLACK") }};
+            {$ else $}
+                background: {{ @Theme.colors("LIGHT") }};
+                border-color: {{ @Theme.colors("SHADE") }};
+            {$ endif $}
+        }
+
+        [part="search-wrapper"]:focus,
+        [part="search-wrapper"]:focus-within {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+
+        [part="search-group"] {
+            flex: 1;
+            width: 0%;
+            display: flex;
+            position: relative;
+            flex-direction: column;
+        }
+
+        [part="search-label"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            font-weight: 600;
+            inset: 0 0 auto 0;  
+            position: absolute; 
+            padding: .437rem 0;
+            white-space: nowrap;
+            flex-direction: column;
+            text-overflow: ellipsis;
+            justify-content: center;
+            color: {{ @Theme.colors("BLACK", 50) }};
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("SMALL") }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: 200ms ease-in-out padding, 200ms ease-in-out color, 200ms ease-in-out font-size, 200ms ease-in-out line-height; 
+            {$ endeach $}
+        }
+
+        [part="search-label"]:has(+ [part="search"]:not(:placeholder-shown)),
+        [part="search-label"]:has(+ [part="search"]:focus) {
+            padding: 0;
+            overflow: visible;
+            color: {{ @Theme.colors("BLACK", 80) }};
+            font-size: {{ @Theme.sizes("XSMALL") }};
+            line-height: {{ @Theme.lines("THIN") }};
+        }
+
+        [part="search"] {
+            width: 100%;
+            outline: none;
+            border: unset;
+            display: block;
+            margin: .75rem 0 0 0;
+            background: transparent;
+            color: {{ @Theme.colors("BLACK") }};
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("SMALL") }};
+            caret-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+
+        [part="search-icon"] {
+            width: 1.2rem;
+            height: 1.2rem;
+            display: block;
+            pointer-events: none;
+            color: {{ @Theme.colors("BLACK") }};
+        }
+
+        [part="search-wrapper"]:focus [part="search-icon"],
+        [part="search-wrapper"]:focus-within [part="search-icon"] {
+            color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    {$ if @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
+        [part="tools"] {
+            gap: .5rem;
+            display: flex;
+            margin: 0 auto;
+            max-width: 100%;
+            flex-wrap: wrap;
+            width: max-content;
+            align-items: center;
+            justify-content: center;
+        }
+
+        [part="btn"] {
+            padding: 0;
+            width: 2rem;
+            height: 2rem;
+            outline: none;
+            border: unset;
+            display: flex;
+            cursor: pointer;
+            position: relative;
+            isolation: isolate;
+            align-items: center;
+            border-radius: .25rem;
+            background: transparent;
+            justify-content: center;
+        }
+
+        [part="btn"]:hover,
+        [part="btn"]:focus,
+        [part="btn"]:focus-within {
+            background: {{ @Theme.colors("BLACK", 5) }};
+        }
+
+        [part="icon"] {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: block;
+            pointer-events: none;
+            color: {{ @Theme.colors("BLACK") }};
+        }
+    {$ endif $}            
+    
+    {$ if @state.search $}
+        [part="btn"][search] [part="icon"] {
+            color: {{ @Theme.colors("PRIME") }};
+        }
+    {$ endif $}
+
+    {$ if @props.filter $}
+        [part="filter"] {
+            display: flex;
+            width: max-content;
+        }
+
+        {$ if @state.show $}
+            [part="filter-modal"] {
+                inset: 0;
+                width: 100%;
+                display: flex;
+                height: 100dvh;
+                position: fixed;
+                align-items: end;
+                justify-content: center;
+                backdrop-filter: blur(5px);
+                {$ if !@state.expand $}
+                    pointer-events: none;
+                {$ endif $}
+                z-index: {{ @Theme.layer() }};
+                background: {{ @Theme.colors("BLACK", 60) }};
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}animation: opacity-{{ @state.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+                {$ endeach $}
+            }
+
+            [part="filter-content"] {
+                width: 100%;
+                outline: none;
+                display: flex;
+                overflow: hidden;
+                max-height: 90dvh; 
+                border-radius: .25rem;
+                flex-direction: column;
+                background: {{ @Theme.colors("WHITE") }};
+                border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}box-shadow: 0px 8px 8px -8px {{ @Theme.colors("BLACK", 20) }};
+                    {{ _media }}animation: slide-{{ @state.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+                {$ endeach $}
+            }
+
+            [part="filter-label"] {
+                width: 100%;
+                display: block;
+                font-weight: 700;
+                text-align: center;
+                padding: .5rem .75rem;
+                color: {{ @Theme.colors("BLACK") }};
+                font-size: {{ @Theme.sizes("SMALL") }};
+                line-height: {{ @Theme.lines("SMALL") }};
+                border-bottom: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            }
+
+            [part="filter-items"] {
+                flex: 1;
+                margin: 0;
+                width: 100%;
+                display: flex;
+                padding: .5rem;
+                list-style: none;
+                overflow: overlay;
+                flex-direction: column; 
+            }
+
+            [part="filter-item-label"] {
+                gap: .5rem;
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            [part="checkbox"] {
+                width: 1.2rem;
+                height: 1.2rem;
+                display: block;
+                border-width: 1px;
+                border-style: solid;
+                border-radius: .25rem; 
+                accent-color: {{ @Theme.colors("PRIME") }};
+                border-color: {{ @Theme.colors("BLACK") }};
+            }
+
+            [part="checkbox"]:focus,
+            [part="checkbox"]:focus-within {
+                display: block;
+                outline-width: 2px;
+                outline-offset: 1px;
+                outline-style: solid;
+                outline-color: {{ @Theme.colors("PRIME") }};
+            }
+
+            [part="filter-text"] {
+                font-weight: 700;
+                color: {{ @Theme.colors("BLACK") }};
+                font-size: {{ @Theme.sizes("BASE") }};
+                line-height: {{ @Theme.lines("BASE") }};
+            }
+        {$ endif $}
+    {$ endif $}
+
+    {$ if @props.print $}
+        [part="print-modal"] {
+            inset: 0;
+            display: flex;
+            height: 100dvh;
+            position: fixed;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            z-index: {{ @Theme.layer() }};
+            background: {{ @Theme.colors("BLACK", 60) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}animation: opacity-{{ @state.seen ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        }
+    {$ endif $}
+
+    {$ if @props.loading || @state.seen $}
+        [part="loader"] {
+            width: 40px;
+            height: 40px;
+            display: block;
+            margin: 2rem auto;
+            position: relative;
+            color: {{ @Theme.colors("PRIME") }};
+        }
+
+        [part="loader"] span {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 50%;
+            position: absolute;
+            box-sizing: border-box;
+            border: 5px solid currentColor;
+            animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: currentColor transparent transparent transparent;
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            {$ endeach $}
+        }
+
+        [part="loader"] span:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        [part="loader"] span:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        [part="loader"] span:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+    {$ endif $}
+
+    [part="wrapper"] {
+        width: 100%;
+        overflow-x: auto;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: .25rem; 
+        {$ if @props.outline $}
+            border-color: {{ @Theme.colors("BLACK") }};
+        {$ else $}
+            background: {{ @Theme.colors("WHITE") }};
+            border-color: {{ @Theme.colors("SHADE") }};
+        {$ endif $}
+    }
+
+    [part="table"] {
+        min-width: 100%;
+        width: max-content;
+        border-collapse: collapse;
+    }
+
+    [part="table-head-col"] {
+        font-weight: 700;
+        padding: .5rem 1rem;
+        color: {{ @Theme.colors("BLACK") }};
+        font-size: {{ @Theme.sizes("SMALL") }};
+        line-height: {{ @Theme.lines("SMALL") }};
+        {$ if !@props.outline $}
+            background: {{ @Theme.colors("LIGHT") }};
+        {$ endif $}
+    }
+
+    [part="table-head-col"]:first-of-type,
+    [part="table-body-col"]:first-of-type {
+        padding-inline-start: 1.5rem;
+    }
+
+    [part="table-head-col"]:last-of-type,
+    [part="table-body-col"]:last-of-type {
+        padding-inline-end: 1.5rem;
+    }
+
+    [part="table-body-col"] {
+        padding: 0.5rem 1rem;
+        font-size: {{ @Theme.sizes("BASE") }};
+        line-height: {{ @Theme.lines("BASE") }};
+    }
+    
+    [part="table-empty-col"] {
+        font-weight: 700;
+        text-align: center;
+        padding: 1rem 1.5rem;
+        color: {{ @Theme.colors("BLACK") }};
+        font-size: {{ @Theme.sizes("MEDIUM") }};
+        line-height: {{ @Theme.lines("MEDIUM") }};
+    }
+
+    [part="table-body-row"] {
+        border-top-width: 1px;
+        border-top-style: solid;
+        border-top-color: {{ @props.outline ? @Theme.colors("BLACK") : @Theme.colors("BLACK", 20) }};
+    }
+
+    [part="page"],
+    [part="frame"],
+    [part="download"] {
+        display: none;
+    }
+    
+    @media (min-width: 1024px) {
+        {$ if @truty(@props.title) || @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
+            [part="topbar"] {
+                gap: 1rem;
+                flex-direction: row;
+                align-items: {{ @state.search ? "end" : "center" }};
+            }
+        {$ endif $}
+
+        {$ if @truty(@props.title) $}
+            [part="title"] {
+                margin: 0;
+                font-size: {{ @Theme.sizes("XLARGE") }};
+                line-height: {{ @Theme.lines("XLARGE") }};
+            }
+        {$ endif $}
+
+        {$ if @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
+            [part="tools"] {
+                margin-inline-end: 0;
+                margin-inline-start: auto;
+            }
+        {$ endif $}
+
+        {$ if @props.search $}
+            [part="search-wrapper"] {
+                order: 0;
+                max-width: 20rem;   
+            }
+        {$ endif $}
+
+        {$ if @props.filter $}
+            [part="filter"] {
+                position: relative;
+            }
+
+            {$ if @state.show $}
+                [part="filter-modal"] {
+                    inset: auto;
+                    max-width: 400px;
+                    min-width: 140px;
+                    width: max-content;
+                    position: absolute;
+                    height: max-content;
+                    background: transparent;
+                    {{ @state.pos ? "bottom" : "top" }}: 0;
+                    {{ document.documentElement.lang === "ar" ? "left" : "right" }}: 0;
+                }
+
+                [part="filter-content"] {
+                    max-height: 300px;
+                }
+
+                [part="filter-label"] {
+                    display: none;
+                }
+            {$ endif $}
+        {$ endif $}
+    }
+</style>
+
+<template name="neo-datavisualizer">
+    {$ if @truty(@props.title) || @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
+        <div ref="topbar" part="topbar">
+            {$ if @props.search && @state.search $}
+                <div ref="searchwrapper" part="search-wrapper">
+                    <div ref="searchgroup" part="search-group">
+                        <label ref="searchlabel" part="search-label" for="{{ @state.uid }}">{{ @trans("Search") }}</label>
+                        <input ref="search" part="search" @input="{{ @rules.search }}" id="{{ @state.uid }}"  placeholder=" " />
+                    </div>
+                    <svg ref="searchicon" part="search-icon" fill="currentColor" viewBox="0 0 48 48">
+                        <path d="M39.7 43.2L26.2894 29.8C25.2965 30.5641 24.1591 31.1635 22.8771 31.5981C21.5951 32.0327 20.1934 32.25 18.6719 32.25C14.8282 32.25 11.597 30.9383 8.9782 28.3149C6.35943 25.6914 5.05005 22.4998 5.05005 18.7399C5.05005 14.98 6.36177 11.7917 8.9852 9.175C11.6086 6.55833 14.8003 5.25 18.5602 5.25C22.3201 5.25 25.5084 6.56073 28.125 9.1822C30.7417 11.8037 32.05 14.9954 32.05 18.7575C32.05 20.2858 31.8334 21.675 31.4 22.925C30.9667 24.175 30.3334 25.3667 29.5 26.5L43 39.9L39.7 43.2ZM18.5721 27.7C21.1049 27.7 23.2261 26.841 24.9357 25.1229C26.6453 23.4049 27.5 21.2874 27.5 18.7706C27.5 16.2538 26.6443 14.1295 24.9327 12.3977C23.2212 10.6659 21.1025 9.8 18.5765 9.8C16.0228 9.8 13.8882 10.6659 12.1729 12.3977C10.4577 14.1295 9.60005 16.2538 9.60005 18.7706C9.60005 21.2874 10.4552 23.4049 12.1656 25.1229C13.876 26.841 16.0115 27.7 18.5721 27.7Z" />
+                    </svg>
+                </div>
+            {$ elif @truty(@props.title) $}
+                <h1 ref="title" part="title">{{ @props.title }}</h1>
+            {$ endif $}
+            {$ if @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
+                <div ref="tools" part="tools">
+                    <slot name="start"></slot>
+                    {$ if @props.search $}
+                        <button aria-label="search_trigger" search title="{{ @trans('Search') }}" ref="btn" part="btn" @click="{{ @rules.toggle }}">
+                            <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+                                <path d="M39.7 43.2L26.2894 29.8C25.2965 30.5641 24.1591 31.1635 22.8771 31.5981C21.5951 32.0327 20.1934 32.25 18.6719 32.25C14.8282 32.25 11.597 30.9383 8.9782 28.3149C6.35943 25.6914 5.05005 22.4998 5.05005 18.7399C5.05005 14.98 6.36177 11.7917 8.9852 9.175C11.6086 6.55833 14.8003 5.25 18.5602 5.25C22.3201 5.25 25.5084 6.56073 28.125 9.1822C30.7417 11.8037 32.05 14.9954 32.05 18.7575C32.05 20.2858 31.8334 21.675 31.4 22.925C30.9667 24.175 30.3334 25.3667 29.5 26.5L43 39.9L39.7 43.2ZM18.5721 27.7C21.1049 27.7 23.2261 26.841 24.9357 25.1229C26.6453 23.4049 27.5 21.2874 27.5 18.7706C27.5 16.2538 26.6443 14.1295 24.9327 12.3977C23.2212 10.6659 21.1025 9.8 18.5765 9.8C16.0228 9.8 13.8882 10.6659 12.1729 12.3977C10.4577 14.1295 9.60005 16.2538 9.60005 18.7706C9.60005 21.2874 10.4552 23.4049 12.1656 25.1229C13.876 26.841 16.0115 27.7 18.5721 27.7Z" />
+                            </svg>
+                        </button>         
+                    {$ endif $}
+                    {$ if @props.print $}
+                        {$ if @state.seen $}
+                            <div ref="printmodal" part="print-modal">
+                                <div ref="loader" part="loader">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        {$ endif $}
+                        <button aria-label="print_trigger" title="{{ @trans('Print') }}" ref="btn" part="btn" @click="{{ @rules.print }}">
+                            <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">                      
+                                <path d="M37.05 13H11V5H37.05V13ZM36.2 24.8C36.8 24.8 37.2917 24.6198 37.675 24.2594C38.0583 23.899 38.25 23.4208 38.25 22.825C38.25 22.2417 38.0604 21.75 37.6813 21.35C37.3021 20.95 36.8167 20.75 36.225 20.75C35.6083 20.75 35.1167 20.951 34.75 21.3531C34.3833 21.7552 34.2 22.2375 34.2 22.8C34.2 23.4 34.3833 23.8833 34.75 24.25C35.1167 24.6167 35.6 24.8 36.2 24.8ZM32.45 39.4V32.45H15.55V39.4H32.45ZM37.05 43.7H11V34.05H3V20.85C3 19.0617 3.60695 17.5396 4.82085 16.2837C6.03472 15.0279 7.52777 14.4 9.3 14.4H38.7C40.5083 14.4 42.0188 15.0279 43.2313 16.2837C44.4438 17.5396 45.05 19.0617 45.05 20.85V34.05H37.05V43.7Z" />
+                            </svg>
+                        </button>         
+                    {$ endif $}
+                    {$ if @props.download $}
+                        <button aria-label="download_trigger" title="{{ @trans('Download') }}" ref="btn" part="btn" @click="{{ @rules.download }}">
+                            <a aria-label="download_link" ref="download" part="download" download="{{ @Str.kebab(@props.title) }}.csv"></a>
+                            <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+                                <path d="M12.6 41.05C9.43333 41.05 6.70833 39.925 4.425 37.675C2.14167 35.425 1 32.6833 1 29.45C1 26.7167 1.85 24.25 3.55 22.05C5.25 19.85 7.45 18.5333 10.15 18.1C10.9167 15.1 12.4 12.6 14.6 10.6C16.8 8.6 19.3667 7.4 22.3 7V25.6L18.4 21.6L15.95 24.05L24 32.2L32.05 24.05L29.65 21.6L25.75 25.6V7C29.1833 7.43333 32.0833 8.95 34.45 11.55C36.8167 14.15 38.1 17.2667 38.3 20.9V22.1C40.8 22.3667 42.8583 23.375 44.475 25.125C46.0917 26.875 46.9 29.0333 46.9 31.6C46.9 34.2333 45.9833 36.4667 44.15 38.3C42.3167 40.1333 40.0833 41.05 37.45 41.05H12.6Z" />
+                            </svg>
+                        </button>         
+                    {$ endif $}
+                    {$ if @props.filter $}
+                        <div ref="filter" part="filter">
+                            <button aria-label="filter_trigger" title="{{ @trans('Columns') }}" ref="btn" part="btn" @click="{{ @rules.filter }}">
+                                <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+                                    <path d="M7.55 39.25C6.55 39.25 5.70833 38.9 5.025 38.2C4.34167 37.5 4 36.6667 4 35.7V12.55C4 11.5696 4.34167 10.7328 5.025 10.0397C5.70833 9.34657 6.55 9 7.55 9H12.05C13.0167 9 13.8333 9.34657 14.5 10.0397C15.1667 10.7328 15.5 11.5696 15.5 12.55V35.7C15.5 36.6667 15.1667 37.5 14.5 38.2C13.8333 38.9 13.0167 39.25 12.05 39.25H7.55ZM21.3 39.25C20.3333 39.25 19.5 38.9 18.8 38.2C18.1 37.5 17.75 36.6667 17.75 35.7V12.55C17.75 11.5696 18.1 10.7328 18.8 10.0397C19.5 9.34657 20.3333 9 21.3 9H25.8C26.7667 9 27.5917 9.34657 28.275 10.0397C28.9583 10.7328 29.3 11.5696 29.3 12.55V35.7C29.3 36.6667 28.9583 37.5 28.275 38.2C27.5917 38.9 26.7667 39.25 25.8 39.25H21.3ZM35.05 39.25C34.05 39.25 33.2083 38.9 32.525 38.2C31.8417 37.5 31.5 36.6667 31.5 35.7V12.55C31.5 11.5696 31.8417 10.7328 32.525 10.0397C33.2083 9.34657 34.05 9 35.05 9H39.5C40.4804 9 41.3255 9.34657 42.0353 10.0397C42.7451 10.7328 43.1 11.5696 43.1 12.55V35.7C43.1 36.6667 42.7451 37.5 42.0353 38.2C41.3255 38.9 40.4804 39.25 39.5 39.25H35.05Z" />
+                                </svg>
+                            </button>
+                            {$ if @state.show $}
+                                <div ref="filtermodal" part="filter-modal">
+                                    <div ref="filtercontent" part="filter-content" @click:propagation="{{ () => {} }}">
+                                        <label ref="filterlabel" part="filter-label">{{ @trans("Columns") }}</label>
+                                        <ul ref="filteritems" part="filter-items">
+                                            {$ each col into @props.cols $}
+                                                <li ref="filteritem" part="filter-item">
+                                                    <label for="_{{ col.name }}" ref="filterItemLabel" part="filter-item-label">
+                                                        <input id="_{{ col.name }}" type="checkbox" ref="checkbox" part="checkbox" @keydown="{{ (e) => @rules.keydown(e, col.name) }}" @change="{{ () => @rules.change(col.name) }}"  checked="{{ col.visible !== false }}" />
+                                                        <span ref="filtertext" part="filter-text">{{ col.text || col.name }}</span>
+                                                    </label>
+                                                </li>
+                                            {$ endeach $}
+                                        </ul>
+                                    </div>
+                                </div>  
+                            {$ endif $}
+                        </div>      
+                    {$ endif $}
+                    <slot name="end"></slot>
+                </div>
+            {$ endif $}
+        </div>
+    {$ endif $}
+    <div ref="wrapper" part="wrapper">
+        {$ if @props.loading || @state.print $}
+            <div ref="loader" part="loader">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        {$ else $}
+            <table ref="table" part="table">
+                {$ if  @state.rows.length $}
+                    <thead ref="tablehead" part="table-head">
+                        <tr ref="tableheadrow" part="table-head-row">
+                            {$ each col into @props.cols $}
+                                {$ if col.visible !== false $}
+                                    <td ref="tableheadcol" part="table-head-col"
+                                        {$ if col.headStyle $}
+                                            style="{{ @style(typeof col.headStyle === 'function' ? col.headStyle(col) : col.headStyle) }}"
+                                        {$ endif $}
+                                    >
+                                        {{ @when(col.headRender, col.headRender, col.text || col.name) }}
+                                    </td>
+                                {$ endif $}
+                            {$ endeach $}
+                        </tr>
+                    </thead>
+                {$ endif $}
+                <tbody ref="tablebody" part="table-body">
+                    {$ forelse row into @state.rows $}
+                        <tr ref="tablebodyrow" part="table-body-row">
+                            {$ each col into @props.cols $}
+                                {$ if col.visible !== false $}
+                                    <td ref="tablebodycol" part="table-body-col"
+                                        {$ if col.bodyStyle $}
+                                            style="{{ @style(typeof col.bodyStyle === 'function' ? col.bodyStyle(row, col) : col.bodyStyle) }}"
+                                        {$ endif $}
+                                    >
+                                        {{ @when(col.bodyRender, () => col.bodyRender(row, @loop), row[col.name]) }}
+                                    </td>
+                                {$ endif $}
+                            {$ endeach $}
+                        </tr>
+                    {$ empty $}
+                        <tr ref="tableemptyrow" part="table-empty-row">
+                            <td colspan="{{ @props.cols.length }}" ref="tablebodycol" part="table-empty-col">
+                                {{ @trans("No data found") }}
+                            </td>
+                        </tr>
+                    {$ endforelse $}
+                </tbody>
+            </table>
+        {$ endif $}
+    </div>
+    {$ if @props.print $}
+        <section ref="page" part="page">
+            <style> body { margin: 0; } #page { width: 100% } @page { size: {{ @props.size }}; margin: {{ @props.margin }}; } #title { font-weight: 700; text-align: center; margin: 0 0 1rem 0; font-size: {{ @Theme.sizes("XLARGE") }}; line-height: {{ @Theme.lines("XLARGE") }}; } #wrapper { width: 100%; overflow-x: auto; border-width: 1px; border-style: solid; border-radius: .25rem; {$ if @props.outline $} border-color: {{ @Theme.colors("BLACK") }}; {$ else $} background: {{ @Theme.colors("WHITE") }}; border-color: {{ @Theme.colors("BLACK", 20) }}; {$ endif $} } #table { min-width: 100%; width: max-content; border-collapse: collapse; } .table-head-col { font-weight: 700; padding: .5rem 1rem; color: {{ @Theme.colors("BLACK") }}; font-size: {{ @Theme.sizes("SMALL") }}; line-height: {{ @Theme.lines("SMALL") }}; {$ if !@props.outline $} background: {{ @Theme.colors("LIGHT") }}; {$ endif $} } .table-head-col:first-of-type, .table-body-col:first-of-type { padding-inline-start: 1.5rem; } .table-head-col:last-of-type, .table-body-col:last-of-type { padding-inline-end: 1.5rem; } .table-body-col { padding: 0.5rem 1rem; font-size: {{ @Theme.sizes("BASE") }}; line-height: {{ @Theme.lines("BASE") }}; } #table-empty-col { font-weight: 700; text-align: center; padding: 1rem 1.5rem; color: {{ @Theme.colors("BLACK") }}; font-size: {{ @Theme.sizes("MEDIUM") }}; line-height: {{ @Theme.lines("MEDIUM") }}; } .table-body-row { border-top-width: 1px; border-top-style: solid; border-top-color: {{ @props.outline ? @Theme.colors("BLACK") : @Theme.colors("BLACK", 20) }}; }
+            </style>
+            <slot ref="printStyles" name="styles" part="styles"></slot>
+            <table id="page">
+                <thead>
+                    <tr>
+                        <td>
+                            <div id="header">
+                                <slot ref="printHeader" name="header" part="header"></slot>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <main id="main">
+                                <slot ref="printTop" name="top" part="top"></slot>
+                                {$ if @truty(@props.title) $}
+                                    <h1 id="title">{{ @props.title }}</h1>
+                                {$ endif $}
+                                <div id="wrapper">
+                                    <table id="table">
+                                        {$ if  @state.rows.length $}
+                                            <thead id="table-head">
+                                                <tr id="table-head-row">
+                                                    {$ each col into @props.cols $}
+                                                        {$ if col.visible !== false $}
+                                                            <td class="table-head-col"
+                                                                {$ if col.headPdfStyle $}
+                                                                    style="{{ @style(typeof col.headPdfStyle === 'function' ? col.headPdfStyle(col) : col.headPdfStyle) }}"
+                                                                {$ endif $}
+                                                            >
+                                                                {{ @when(col.headPdfRender, col.headPdfRender, col.text || col.name) }}
+                                                            </td>
+                                                        {$ endif $}
+                                                    {$ endeach $}
+                                                </tr>
+                                            </thead>
+                                        {$ endif $}
+                                        <tbody id="table-body">
+                                            {$ forelse row into @state.rows $}
+                                                <tr class="table-body-row">
+                                                    {$ each col into @props.cols $}
+                                                        {$ if col.visible !== false $}
+                                                            <td class="table-body-col"
+                                                                {$ if col.bodyPdfStyle $}
+                                                                    style="{{ @style(typeof col.bodyPdfStyle === 'function' ? col.bodyPdfStyle(col) : col.bodyStyle) }}"
+                                                                {$ endif $}
+                                                            >
+                                                                {{ @when(col.bodyPdfRender, () => col.bodyPdfRender(row, @loop), row[col.name]) }}
+                                                            </td>
+                                                        {$ endif $}
+                                                    {$ endeach $}
+                                                </tr>
+                                            {$ empty $}
+                                                <tr id="table-empty-row">
+                                                    <td colspan="{{ @props.cols.length }}" id="table-empty-col">
+                                                        {{ @trans("No data found") }}
+                                                    </td>
+                                                </tr>
+                                            {$ endforelse $}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <slot ref="printBottom" name="bottom" part="bottom"></slot>
+                            </main>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <div id="footer">
+                                <slot ref="printFooter" name="footer" part="footer"></slot>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["title", "margin", "size", "outline", "print", "search", "filter", "download"],
+        dense: {
+            globals: [],
+        },
+        props: {
+            margin: "5mm 5mm 5mm 5mm",
+            outline: false,
+            download: false,
+            loading: false,
+            search: false,
+            filter: false,
+            print: false,
+            title: "",
+            size: "A4",
+            cols: [],
+            rows: [],
+        },
+        state: {
+            uid: "uid_" + Neo.Helper.random(),
+            expand: false,
+            search: false,
+            print: false,
+            show: false,
+            seen: false,
+            pos: null,
+            rows: [],
+        },
+        rules: {
+            download() {
+                const cols = [];
+                this.props.cols.forEach(col => {
+                    if (col.visible !== false)
+                        cols.push(this.rules.parse(Neo.Helper.when(col.headCsvRender, col.headCsvRender, col.text || col.name)));
+                });
+                const rows = [cols.join(",")];
+                this.state.rows.forEach(row => {
+                    const cols = []
+                    this.props.cols.forEach(col => {
+                        if (col.visible !== false)
+                            cols.push(this.rules.parse(Neo.Helper.when(col.bodyCsvRender, () => col.bodyCsvRender(row), row[col.name])));
+                    });
+                    rows.push(cols.join(","));
+                });
+                this.refs.download.href = URL.createObjectURL(new Blob([rows.join("\n")], {
+                    type: "text/csv",
+                }));
+                this.refs.download.click();
+                this.emit("download");
+            },
+            search(event) {
+                const value = new Set(event.target.value.toUpperCase()
+                                .trim().split(/[-_.\\\/\s]/g));
+                this.emit("search", { data: event.target.value }, () => {
+                    clearTimeout(this.state.time);
+                    this.state.time = setTimeout(() => {
+                        this.state.rows = this.props.rows.filter(item => {
+                            const score = [];
+                            for (const niddle of value) {
+                                for (const col of this.props.cols) {
+                                    if (String(item[col.name]).toUpperCase().includes(niddle)) score.push(1);
+                                    else score.push(0);
+                                }
+                            }
+                            return score.includes(1);
+                        });
+                    }, 500);
+                });
+            },
+            change(name) {
+                this.props.cols = this.props.cols.map(col => {
+                    if (col.name === name) col.visible = !(col.visible !== false);
+                    return col;
+                });
+            },
+            keydown(event, name) {
+                if (event.keyCode === 13) this.rules.change(name);
+            },
+            toggle() {
+                if(this.props.loading) return;
+
+                this.rules.clear();
+                this.state.search = !this.state.search;
+                if (this.state.search) {
+                    this.refs.search.focus();
+                }
+            },
+            filter() {
+                this.state.expand = !this.state.expand;
+            },
+            print() {
+                const Page = this.rules.createPage();
+                const Frame = this.rules.createFrame();
+
+                this.rules.insertStyles(Page);
+                this.rules.insertContent(Page);
+
+                this.rules.writeContent(Frame, Page);
+                this.rules.execOnLoad(Frame);
+            },
+            parse(str) {
+                if (!str) return '""';
+                str = String(str).replace(/"/g, `""`);
+                if (/[",\n]/.test(str)) {
+                    str = `"${str}"`;
+                }
+                return str;
+            },
+            clear() {
+                if (!this.state.search) return;
+                const val = this.refs.search.value;
+                this.refs.search.value = "";
+                if (Neo.Helper.truty(val)) {
+                    this.refs.search.dispatchEvent(new Event('input'));
+                    this.state.rows = this.props.rows;
+                }
+            },
+            blur(event) {
+                if (!this.refs.filtercontent.contains(event.target) && this.state.expand) {
+                    this.rules.filter();
+                }
+            },
+            pos() {
+                this.state.show && (this.state.pos = window.innerHeight - this.getBoundingClientRect().top < this.refs.filtermodal.clientHeight);
+            },
+            createPage() {
+                this.state.seen = true;
+                Neo.Wrapper && Neo.Wrapper.rules.closed();
+
+                const page = (new DOMParser).parseFromString(this.refs.page.innerHTML, "text/html");
+                page.documentElement.dir = document.documentElement.lang === "ar" ? "rtl" : "ltr";
+                page.documentElement.lang = document.documentElement.lang;
+                return page;
+            },
+            createFrame() {
+                const frame = document.createElement("iframe");
+                frame.setAttribute("part", "frame");
+                this.root.appendChild(frame);
+                return frame;
+            },
+            insertStyles(page) {
+                const styles = [...this.refs.printStyles.assignedNodes()];
+                this.constructor.globals.forEach(link => {
+                    const style = document.createElement("link");
+                    style.rel = "stylesheet";
+                    style.href = link;
+
+                    page.head.appendChild(style.cloneNode(true));
+                });
+                styles.forEach(style => {
+                    if (style instanceof HTMLElement) {
+                        page.head.appendChild(style.cloneNode(true));
+                    }
+                });
+            },
+            insertContent(page) {
+                const sections = [
+                    { id: "top", ref: this.refs.printTop },
+                    { id: "header", ref: this.refs.printHeader },
+                    { id: "bottom", ref: this.refs.printBottom },
+                    { id: "footer", ref: this.refs.printFooter }
+                ];
+
+                sections.forEach(section => {
+                    const slot = page.querySelector(`[part=${section.id}]`),
+                        elements = section.ref.assignedNodes();
+                    elements.forEach(element => {
+                        if (element instanceof HTMLElement) {
+                            slot.insertAdjacentElement("beforebegin", element.cloneNode(true));
+                        }
+                    });
+                    slot.remove();
+                });
+            },
+            writeContent(frame, page) {
+                const state = frame.contentDocument || frame.contentWindow.document;
+                state.open();
+                state.write(page.documentElement.outerHTML);
+                state.close();
+            },
+            execOnLoad(frame) {
+                frame.onload = () => {
+                    frame.contentWindow.print();
+                    this.state.seen = false;
+                    Neo.Wrapper && Neo.Wrapper.rules.opened();
+                    setTimeout(() => {
+                        frame.remove();
+                    }, 1000);
+                };
+            }
+        },
+        cycle: {
+            mounted() {
+                window.addEventListener("scroll", this.rules.pos);
+            },
+            removed() {
+                window.removeEventListener("click", this.rules.blur);
+                window.removeEventListener("scroll", this.rules.pos);
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "size,title,margin": () => {
+                            this.props[name] = next
+                        },
+                        "outline,print,search,filter,download": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name));
+                        }
+                    },
+                    state: {
+                        "show": () => {
+                            Neo.Wrapper && Neo.Wrapper.rules[next ? "smonly" : "opened"]();
+                            setTimeout(() => {
+                                window[(next ? "add" : "remove") + "EventListener"]("click", this.rules.blur);
+                            }, 0);
+                            this.emit("change:expand", {
+                                data: next,
+                            });
+                        },
+                        "expand": () => {
+                            next ? (this.state.show = next, this.rules.pos()) :
+                                setTimeout(() => {
+                                    this.state.show = next;
+                                }, 250);
+                        },
+                    },
+                    props: {
+                        "size,title,margin,print,outline,loading": () => {
+                            this.emit("change:" + name, { data: next });
+                        },
+                        "filter,search": () => {
+                            this.state[name] = false;
+                            name === "search" && this.rules.clear();
+                            this.emit("change:" + name, { data: next });
+                        },
+                        "rows": () => {
+                            this.state.rows = next;
+                        }
+                    }
+                }[type], name);
+            },
+        },
+    }
+</script>

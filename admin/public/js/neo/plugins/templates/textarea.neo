@@ -1,0 +1,244 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    ::-webkit-search-cancel-button,
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: none;
+        {$ endeach $}
+        display: none;
+    }
+
+    ::-webkit-scrollbar {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: none;
+        {$ endeach $}
+        background: transparent;
+        height: 5px;
+        width: 5px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        border-radius: 2px; 
+        background: {{ @Theme.colors("GRAY", 300) }};
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: {{ @Theme.colors("GRAY", 400) }};
+    }  
+    
+    textarea {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: textfield;
+        {$ endeach $}
+    }
+
+    :host {
+        gap: .5rem;
+        width: auto;
+        max-width: 100%;
+        flex-wrap: wrap;
+        border-width: 1px;
+        align-items: center;
+        border-style: solid;
+        display: inline-flex;
+        border-radius: .25rem;
+        padding: .4rem .75rem;
+        {$ if @props.outline $}
+            border-color: {{ @Theme.colors("BLACK") }};
+        {$ else $}
+            background: {{ @Theme.colors("LIGHT") }};
+            border-color: {{ @Theme.colors("SHADE") }};
+        {$ endif $}
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus),
+        :host(:focus-within) {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    [part="wrapper"] {
+        flex: 1;
+        width: 0%;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+    }
+
+    {$ if @truty(@props.label) $}
+        [part="label"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            font-weight: 600;
+            inset: 0 0 auto 0;  
+            position: absolute; 
+            padding: .437rem 0;
+            white-space: nowrap;
+            flex-direction: column;
+            text-overflow: ellipsis;
+            justify-content: center;
+            color: {{ @Theme.colors("BLACK", 50) }};
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("SMALL") }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: 200ms ease-in-out padding, 200ms ease-in-out color, 200ms ease-in-out font-size, 200ms ease-in-out line-height;
+            {$ endeach $}
+        }
+
+        [part="label"]:has(+ [part="field"]:not(:placeholder-shown)),
+        [part="label"]:has(+ [part="field"]:focus) {
+            padding: 0;
+            overflow: visible;
+            color: {{ @Theme.colors("BLACK", 80) }};
+            font-size: {{ @Theme.sizes("XSMALL") }};
+            line-height: {{ @Theme.lines("THIN") }};
+        }
+    {$ endif $}
+
+     [part="field"] {
+        padding: 0;
+        width: 100%;
+        resize: none;
+        outline: none;
+        border: unset;
+        display: block;
+        background: transparent;
+        color: {{ @Theme.colors("BLACK") }};
+        font-size: {{ @Theme.sizes("BASE") }};
+        line-height: {{ @Theme.lines("SMALL") }};
+        caret-color: {{ @Theme.colors("PRIME", 400) }};
+        margin: {{ @truty(@props.label) ? ".75rem 0 0 0" : "0" }};
+    }
+</style>
+
+<template name="neo-textarea" ctl="true">
+    <slot name="start"></slot>
+    <div ref="wrapper" part="wrapper">
+        {$ if @truty(@props.label) $}
+            <label ref="label" part="label" for="{{ @state.uid }}">{{ @props.label }}</label>
+        {$ endif $}
+        <textarea ref="field" part="field" id="{{ @state.uid }}" 
+            {$ if @this.name $} name="{{ @this.name }}" {$ endif $}
+            @keypress="{{ @rules.keypress }}" 
+            @keydown="{{ @rules.keydown }}" 
+            @change="{{ @rules.change }}" 
+            @keyup="{{ @rules.keyup }}" 
+            @input="{{ @rules.input }}" 
+            @focus="{{ @rules.focus }}" 
+            @blur="{{ @rules.blur }}" 
+            rows="{{ @props.rows }}"
+            placeholder="{{ @when(@truty(@props.placeholder), @props.placeholder, ' ') }}"
+            autocomplete="{{ @when(@props.fill, 'on', 'off') }}"
+            {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}
+        >{{ @props.value }}</textarea>
+    </div>
+    <slot name="end"></slot>
+</template>
+
+<script>
+    export default {
+        attrs: ["label", "outline", "disable", "placeholder", "fill", "rows", "auto"],
+        props: {
+            label: "",
+            value: "",
+            fill: true,
+            auto: true,
+            rows: 1,
+            outline: false,
+            disable: false,
+            placeholder: "",
+        },
+        state: {
+            uid: "uid_" + Neo.Helper.random(),
+            min: 20,
+        },
+        rules: {
+            focus() {
+                this.emit("focus", { data: this.props.value });
+            },
+            blur() {
+                this.emit("blur", { data: this.props.value });
+            },
+            change() {
+                this.emit("change", { data: this.props.value });
+            },
+            keyup() {
+                this.emit("keyup", { data: this.props.value });
+            },
+            keydown() {
+                this.emit("keydown", { data: this.props.value });
+            },
+            keypress() {
+                this.emit("keypress", { data: this.props.value });
+            },
+            input(event) {
+                this.props.value = event.target.value;
+                this.emit("input", { data: this.props.value });
+            },
+            scroll() {
+                setTimeout(() => {
+                    this.refs.field.style.cssText = "height: auto";
+                    this.refs.field.style.cssText = "height: " + Math.max(this.refs.field.scrollHeight, this.state.min * +this.props.rows) + "px";
+                }, 0);
+            },
+        },
+        cycle: {
+            created() {
+                this.reset = function() {
+                    this.props.value = "";
+                    this.emit("reset");
+                }
+                this.focus = function() { this.refs.field.focus() }
+                this.blur = function() { this.refs.field.blur() }
+            },
+            mounted() {
+                if (this.hasAttribute("value")) {
+                    this.props.value = this.getAttribute("value");
+                    this.removeAttribute("value");
+                }
+
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            removed() {
+                this.ctl.form && this.ctl.form.removeEventListener("reset", this.reset.bind(this));
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "label,type,placeholder,rows": () => {
+                            this.props[name] = next;
+                        },
+                        "outline,disable,fill,auto": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name));
+                        }
+                    },
+                    props: {
+                        "label,placeholder,outline,disable,fill,rows,auto": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "value": () => {
+                            this.ctl.setFormValue(next ? next : null);
+                            if(this.props.auto) this.rules.scroll();
+                        },
+                    }
+                }[type], name);
+            },
+        },
+    }
+</script>

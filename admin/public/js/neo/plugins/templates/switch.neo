@@ -1,0 +1,149 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    :host {
+        gap: .5rem;
+        flex-wrap: wrap;
+        align-items: center;
+        display: inline-flex;
+    }
+
+     [part="field"] {
+        padding: 0;
+        display: flex;
+        width: 2.5rem;
+        height: 1.5rem;
+        cursor: pointer;
+        align-items: center;
+    }
+
+    {$ if !@props.disable $}
+        [part="field"]:focus,
+        [part="field"]:focus-within {
+            outline-width: 2px;
+            outline-offset: -1px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    [part="track"] {
+        width: 100%;
+        display: flex;
+        height: .85rem;
+        aspect-ratio: 2/1;
+        border-width: 1px;
+        position: relative;
+        align-items: center;
+        border-style: solid;
+        border-radius: 1rem;    
+        cursor: {{ @props.disable ? "default" : "pointer" }};
+        border-color: {{ @Theme.colors(@props.outline ? "BLACK" : "SHADE") }};
+        background: {{ @Theme.colors(@props.active ? "PRIME" : (@props.outline ? "WHITE" : "LIGHT")) }};
+        {$ if !@state.init $}
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: 200ms ease-in-out background;
+            {$ endeach $}
+        {$ endif $}
+    }
+
+    [part="thumb"] {
+        z-index: 1;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-width: 1px;
+        position: absolute;
+        border-style: solid;
+        border-radius: 1rem;
+        background: {{ @Theme.colors("WHITE") }};
+        {$ if !@state.init $}
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: 200ms ease-in-out margin;
+            {$ endeach $}
+        {$ endif $}
+        border-color: {{ @Theme.colors(@props.outline ? "BLACK" : "SHADE") }};
+        margin-inline-start: {{ (@props.active ? @refs.track.clientWidth - @refs.thumb.clientWidth - 1 : -1) + "px" }};
+    }
+</style>
+
+<template name="neo-switch" ctl="true">
+    <div ref="field" part="field" tabindex="{{ @props.disable ? -1 : 0 }}">
+        <div ref="track" part="track">    
+            <div ref="thumb" part="thumb"></div>
+        </div>
+    </div>
+    <slot></slot>
+</template>
+
+<script>
+    export default {
+        attrs: ["value", "active", "disable", "outline"],
+        props: {
+            value: "",
+            active: false,
+            disable: false,
+            outline: false,
+        },
+        state: {
+            init: true,
+        },
+        rules: {
+            change(event) {
+                this.state.init = false;
+                if ((event.type !== "click" && event.keyCode !== 13) || this.props.disable) return;
+                this.props.active = (this.name && this.name.length && this.props.active) ? true : !this.props.active;
+            },
+        },
+        cycle: {
+            created() {
+                this.reset = function() {
+                    this.props.active = false;
+                    this.emit("reset");
+                }
+                this.focus = function() { this.refs.field.focus() }
+                this.blur = function() { this.refs.field.blur() }
+            },
+            mounted() {
+                this.addEventListener("click", this.rules.change);
+                this.addEventListener("keydown", this.rules.change);
+                this.ctl.form && this.ctl.form.addEventListener("reset", this.reset.bind(this));
+            },
+            removed() {
+                this.removeEventListener("click", this.rules.change);
+                this.removeEventListener("keydown", this.rules.change);
+                this.ctl.form && this.ctl.form.removeEventListener("reset", this.reset.bind(this));
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "value": () => {
+                            this.props.value = next;
+                        },
+                        "outline,disable,active": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name));
+                        }
+                    },
+                    props: {
+                        "value,outline,disable": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "active": () => {
+                            if (next && this.name && this.name.length) {
+                                document.querySelectorAll(this.tagName.toLowerCase() + "[name=" + this.name + "]").forEach((xswitch) => {
+                                    this !== xswitch && (xswitch.state.init = false, xswitch.active = false);
+                                });
+                            }
+                            this.ctl.setFormValue(next ? this.props.value : null);
+                            this.emit("change", { data: next });
+                        }
+                    }
+                }[type], name);
+            }
+        }
+    }
+</script>
