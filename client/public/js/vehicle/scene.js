@@ -265,7 +265,7 @@ function execReservations({ patch, print }) {
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}" print="${print}"></action-tools>`,
+        bodyRender: (row) => `<action-tools blank="true" target="${row.id}" patch="${patch}" print="${print}"></action-tools>`,
         headPdfStyle: function() {
             return this.headStyle
         },
