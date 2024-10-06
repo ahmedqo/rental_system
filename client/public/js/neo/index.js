@@ -646,7 +646,7 @@ const Neo = (function Neo() {
 
                 static money = function money(number, zeros = 2) {
                     return number.toLocaleString('en-US', {
-                        minimumFractionDigits: Math.max(zeros, (number.toString().split('.')[1] || '').length)
+                        minimumFractionDigits: Math.max(zeros, (number.toFixed(zeros).toString().split('.')[1] || '').length)
                     });
                 }
 
