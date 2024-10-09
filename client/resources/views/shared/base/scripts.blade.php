@@ -15,7 +15,7 @@
             Neo.getComponent("neo-printer").globals = [
                 "{{ asset('css/index.min.css') }}?v={{ env('APP_VERSION') }}",
                 "{{ asset('css/app.min.css') }}?v={{ env('APP_VERSION') }}",
-                "{{ asset('css/print.min.css') }}?v={{ env('APP_VERSION') }}"
+                // "{{ asset('css/print.min.css') }}?v={{ env('APP_VERSION') }}"
             ];
         });
     </script>
