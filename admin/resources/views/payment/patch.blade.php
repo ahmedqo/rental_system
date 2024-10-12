@@ -106,7 +106,7 @@
                             </neo-select>
                         </div>
                         <neo-button outline id="add-payment" type="button"
-                            class="w-max ms-auto outline outline-1 -outline-offset-1 outline-x-prime px-10 text-base lg:text-lg font-x-huge text-x-prime hover:outline-x-acent hover:text-x-white hover:bg-x-acent focus:outline-x-acent focus:text-x-white focus:bg-x-acent focus-within:outline-x-acent focus-within:text-x-white focus-within:bg-x-acent">
+                            class="w-max ms-auto outline outline-1 -outline-offset-1 outline-x-prime px-6 text-base lg:text-lg font-x-huge text-x-prime hover:outline-x-acent hover:text-x-white hover:bg-x-acent focus:outline-x-acent focus:text-x-white focus:bg-x-acent focus-within:outline-x-acent focus-within:text-x-white focus-within:bg-x-acent">
                             <span>{{ __('Add') }}</span>
                         </neo-button>
                     </div>
@@ -138,15 +138,15 @@
                 </neo-tab-outlet>
                 <div class="w-full flex flex-wrap gap-6">
                     <neo-button outline type="button" id="prev" style="display: none"
-                        class="w-max me-auto outline outline-1 -outline-offset-1 outline-x-prime px-10 text-base lg:text-lg font-x-huge text-x-prime hover:outline-x-acent hover:text-x-white hover:bg-x-acent focus:outline-x-acent focus:text-x-white focus:bg-x-acent focus-within:outline-x-acent focus-within:text-x-white focus-within:bg-x-acent">
+                        class="w-max me-auto outline outline-1 -outline-offset-1 outline-x-prime px-6 text-base lg:text-lg font-x-huge text-x-prime hover:outline-x-acent hover:text-x-white hover:bg-x-acent focus:outline-x-acent focus:text-x-white focus:bg-x-acent focus-within:outline-x-acent focus-within:text-x-white focus-within:bg-x-acent">
                         <span>{{ __('Prev') }}</span>
                     </neo-button>
                     <neo-button id="save" style="display: none"
-                        class="w-max px-10 ms-auto text-base lg:text-lg font-x-huge text-x-white bg-x-prime hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent">
+                        class="w-max px-6 ms-auto text-base lg:text-lg font-x-huge text-x-white bg-x-prime hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent">
                         <span>{{ __('Save') }}</span>
                     </neo-button>
                     <neo-button outline type="button" id="next"
-                        class="w-max ms-auto outline outline-1 -outline-offset-1 outline-x-prime px-10 text-base lg:text-lg font-x-huge text-x-prime hover:outline-x-acent hover:text-x-white hover:bg-x-acent focus:outline-x-acent focus:text-x-white focus:bg-x-acent focus-within:outline-x-acent focus-within:text-x-white focus-within:bg-x-acent">
+                        class="w-max ms-auto outline outline-1 -outline-offset-1 outline-x-prime px-6 text-base lg:text-lg font-x-huge text-x-prime hover:outline-x-acent hover:text-x-white hover:bg-x-acent focus:outline-x-acent focus:text-x-white focus:bg-x-acent focus-within:outline-x-acent focus-within:text-x-white focus-within:bg-x-acent">
                         <span>{{ __('Next') }}</span>
                     </neo-button>
                 </div>

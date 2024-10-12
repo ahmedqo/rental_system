@@ -718,5 +718,6 @@
     "Thursday": "يوم الخميس",
     "Friday": "جمعة",
     "Saturday": "السبت",
-    "Access denied": "تم الرفض"
+    "Access denied": "تم الرفض",
+    "Blacklist": "القائمة السوداء"
 }

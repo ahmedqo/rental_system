@@ -37,7 +37,7 @@
             </div>
             <div class="w-full flex flex-wrap gap-6">
                 <neo-button id="save"
-                    class="w-max px-10 ms-auto text-base lg:text-lg font-x-huge text-x-white bg-x-prime hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent">
+                    class="w-max px-6 ms-auto text-base lg:text-lg font-x-huge text-x-white bg-x-prime hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent">
                     <span>{{ __('Save') }}</span>
                 </neo-button>
             </div>
