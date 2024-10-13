@@ -16,10 +16,8 @@
             class="block w-36" width="916" height="516" loading="lazy" />
     </section>
     <neo-wrapper class="isolate overflow-hidden">
-        <header class="flex flex-col gap-8 relative">
-            <img src="{{ asset('img/svg/sharpes.svg') }}?v={{ env('APP_VERSION') }}"
-                alt="{{ env('APP_NAME') }} sharpes image"
-                class="block w-full h-full object-cover absolute inset-0 pointer-events-none z-[-100]" />
+        <header class="flex flex-col gap-8 bg-no-repeat bg-cover bg-center"
+            style="background: url({{ asset('img/svg/pattern-1.svg') }}?v={{ env('APP_VERSION') }})">
             <neo-topbar transparent align="space-between" class="w-full">
                 <img src="{{ asset('img/logo.webp') }}?v={{ env('APP_VERSION') }}"
                     alt="{{ env('APP_NAME') }} logo image" class="block w-24" width="916" height="516"
@@ -74,10 +72,10 @@
                 <div class="p-4 container mx-auto">
                     <div class="w-full lg:w-10/12 mx-auto flex flex-col gap-6 lg:gap-10">
                         <div class="w-full flex flex-col gap-2 lg:gap-4 lg:px-10">
-                            <h1 class="font-x-huge text-center text-x-black text-2xl lg:text-5xl rtl:leading-[1.4]">
+                            <h1 class="font-x-huge text-center text-x-black text-3xl lg:text-5xl rtl:leading-[1.4]">
                                 {{ ucwords(__('revolutionize your car rental business with our all-in-one solution')) }}
                             </h1>
-                            <h2 class="text-center text-x-black text-lg lg:text-2xl">
+                            <h2 class="text-center text-x-black text-xl lg:text-2xl">
                                 {{ ucfirst(__('enhance your business operations, increase profits, and deliver better customer experiences')) }}
                             </h2>
                             <div class="flex items-center justify-center gap-4 mt-2">
@@ -112,13 +110,13 @@
             </div>
         </header>
         <main class="w-full flex flex-col">
-            <section class="w-full relative bg-x-light py-6">
+            <section class="w-full py-6 bg-x-light">
                 <div class="p-4 container mx-auto flex flex-col gap-10">
                     <div class="flex flex-col gap-3 lg:w-10/12 lg:mx-auto">
-                        <h3 class="font-x-thin text-center text-x-black text-xl lg:text-3xl">
+                        <h3 class="font-x-thin text-center text-x-black text-2xl lg:text-4xl">
                             {{ ucwords(__('why we’re the best choice for your car rental business')) }}
                         </h3>
-                        <p class="text-center text-x-black text-base lg:text-xl">
+                        <p class="text-center text-x-black text-lg lg:text-xl">
                             {{ ucfirst(__('discover the benefits of choosing a solution that’s tailored to your car rental business needs')) }}
                         </p>
                     </div>
@@ -182,16 +180,14 @@
                     </ul>
                 </div>
             </section>
-            <section class="w-full py-6 relative isolate overflow-hidden">
-                <img src="{{ asset('img/svg/pattern.svg') }}?v={{ env('APP_VERSION') }}"
-                    alt="{{ env('APP_NAME') }} pattern image"
-                    class="block w-full h-full object-cover absolute inset-0 pointer-events-none z-[-100]" />
+            <section class="w-full py-6 bg-no-repeat bg-cover bg-center"
+                style="background: url({{ asset('img/svg/pattern-2.svg') }}?v={{ env('APP_VERSION') }})">
                 <div class="p-4 container mx-auto flex flex-col gap-10">
                     <div class="flex flex-col gap-3 lg:w-10/12 lg:mx-auto">
-                        <h3 class="font-x-thin text-center text-x-prime text-xl lg:text-3xl">
+                        <h3 class="font-x-thin text-center text-x-prime text-2xl lg:text-4xl">
                             {{ ucwords(__('a cutting-edge, full-stack system for processing car rentals')) }}
                         </h3>
-                        <p class="text-center text-x-black text-base lg:text-xl">
+                        <p class="text-center text-x-black text-lg lg:text-xl">
                             {{ ucfirst(__('this full-stack solution transforms car rental operations by integrating booking, vehicle management, payments, and reporting into one seamless system. With modern technology and a user-friendly interface, it simplifies fleet management and enhances overall operations')) }}
                         </p>
                     </div>
@@ -266,13 +262,11 @@
                     </div>
                 </div>
             </section>
-            <section class="bg-x-acent py-6 relative isolate overflow-hidden">
-                <img src="{{ asset('img/svg/shapes.svg') }}?v={{ env('APP_VERSION') }}"
-                    alt="{{ env('APP_NAME') }} shapes image"
-                    class="block w-full h-full object-cover absolute inset-0 pointer-events-none z-[-100]" />
-                <div class="p-4 container mx-auto flex flex-col gap-10">
+            <section class="w-full py-6 bg-no-repeat bg-cover bg-center bg-x-acent"
+                style="background-image: url({{ asset('img/svg/shape-1.svg') }}?v={{ env('APP_VERSION') }})">
+                <div class="container mx-auto p-4 flex flex-col gap-10">
                     <div class="flex flex-col gap-3">
-                        <h3 class="font-x-huge text-start text-x-white text-2xl lg:text-5xl rtl:leading-[1.4]">
+                        <h3 class="font-x-thin text-start text-x-white text-2xl lg:text-4xl">
                             {{ ucwords(__('trusted by 13,643 businesses')) }} <br>
                             {{ ucwords(__('all around morocco')) }}
                         </h3>
@@ -313,101 +307,124 @@
                     </ul>
                 </div>
             </section>
-            <section class="py-6 relative isolate overflow-hidden">
-             <img src="{{ asset('img/svg/boxes.svg') }}?v={{ env('APP_VERSION') }}"
-                    alt="{{ env('APP_NAME') }} boxes image"
-                    class="block w-full h-full object-cover absolute inset-0 pointer-events-none z-[-100]" />
+            <section class="w-full py-6 bg-no-repeat bg-cover bg-center"
+                style="background: url({{ asset('img/svg/pattern-3.svg') }}?v={{ env('APP_VERSION') }})">
                 <div class="p-4 container mx-auto flex flex-col gap-10">
                     <div class="flex flex-col gap-3 lg:w-10/12 lg:mx-auto">
-                        <h3 class="font-x-thin text-center text-x-black text-xl lg:text-3xl">
+                        <h3 class="font-x-thin text-center text-x-black text-2xl lg:text-4xl">
                             {{ ucwords(__('frequently asked questions')) }}
                         </h3>
-                        <p class="text-center text-x-black text-base">
+                        <p class="text-center text-x-black text-lg lg:text-xl">
                             {{ ucfirst(__('below you\'ll find answers to the most common questions about our services and how they can benefit your car rental business. If you don’t see your question here, feel free to contact our support team for further assistance')) }}
                         </p>
                     </div>
-                    <ul class="grid grid-rows-1 grid-cols-1 lg:grid-cols-2 items-start gap-4">
-                        <li>
-                            <ul class="flex flex-col gap-4">
-                                @php
-                                    $bollets = [
-                                        'what features does this platform offer' =>
-                                            'our platform includes fleet management, reservation systems, customer management, payment processing, and analytics tools',
-                                        'can i customize the software for my business' =>
-                                            'yes, the platform allows customization to fit your brand, pricing models, and rental policies',
-                                        'what support is available' =>
-                                            'we provide 24/7 customer support and training resources',
-                                        'how secure is the platform' =>
-                                            'we use industry-standard encryption and data security measures to protect your business and customer data',
-                                    ];
-                                @endphp
-                                @foreach ($bollets as $head => $text)
-                                    <li
-                                        class="tab-main tab-open w-full rounded-x-huge border bg-opacity-70 border-x-light bg-x-light">
-                                        <div
-                                            class="tab-header px-6 py-3 cursor-pointer flex flex-wrap gap-4 items-center">
-                                            <h5 class="w-0 flex-1 text-x-black text-lg lg:text-xl">
-                                                {{ ucwords(__($head)) }}?
-                                            </h5>
-                                            <svg class="tab-icon block text-x-black w-8 h-8 pointer-events-none"
-                                                fill="currentcolor" viewBox="0 -960 960 960">
-                                                <path d="M480-352 263-567h434L480-352Z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="tab-content overflow-hidden transition-all duration-150"
-                                            style="max-height: 0px">
-                                            <p class="text-x-black text-base p-6 border-t border-x-prime">
-                                                {{ ucfirst(__($text)) }}
-                                            </p>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </li>
-                        <li>
-                            <ul class="flex flex-col gap-4">
-                                @php
-                                    $bollets = [
-                                        'do you offer training for new users' =>
-                                            'yes, we provide onboarding and training materials, as well as live support during setup',
-                                        'is there a mobile app for managing rentals' =>
-                                            'yes, we offer a mobile app for managing bookings and fleet operations on the go',
-                                        'how do i access customer reports' =>
-                                            'detailed customer and reservation reports are available through the analytics dashboard',
-                                        'what are the system requirements' =>
-                                            'the platform is cloud-based, accessible via any modern web browser without special hardware requirements',
-                                    ];
-                                @endphp
-                                @foreach ($bollets as $head => $text)
-                                    <li
-                                        class="tab-main tab-open w-full rounded-x-huge border bg-opacity-70 border-x-light bg-x-light">
-                                        <div
-                                            class="tab-header px-6 py-3 cursor-pointer flex flex-wrap gap-4 items-center">
-                                            <h5 class="w-0 flex-1 text-x-black text-lg lg:text-xl">
-                                                {{ ucwords(__($head)) }}?
-                                            </h5>
-                                            <svg class="tab-icon block text-x-black w-8 h-8 pointer-events-none"
-                                                fill="currentcolor" viewBox="0 -960 960 960">
-                                                <path d="M480-352 263-567h434L480-352Z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="tab-content overflow-hidden transition-all duration-150"
-                                            style="max-height: 0px">
-                                            <p class="text-x-black text-base p-6 border-t border-x-prime">
-                                                {{ ucfirst(__($text)) }}
-                                            </p>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </li>
+                    <ul class="lg:w-8/12 lg:mx-auto flex flex-col gap-4">
+                        @php
+                            $bollets = [
+                                'what features does this platform offer' =>
+                                    'our platform includes fleet management, reservation systems, customer management, payment processing, and analytics tools',
+                                'can i customize the software for my business' =>
+                                    'yes, the platform allows customization to fit your brand, pricing models, and rental policies',
+                                'what support is available' =>
+                                    'we provide 24/7 customer support and training resources',
+                                'how secure is the platform' =>
+                                    'we use industry-standard encryption and data security measures to protect your business and customer data',
+                                'do you offer training for new users' =>
+                                    'yes, we provide onboarding and training materials, as well as live support during setup',
+                                'is there a mobile app for managing rentals' =>
+                                    'yes, we offer a mobile app for managing bookings and fleet operations on the go',
+                                'how do i access customer reports' =>
+                                    'detailed customer and reservation reports are available through the analytics dashboard',
+                                'what are the system requirements' =>
+                                    'the platform is cloud-based, accessible via any modern web browser without special hardware requirements',
+                            ];
+                        @endphp
+                        @foreach ($bollets as $head => $text)
+                            <li
+                                class="tab-main tab-open w-full rounded-x-huge border bg-opacity-70 border-x-light bg-x-light">
+                                <div class="tab-header px-6 py-3 cursor-pointer flex flex-wrap gap-4 items-center">
+                                    <h5 class="w-0 flex-1 text-x-black text-lg lg:text-xl">
+                                        {{ ucwords(__($head)) }}?
+                                    </h5>
+                                    <svg class="tab-icon block text-x-black w-8 h-8 pointer-events-none"
+                                        fill="currentcolor" viewBox="0 -960 960 960">
+                                        <path d="M480-352 263-567h434L480-352Z"></path>
+                                    </svg>
+                                </div>
+                                <div class="tab-content overflow-hidden transition-all duration-150"
+                                    style="max-height: 0px">
+                                    <p class="text-x-black text-base p-6 border-t border-x-prime">
+                                        {{ ucfirst(__($text)) }}
+                                    </p>
+                                </div>
+                            </li>
+                        @endforeach
                     </ul>
+                </div>
+            </section>
+            <section class="w-full py-6 bg-no-repeat bg-cover bg-center bg-x-acent "
+                style="background-image: url({{ asset('img/svg/shape-2.svg') }}?v={{ env('APP_VERSION') }})">
+                <div class="w-full container p-4 mx-auto flex flex-col gap-10">
+                    <div class="flex flex-col gap-3">
+                        <h3 class="font-x-thin text-start text-x-white text-2xl lg:text-4xl">
+                            {{ ucwords(__('what our clients say')) }}<br>
+                            {{ ucwords(__('about us')) }}
+                        </h3>
+                        {{-- <p class="text-center text-x-white text-lg lg:text-xl">
+                            {{ ucfirst(__('Our clients love the results we deliver and the exceptional service we provide. Hear their stories, see their success, and discover why they trust us for their needs')) }}
+                        </p> --}}
+                    </div>
+                    <div class="w-full flex flex-wrap items-center relative">
+                        <button id="ui-prev" aria-label="prev_arrow"
+                            class="flex items-center justify-center w-8 h-8 rounded-full absolute left-2 rtl:left-auto rtl:right-2 outline outline-2 outline-x-white bg-gray-700">
+                            <svg class="block w-5 h-5 pointer-events-none text-x-white" viewBox="0 -960 960 960"
+                                fill="currentColor">
+                                <path
+                                    d="{{ Core::lang('ar') ? 'M584-412H114v-136h470L382-750l98-96 366 366-366 366-97-96 201-202Z' : 'm376-412 201 202-97 96-366-366 366-366 98 96-202 202h470v136H376Z' }}" />
+                            </svg>
+                        </button>
+                        <div id="ui-carousel" class="w-full">
+                            <ul>
+                                @for ($i = 0; $i < 10; $i++)
+                                    <li class="flex bg-x-white w-full rounded-x-huge flex-col gap-4 px-14 py-8">
+                                        <div class="flex flex-wrap items-center gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-red-500"></div>
+                                            <ul class="w-0 flex-1 flex flex-col">
+                                                <span class="text-x-black font-x-thin text-lg">
+                                                    Ahmed qo
+                                                </span>
+                                                <span class="text-gray-800 text-base -mt-2">
+                                                    2 weeks ago
+                                                </span>
+                                            </ul>
+                                        </div>
+                                        <p class="text-base text-x-black text-justify">
+                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum harum
+                                            quibusdam
+                                            laudantium doloribus voluptate cumque exercitationem minus commodi
+                                            accusantium
+                                            eveniet.
+                                        </p>
+                                    </li>
+                                @endfor
+                            </ul>
+                        </div>
+                        <button id="ui-next" aria-label="next_arrow"
+                            class="flex items-center justify-center w-8 h-8 rounded-full absolute right-2 rtl:right-auto rtl:left-2 outline outline-2 outline-x-white bg-gray-700">
+                            <svg class="block w-5 h-5 pointer-events-none text-x-white" viewBox="0 -960 960 960"
+                                fill="currentColor">
+                                <path
+                                    d="{{ Core::lang('ar') ? 'm376-412 201 202-97 96-366-366 366-366 98 96-202 202h470v136H376Z' : 'M584-412H114v-136h470L382-750l98-96 366 366-366 366-97-96 201-202Z' }}" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </section>
         </main>
     </neo-wrapper>
     <neo-toaster horisontal="end" vertical="start"></neo-toaster>
     @include('shared.base.scripts', ['type' => 'admin'])
+    <script src="{{ asset('js/slider.min.js') }}?v={{ env('APP_VERSION') }}"></script>
     <script>
         const tabs = document.querySelectorAll(".tab-main");
 
@@ -441,6 +458,24 @@
                     }
                 }, 500);
             });
+        });
+
+        Slider({
+            root: document.querySelector("#ui-carousel"),
+            prev: document.querySelector("#ui-prev"),
+            next: document.querySelector("#ui-next"),
+            opts: {
+                drag: true,
+                gaps: 24
+            }
+        }).sm({
+            cols: 2,
+        }).md({
+            cols: 2,
+        }).lg({
+            cols: 3,
+        }).xl({
+            cols: 3,
         });
     </script>
 </body>
