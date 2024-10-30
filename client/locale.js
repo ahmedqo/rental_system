@@ -27,66 +27,48 @@ const readFiles = (dir, fileList = []) => {
 
 // Function to extract text between __('')
 const extractText = (content) => {
-    const regex = /__\(['"]([^'"]+)['"]\)/g;
-    const matches = [];
-    let match;
-
-    while (match = regex.exec(content)) {
-        matches.push(match[1]);
-    }
-
-    return matches;
-};
-
-// Function to extract text between __('')
-const extractText2 = (content) => {
-    const regex = /\$trans\(['"]([^'"]+)['"]\)/g;
-    const matches = [];
-    let match;
-
-    while (match = regex.exec(content)) {
-        matches.push(match[1]);
-    }
-
-    return matches;
+    const regex = /__\(\s*['"`]((?:[^'"`]|\\['"`]|"(?:[^"\\]|\\.)*")*?)['"`]\s*,?\s*\)/g;
+    const matches = content.matchAll(regex);
+    const params = Array.from(matches, match => match[1]);
+    return params;
 };
 
 // Main function
 const extractTextFromFiles = (dir, js) => {
-    const files = readFiles(dir);
-    const result = {};
+    const result = {},
+        files = fs.statSync(dir).isFile() ? [dir] : readFiles(dir);
 
     files.forEach(file => {
         const content = fs.readFileSync(file, 'utf8');
-        const matches = (js ? extractText2 : extractText)(content);
+        const matches = extractText(content);
         if (matches.length) {
             result[file] = matches;
+            matches.forEach(dd => console.log(`found: "${dd}" in ${file}`));
         }
     });
 
     return result;
 };
 
-if (process.argv.includes('--js')) {
-    const directoryPath = ['public/js'];
-    var data = {};
-    directoryPath.forEach(path => {
-        const extractedText = extractTextFromFiles(path, true);
-        Object.values(extractedText).reduce((a, e) => [...a, ...e], []).forEach(dd => {
-            data[dd] = dd;
+function main() {
+    const dictionary = {},
+        args = process.argv,
+        ends = args.includes("--view") ? '.blade.php' : '',
+        base = args.includes("--view") ? 'resources/views' : '';
+
+    const enter = args.indexOf("--enter") !== -1 ? [args[args.indexOf("--enter") + 1] + ends] : ['app/Http/Controllers', 'app/Functions', 'resources/views'],
+        leave = args.indexOf("--leave") !== -1 ? args[args.indexOf("--leave") + 1] : "locale";
+
+    enter.forEach(_path => {
+        const extractedText = extractTextFromFiles(path.join(base, _path));
+        Object.values(extractedText).reduce((carry, current) => [...carry, ...current], []).forEach(text => {
+            text = text.replace(/[\r\n\t]/g, "").replace(/\\(?=['"`])/g, '');
+            dictionary[text] = text;
         });
     });
 
-    fs.writeFileSync("./js.json", JSON.stringify(data, null, 2), 'utf8');
-} else {
-    const directoryPath = ['app/Http/Controllers', 'resources/views'];
-    var data = {};
-    directoryPath.forEach(path => {
-        const extractedText = extractTextFromFiles(path);
-        Object.values(extractedText).reduce((a, e) => [...a, ...e], []).forEach(dd => {
-            data[dd] = dd;
-        });
-    });
-
-    fs.writeFileSync("./locale.json", JSON.stringify(data, null, 2), 'utf8');
+    fs.writeFileSync("./lang/" + leave + ".json", JSON.stringify(dictionary, null, 2), 'utf8');
+    console.log(`completed successfully with ${Object.keys(dictionary).length} strings found`);
 }
+
+main();
