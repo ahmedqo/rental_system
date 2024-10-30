@@ -27,7 +27,7 @@ const readFiles = (dir, fileList = []) => {
 
 // Function to extract text between __('')
 const extractText = (content) => {
-    const regex = /__\(\s*['"`]((?:[^'"`]|\\['"`]|"(?:[^"\\]|\\.)*")*?)['"`]\s*,?\s*\)/g;
+    const regex = /__\(\s*['"`]((?:[^'"`]|\\['"`]|"(?:[^"\\]|\\.)*")*?)['"`]\s*,?\s*[\)|\[]/g;
     const matches = content.matchAll(regex);
     const params = Array.from(matches, match => match[1]);
     return params;
