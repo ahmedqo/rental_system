@@ -262,49 +262,102 @@
                     </div>
                 </div>
             </section>
-            <section class="w-full py-6 bg-no-repeat bg-cover bg-center bg-x-acent"
+            <section class="w-full py-6 bg-no-repeat bg-cover bg-center bg-x-acent relative isolate"
                 style="background-image: url({{ asset('img/svg/shape-1.svg') }}?v={{ env('APP_VERSION') }})">
-                <div class="container mx-auto p-4 flex flex-col gap-10">
-                    <div class="flex flex-col gap-3">
-                        <h3 class="font-x-thin text-start text-x-white text-2xl lg:text-4xl">
-                            {{ ucwords(__('trusted by 13,643 businesses')) }} <br>
-                            {{ ucwords(__('all around morocco')) }}
-                        </h3>
+                <div class="w-full h-full bg-x-black bg-opacity-10 absolute inset-0 z-[-1]"></div>
+                <div class="container mx-auto p-4">
+                    <div class="grid grid-rows-1 grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0">
+                        <div class="grid grid-rows-1 grid-cols-1 gap-10">
+                            <div class="flex flex-col gap-3">
+                                <h3 class="font-x-thin text-start text-x-white text-2xl lg:text-4xl">
+                                    {{ ucwords(__('trusted by 13,643 businesses')) }} <br>
+                                    {{ ucwords(__('all around morocco')) }}
+                                </h3>
+                            </div>
+                            <ul class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-4">
+                                <li class="flex flex-col">
+                                    <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
+                                        207,930.50 MAD
+                                    </h5>
+                                    <p class="text-x-white text-start text-lg">
+                                        {{ ucfirst(__('reservations paid')) }}.
+                                    </p>
+                                </li>
+                                <li class="flex flex-col">
+                                    <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
+                                        230,312,895
+                                    </h5>
+                                    <p class="text-x-white text-start text-lg">
+                                        {{ ucfirst(__('minutes tracked')) }}.
+                                    </p>
+                                </li>
+                                <li class="flex flex-col">
+                                    <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
+                                        4,000
+                                    </h5>
+                                    <p class="text-x-white text-start text-lg">
+                                        {{ ucfirst(__('reservations completed')) }}.
+                                    </p>
+                                </li>
+                                <li class="flex flex-col">
+                                    <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
+                                        2,648
+                                    </h5>
+                                    <p class="text-x-white text-start text-lg">
+                                        {{ ucfirst(__('agencies signed')) }}.
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="w-full flex flex-wrap items-center relative">
+                            <button id="ui-prev" aria-label="prev_arrow"
+                                class="flex items-center justify-center w-8 h-8 rounded-full absolute left-2 rtl:left-auto rtl:right-2 outline outline-2 outline-x-white bg-gray-700">
+                                <svg class="block w-5 h-5 pointer-events-none text-x-white" viewBox="0 -960 960 960"
+                                    fill="currentColor">
+                                    <path
+                                        d="{{ Core::lang('ar') ? 'M584-412H114v-136h470L382-750l98-96 366 366-366 366-97-96 201-202Z' : 'm376-412 201 202-97 96-366-366 366-366 98 96-202 202h470v136H376Z' }}" />
+                                </svg>
+                            </button>
+                            <div id="ui-carousel" class="w-full lg:w-[calc(100%-6rem)] mx-auto">
+                                <ul>
+                                    @for ($i = 0; $i < 10; $i++)
+                                        <li
+                                            class="flex bg-x-white w-full rounded-x-huge justify-center items-center px-16 py-8 lg:p-6">
+                                            <div class="flex flex-col gap-4">
+                                                <div class="flex flex-wrap items-center gap-4">
+                                                    <div class="w-10 h-10 rounded-full bg-red-500"></div>
+                                                    <ul class="w-0 flex-1 flex flex-col">
+                                                        <span class="text-x-black font-x-thin text-lg">
+                                                            Ahmed qo
+                                                        </span>
+                                                        <span class="text-gray-800 text-base -mt-2">
+                                                            2 weeks ago
+                                                        </span>
+                                                    </ul>
+                                                </div>
+                                                <p class="text-base text-x-black text-justify">
+                                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum
+                                                    harum
+                                                    quibusdam
+                                                    laudantium doloribus voluptate cumque exercitationem minus commodi
+                                                    accusantium
+                                                    eveniet.
+                                                </p>
+                                            </div>
+                                        </li>
+                                    @endfor
+                                </ul>
+                            </div>
+                            <button id="ui-next" aria-label="next_arrow"
+                                class="flex items-center justify-center w-8 h-8 rounded-full absolute right-2 rtl:right-auto rtl:left-2 outline outline-2 outline-x-white bg-gray-700">
+                                <svg class="block w-5 h-5 pointer-events-none text-x-white" viewBox="0 -960 960 960"
+                                    fill="currentColor">
+                                    <path
+                                        d="{{ Core::lang('ar') ? 'm376-412 201 202-97 96-366-366 366-366 98 96-202 202h470v136H376Z' : 'M584-412H114v-136h470L382-750l98-96 366 366-366 366-97-96 201-202Z' }}" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                    <ul class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <li class="flex flex-col">
-                            <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
-                                207,930.50 MAD
-                            </h5>
-                            <p class="text-x-white text-start text-lg">
-                                {{ ucfirst(__('reservations paid')) }}.
-                            </p>
-                        </li>
-                        <li class="flex flex-col">
-                            <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
-                                230,312,895
-                            </h5>
-                            <p class="text-x-white text-start text-lg">
-                                {{ ucfirst(__('minutes tracked')) }}.
-                            </p>
-                        </li>
-                        <li class="flex flex-col">
-                            <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
-                                4,000
-                            </h5>
-                            <p class="text-x-white text-start text-lg">
-                                {{ ucfirst(__('reservations completed')) }}.
-                            </p>
-                        </li>
-                        <li class="flex flex-col">
-                            <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
-                                2,648
-                            </h5>
-                            <p class="text-x-white text-start text-lg">
-                                {{ ucfirst(__('agencies signed')) }}.
-                            </p>
-                        </li>
-                    </ul>
                 </div>
             </section>
             <section class="w-full py-6 bg-no-repeat bg-cover bg-center"
@@ -362,64 +415,6 @@
                     </ul>
                 </div>
             </section>
-            <section class="w-full py-6 bg-no-repeat bg-cover bg-center bg-x-acent "
-                style="background-image: url({{ asset('img/svg/shape-2.svg') }}?v={{ env('APP_VERSION') }})">
-                <div class="w-full container p-4 mx-auto flex flex-col gap-10">
-                    <div class="flex flex-col gap-3">
-                        <h3 class="font-x-thin text-start text-x-white text-2xl lg:text-4xl">
-                            {{ ucwords(__('what our clients say')) }}<br>
-                            {{ ucwords(__('about us')) }}
-                        </h3>
-                        {{-- <p class="text-center text-x-white text-lg lg:text-xl">
-                            {{ ucfirst(__('Our clients love the results we deliver and the exceptional service we provide. Hear their stories, see their success, and discover why they trust us for their needs')) }}
-                        </p> --}}
-                    </div>
-                    <div class="w-full flex flex-wrap items-center relative">
-                        <button id="ui-prev" aria-label="prev_arrow"
-                            class="flex items-center justify-center w-8 h-8 rounded-full absolute left-2 rtl:left-auto rtl:right-2 outline outline-2 outline-x-white bg-gray-700">
-                            <svg class="block w-5 h-5 pointer-events-none text-x-white" viewBox="0 -960 960 960"
-                                fill="currentColor">
-                                <path
-                                    d="{{ Core::lang('ar') ? 'M584-412H114v-136h470L382-750l98-96 366 366-366 366-97-96 201-202Z' : 'm376-412 201 202-97 96-366-366 366-366 98 96-202 202h470v136H376Z' }}" />
-                            </svg>
-                        </button>
-                        <div id="ui-carousel" class="w-full">
-                            <ul>
-                                @for ($i = 0; $i < 10; $i++)
-                                    <li class="flex bg-x-white w-full rounded-x-huge flex-col gap-4 px-14 py-8">
-                                        <div class="flex flex-wrap items-center gap-4">
-                                            <div class="w-10 h-10 rounded-full bg-red-500"></div>
-                                            <ul class="w-0 flex-1 flex flex-col">
-                                                <span class="text-x-black font-x-thin text-lg">
-                                                    Ahmed qo
-                                                </span>
-                                                <span class="text-gray-800 text-base -mt-2">
-                                                    2 weeks ago
-                                                </span>
-                                            </ul>
-                                        </div>
-                                        <p class="text-base text-x-black text-justify">
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum harum
-                                            quibusdam
-                                            laudantium doloribus voluptate cumque exercitationem minus commodi
-                                            accusantium
-                                            eveniet.
-                                        </p>
-                                    </li>
-                                @endfor
-                            </ul>
-                        </div>
-                        <button id="ui-next" aria-label="next_arrow"
-                            class="flex items-center justify-center w-8 h-8 rounded-full absolute right-2 rtl:right-auto rtl:left-2 outline outline-2 outline-x-white bg-gray-700">
-                            <svg class="block w-5 h-5 pointer-events-none text-x-white" viewBox="0 -960 960 960"
-                                fill="currentColor">
-                                <path
-                                    d="{{ Core::lang('ar') ? 'm376-412 201 202-97 96-366-366 366-366 98 96-202 202h470v136H376Z' : 'M584-412H114v-136h470L382-750l98-96 366 366-366 366-97-96 201-202Z' }}" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </section>
         </main>
     </neo-wrapper>
     <neo-toaster horisontal="end" vertical="start"></neo-toaster>
@@ -466,16 +461,9 @@
             next: document.querySelector("#ui-next"),
             opts: {
                 drag: true,
-                gaps: 24
+                gaps: 24,
+                cols: 1,
             }
-        }).sm({
-            cols: 2,
-        }).md({
-            cols: 2,
-        }).lg({
-            cols: 3,
-        }).xl({
-            cols: 3,
         });
     </script>
 </body>
