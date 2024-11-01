@@ -17,8 +17,11 @@
     </section>
     <neo-wrapper class="isolate">
         <neo-topbar transparent align="space-between" class="w-full">
-            <img src="{{ asset('img/logo.webp') }}?v={{ env('APP_VERSION') }}" alt="{{ env('APP_NAME') }} logo image"
-                class="block w-24" width="916" height="516" loading="lazy" />
+            <a href="{{ route('views.guest.index') }}">
+                <img src="{{ asset('img/logo.webp') }}?v={{ env('APP_VERSION') }}"
+                    alt="{{ env('APP_NAME') }} logo image" class="block w-24" width="916" height="516"
+                    loading="lazy" />
+            </a>
             <div class="w-max flex flex-wrap items-center gap-4">
                 <a href="{{ route('views.login.index') }}"
                     class="block w-max px-4 py-2 rounded-x-thin bg-x-prime outline-none hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent text-x-white text-base font-x-thin pointer-events-auto">

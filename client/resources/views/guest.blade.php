@@ -71,8 +71,9 @@
                 ">
                 <div class="p-4 container mx-auto">
                     <div class="w-full lg:w-10/12 mx-auto flex flex-col gap-6 lg:gap-10">
-                        <div class="w-full flex flex-col gap-2 lg:gap-4 lg:px-10">
-                            <h1 class="font-x-huge text-center text-x-black text-3xl lg:text-5xl rtl:leading-[1.4]">
+                        <div class="w-full flex flex-col gap-4">
+                            <h1
+                                class="font-x-huge text-center text-x-black text-[2.75rem] lg:text-[3.5rem] !leading-[1.2] rtl:!leading-[1.4]">
                                 {{ ucwords(__('revolutionize your car rental business with our all-in-one solution')) }}
                             </h1>
                             <h2 class="text-center text-x-black text-xl lg:text-2xl">
@@ -110,69 +111,76 @@
             </div>
         </header>
         <main class="w-full flex flex-col">
-            <section class="w-full py-6 bg-x-light">
+            <section class="w-full py-10 bg-x-light">
                 <div class="p-4 container mx-auto flex flex-col gap-10">
-                    <div class="flex flex-col gap-3 lg:w-10/12 lg:mx-auto">
-                        <h3 class="font-x-thin text-center text-x-black text-2xl lg:text-4xl">
+                    <div class="flex flex-col gap-4 lg:w-9/12 lg:mx-auto">
+                        <h3 class="font-x-thin text-center text-x-black text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
                             {{ ucwords(__('why we’re the best choice for your car rental business')) }}
                         </h3>
                         <p class="text-center text-x-black text-lg lg:text-xl">
                             {{ ucfirst(__('discover the benefits of choosing a solution that’s tailored to your car rental business needs')) }}
                         </p>
                     </div>
-                    <ul class="ui-grid grid grid-rows-1 lg:grid-cols-3 gap-6">
+                    <ul class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                         @php
                             $bollets = [
-                                'all-in-one management' => [
-                                    'text' =>
+                                __('all-in-one management') => [
+                                    'text' => __(
                                         'centralize your fleet, reservations, and customer interactions in a single, streamlined platform',
+                                    ),
                                     'path' =>
                                         'm226-488 258-422 258 422H226ZM708-36q-85 0-143.5-60.08Q506-156.17 506-242q0-85 58.5-143.5T708-444q85.83 0 145.92 58.5Q914-327 914-241.5T853.92-96Q793.83-36 708-36ZM98-60v-364h364v364H98Zm610-82q41 0 70.5-28.39 29.5-28.38 29.5-69.5 0-41.11-29.5-69.61T708-338q-41 0-68.5 28.39-27.5 28.38-27.5 69.5 0 41.11 27.5 69.61T708-142Zm-504-24h152v-152H204v152Zm212-428h138l-70-112-68 112Zm69 0ZM356-318Zm354 78Z',
                                 ],
-                                'intuitive interface' => [
-                                    'text' =>
-                                        'enjoy a user-friendly experience designed to make managing your business easy and efficient',
-                                    'path' =>
-                                        'M48-128v-160h80v-438q0-45 30.5-75.5T234-832h638v106H234v438h234v160H48Zm553 0q-22 0-37.5-15.5T548-181v-412q0-22 15.5-37.5T601-646h258q22 0 37.5 15.5T912-593v412q0 22-15.5 37.5T859-128H601Zm53-160h152v-252H654v252Zm0 0h152-152Z',
-                                ],
-                                'scalable solutions' => [
-                                    'text' =>
-                                        'adapt and expand with flexible features and plans that grow with your business needs',
-                                    'path' =>
-                                        'M67-67q0-117 29-198.5T170.5-400Q216-453 273-481.5T387-521v-108q-137-20-228.5-94T67-893h826q0 97-91.5 170.5T573-629v108q57 11 114 39.5T789.5-400Q835-347 864-265.5T893-67H627v-106h153q-23-133-107-192.5T480-425q-109 0-193 59.5T180-173h153v106H67Zm413-661q74 0 133.5-16.5T715-787H245q42 26 101.5 42.5T480-728Zm0 661q-38 0-65.5-27.5T387-160q0-20 7-37t21-29q26-26 92.5-57T663-343q-29 88-60 155t-57 93q-12 14-29 21t-37 7Zm0-661Z',
-                                ],
-                                'advanced analytics' => [
-                                    'text' =>
-                                        'utilize advanced reporting tools to gain insights and drive data-driven decisions',
-                                    'path' =>
-                                        'M114-114v-85l73-73v158h-73Zm165 0v-245l73-73v318h-73Zm165 0v-318l73 74v244h-73Zm165 0v-244l73-73v317h-73Zm165 0v-405l73-73v478h-73ZM114-341v-103l286-284 160 160 287-288v103L560-465 400-625 114-341Z',
-                                ],
-                                'robust security' => [
-                                    'text' =>
+                                __('robust security') => [
+                                    'text' => __(
                                         'safeguard your business and customer data with our top-tier security and reliable infrastructure',
+                                    ),
                                     'path' =>
                                         'M480.02-46Q328-81 229-216.06 130-351.11 130-516v-266l350-132 350 132v265.57Q830-351 731.02-216t-251 170ZM480-156q98-30 164.5-122T722-480H480v-321l-244 91.94v211.78q0 6.72 2.03 17.28H480v324Z',
                                 ],
-                                '24/7 customer support' => [
-                                    'text' =>
+                                __('intuitive interface') => [
+                                    'text' => __(
+                                        'enjoy a user-friendly experience designed to make managing your business easy and efficient',
+                                    ),
+                                    'path' =>
+                                        'M48-128v-160h80v-438q0-45 30.5-75.5T234-832h638v106H234v438h234v160H48Zm553 0q-22 0-37.5-15.5T548-181v-412q0-22 15.5-37.5T601-646h258q22 0 37.5 15.5T912-593v412q0 22-15.5 37.5T859-128H601Zm53-160h152v-252H654v252Zm0 0h152-152Z',
+                                ],
+                                __('scalable solutions') => [
+                                    'text' => __(
+                                        'adapt and expand with flexible features and plans that grow with your business needs',
+                                    ),
+                                    'path' =>
+                                        'M67-67q0-117 29-198.5T170.5-400Q216-453 273-481.5T387-521v-108q-137-20-228.5-94T67-893h826q0 97-91.5 170.5T573-629v108q57 11 114 39.5T789.5-400Q835-347 864-265.5T893-67H627v-106h153q-23-133-107-192.5T480-425q-109 0-193 59.5T180-173h153v106H67Zm413-661q74 0 133.5-16.5T715-787H245q42 26 101.5 42.5T480-728Zm0 661q-38 0-65.5-27.5T387-160q0-20 7-37t21-29q26-26 92.5-57T663-343q-29 88-60 155t-57 93q-12 14-29 21t-37 7Zm0-661Z',
+                                ],
+                                __('advanced analytics') => [
+                                    'text' => __(
+                                        'utilize advanced reporting tools to gain insights and drive data-driven decisions',
+                                    ),
+                                    'path' =>
+                                        'M114-114v-85l73-73v158h-73Zm165 0v-245l73-73v318h-73Zm165 0v-318l73 74v244h-73Zm165 0v-244l73-73v317h-73Zm165 0v-405l73-73v478h-73ZM114-341v-103l286-284 160 160 287-288v103L560-465 400-625 114-341Z',
+                                ],
+                                __('24/7 customer support') => [
+                                    'text' => __(
                                         'get 24/7 assistance from our dedicated support team for prompt issue resolution',
+                                    ),
                                     'path' =>
                                         'M477.86-218q25.14 0 42.64-17.36t17.5-42.5q0-25.14-17.36-42.64t-42.5-17.5q-25.14 0-42.64 17.36t-17.5 42.5q0 25.14 17.36 42.64t42.5 17.5ZM430-386h98q0-37.65 6.5-59.32Q541-467 582-506q26-24 42-49.92t16-62.32Q640-680 593.65-712 547.3-744 484-744q-66 0-106 34t-54 84l86 34q2-17 18.5-40.5T484-656q29 0 44.5 16t15.5 34q0 20-13 37.5T500-536q-50 44-60 64t-10 86Zm50 338q-89.64 0-168.48-34.02-78.84-34.02-137.16-92.34-58.32-58.32-92.34-137.16T48-480q0-89.9 34.08-168.96 34.08-79.07 92.5-137.55Q233-845 311.74-878.5 390.48-912 480-912q89.89 0 168.94 33.5Q728-845 786.5-786.5t92 137.58q33.5 79.09 33.5 169 0 89.92-33.5 168.42Q845-233 786.51-174.58q-58.48 58.42-137.55 92.5Q569.9-48 480-48Zm0-106q136.51 0 231.26-94.74Q806-343.49 806-480t-94.74-231.26Q616.51-806 480-806t-231.26 94.74Q154-616.51 154-480t94.74 231.26Q343.49-154 480-154Zm0-326Z',
                                 ],
                             ];
                         @endphp
                         @foreach ($bollets as $head => $arr)
-                            <li class="flex flex-wrap gap-2 items-start bg-x-white rounded-x-huge p-6">
-                                <div class="flex flex-col gap-1">
-                                    <svg class="block mx-auto text-x-prime w-12 h-12 pointer-events-none"
+                            <li class="flex flex-wrap gap-2 items-start bg-x-white rounded-x-huge p-3 shadow-xl">
+                                <div
+                                    class="w-full flex flex-col h-full gap-1 p-4 rounded-x-huge border border-x-shade border-dashed">
+                                    <svg class="block text-x-prime mb-3 w-12 h-12 pointer-events-none"
                                         fill="currentcolor" viewBox="0 -960 960 960">
                                         <path d="{{ $arr['path'] }}" />
                                     </svg>
-                                    <h5 class="font-x-thin text-x-black text-center text-lg lg:text-xl">
-                                        {{ ucwords(__($head)) }}
+                                    <h5 class="font-x-thin text-x-black text-start text-lg lg:text-xl">
+                                        {{ ucwords($head) }}
                                     </h5>
-                                    <p class="text-x-black text-center text-base">
-                                        {{ ucfirst(__($arr['text'])) }}.
+                                    <p class="text-x-black text-start text-base">
+                                        {{ ucfirst($arr['text']) }}.
                                     </p>
                                 </div>
                             </li>
@@ -180,103 +188,120 @@
                     </ul>
                 </div>
             </section>
-            <section class="w-full py-6 bg-no-repeat bg-cover bg-center"
+            <section class="w-full py-16 bg-no-repeat bg-cover bg-center overflow-hidden"
                 style="background: url({{ asset('img/svg/pattern-2.svg') }}?v={{ env('APP_VERSION') }})">
                 <div class="p-4 container mx-auto flex flex-col gap-10">
-                    <div class="flex flex-col gap-3 lg:w-10/12 lg:mx-auto">
-                        <h3 class="font-x-thin text-center text-x-prime text-2xl lg:text-4xl">
-                            {{ ucwords(__('a cutting-edge, full-stack system for processing car rentals')) }}
-                        </h3>
-                        <p class="text-center text-x-black text-lg lg:text-xl">
-                            {{ ucfirst(__('this full-stack solution transforms car rental operations by integrating booking, vehicle management, payments, and reporting into one seamless system. With modern technology and a user-friendly interface, it simplifies fleet management and enhances overall operations')) }}
-                        </p>
-                    </div>
-                    <div class="grid grid-rows-1 grid-cols-1 lg:grid-cols-2 items-center gap-10">
-                        <ul class="flex flex-col gap-6 relative isolate pt-4 lg:ms-10">
+                    <div class="grid grid-rows-1 grid-cols-1 lg:grid-cols-2 items-start gap-10">
+                        <div class="flex lg:hidden flex-col gap-4">
+                            <h3
+                                class="font-x-thin text-center lg:text-start text-x-prime text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
+                                {{ ucwords(__('a cutting-edge, full-stack system for processing car rentals')) }}
+                            </h3>
+                            <p class="text-center lg:text-start text-x-black text-lg lg:text-xl">
+                                {{ ucfirst(__('this full-stack solution transforms car rental operations by integrating booking, vehicle management, payments, and reporting into one seamless system. With modern technology and a user-friendly interface, it simplifies fleet management and enhances overall operations')) }}
+                            </p>
+                        </div>
+                        <ul class="relative grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-6">
                             <div
-                                class="w-1 h-full absolute top-0 left-[1.625rem] rtl:left-auto rtl:right-[1.625rem] bottom-0 bg-x-shade z-[-100]">
+                                class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center z-[-100] w-full">
+                                <div class="w-2/12 aspect-square blur-[150px] rounded-full bg-x-prime">
+                                </div>
+                                <div class="w-2/12 aspect-square blur-[150px] rounded-full bg-x-prime">
+                                </div>
                             </div>
                             @php
                                 $bollets = [
-                                    'Reservations' => [
-                                        'text' =>
+                                    __('Reservations') => [
+                                        'text' => __(
                                             'easily manage car rental bookings with real-time availability and a simple scheduling process',
+                                        ),
                                         'path' =>
                                             'M482.77-98Q434-135 378-160q-56-25-117.59-25Q221-185 184-174t-71 29q-37 19-71.5-1T7-206v-480q0-26.06 11-48.33Q29-756.61 52-769q47.63-22 99.32-32.5Q203-812 257.24-812q60.26 0 116.51 15Q430-782 480-748.53V-229q51-31 106-50t114-19q36 0 71 7t69 20v-524q17.52 6 34.52 13 17 7 35.48 13 23 10.39 33 33.67 10 23.27 10 49.33v496q0 35-34.5 49.5T847-145q-34-18-71-29t-76.41-11q-60.59 0-114.82 25-54.23 25-102 62ZM560-332v-417l200-208v437L560-332Z',
                                     ],
-                                    'Payments' => [
-                                        'text' =>
+                                    __('Payments') => [
+                                        'text' => __(
                                             'process payments securely with support for multiple methods, ensuring smooth and transparent transactions',
+                                        ),
                                         'path' =>
                                             'M130-119q-55.97 0-95.99-40.01Q-6-199.02-6-255v-437h136v437h683v136H130Zm193-192q-55.98 0-95.99-39.31Q187-389.63 187-447v-291q0-55.97 40.01-95.99Q267.02-874 323-874h507q55.97 0 95.99 40.01Q966-793.97 966-738v291q0 57.37-40.01 96.69Q885.97-311 830-311H323Zm70-121q0-34.65-24.97-59.33Q343.06-516 308-516v84h85Zm367 0h85v-84q-36 0-60.5 24.67Q760-466.65 760-432Zm-183.79-41q49.79 0 84.29-35 34.5-35 34.5-85t-34.71-85q-34.71-35-84.29-35-50.42 0-85.71 35Q455-643 455-593t35.71 85q35.7 35 85.5 35ZM308-669q35.06 0 60.03-24.97T393-754h-85v85Zm537 0v-85h-85q0 35 24.53 60 24.52 25 60.47 25Z',
                                     ],
-                                    'Blacklist' => [
-                                        'text' =>
-                                            'manage a client blacklist to control vehicle access and enforce rental policies effectively',
+                                    __('Vehicles') => [
+                                        'text' => __(
+                                            'track and manage your fleet, ensuring each vehicle is well-maintained and available for rentals',
+                                        ),
                                         'path' =>
-                                            'M480.15-32Q321-70 217.5-209.06 114-348.11 114-516.16v-274.82L480-928l366 137.02v274.38Q846-348 742.65-209 639.3-70 480.15-32ZM425-315h110q29 0 48.5-20.2T603-383v-98.63Q603-498 591.5-510T563-522v-40q0-34.35-24.33-58.17Q514.34-644 480.17-644t-58.67 23.83Q397-596.35 397-562v40q-17 0-28.5 12T357-482v99q0 27.6 19.5 47.8Q396-315 425-315Zm15-207v-40q0-16 11.5-28t28.5-12q17 0 28.5 12t11.5 28v40h-80Z',
+                                            'M244-161v8q0 30.6-22.5 51.3Q199-81 166.7-81h-10.89Q125-81 102.5-103.29 80-125.58 80-156v-331.43L167-735q9.64-28.8 34.86-46.4Q227.08-799 258-799h444q30.92 0 56.14 17.6T793-735l87 247.57V-156q0 30.42-22.5 52.71T804.19-81H793.3q-32.3 0-54.8-20.7T716-153v-8H244Zm1-404h470l-36-105H281l-36 105Zm60 241q26 0 44-18.38t18-43.5q0-25.12-18-43.62-18-18.5-43.5-18.5T262-429.62q-18 18.38-18 43.5t18.13 43.62Q280.25-324 305-324Zm349.5 0q25.5 0 43.5-18.38t18-43.5q0-25.12-18.12-43.62Q679.75-448 655-448q-26 0-44 18.38t-18 43.5q0 25.12 18 43.62 18 18.5 43.5 18.5Z',
                                     ],
-                                    'Clients' => [
-                                        'text' =>
+                                    __('Clients') => [
+                                        'text' => __(
                                             'manage customer data and rental history, offering insights to enhance personalized services',
+                                        ),
                                         'path' =>
                                             'M13-116v-176q0-35.6 25.65-60.3Q64.3-377 98-377h146q20.21 0 34.11 7Q292-363 300-352q32 44 79.5 69.5T480.04-257q51.96 0 100.46-25.5Q629-308 663-352q6-11 19.59-18 13.6-7 34.41-7h146q35.6 0 60.8 24.7Q949-327.6 949-292v176H658v-128q-38 30-83 46.5T480.14-181q-47.8 0-93.97-16T304-243v127H13Zm466.88-214q-32.88 0-61.38-14.5T372-387q-22-29-48-43t-60-18q36-31 99.08-48T480-513q55.84 0 117.92 17T698-448q-34 4-61 18t-46 43q-19 27-48.58 42t-62.54 15ZM160-473q-47.67 0-81.33-34.25Q45-541.5 45-590.28 45-637 78.75-671t81.53-34Q209-705 243-670.8t34 80.8q0 48.67-34.2 82.83Q208.6-473 160-473Zm640 0q-47.67 0-81.33-34.25Q685-541.5 685-590.28 685-637 718.75-671t81.53-34Q849-705 883-670.8t34 80.8q0 48.67-34.2 82.83Q848.6-473 800-473ZM480-609q-47.67 0-81.33-34.25Q365-677.5 365-725.28q0-48.72 33.75-82.22t81.53-33.5Q529-841 563-807.3t34 82.3q0 47.67-34.2 81.83Q528.6-609 480-609Z',
                                     ],
-                                    'Reminders' => [
-                                        'text' =>
+                                    __('Blacklist') => [
+                                        'text' => __(
+                                            'manage a client blacklist to control vehicle access and enforce rental policies effectively',
+                                        ),
+                                        'path' =>
+                                            'M480.15-32Q321-70 217.5-209.06 114-348.11 114-516.16v-274.82L480-928l366 137.02v274.38Q846-348 742.65-209 639.3-70 480.15-32ZM425-315h110q29 0 48.5-20.2T603-383v-98.63Q603-498 591.5-510T563-522v-40q0-34.35-24.33-58.17Q514.34-644 480.17-644t-58.67 23.83Q397-596.35 397-562v40q-17 0-28.5 12T357-482v99q0 27.6 19.5 47.8Q396-315 425-315Zm15-207v-40q0-16 11.5-28t28.5-12q17 0 28.5 12t11.5 28v40h-80Z',
+                                    ],
+                                    __('Reminders') => [
+                                        'text' => __(
                                             'automate reminders for important tasks such as maintenance schedules',
+                                        ),
                                         'path' =>
                                             'M480-35q-83 0-157-32t-129.5-87Q138-209 106-283T74-441q0-84 32-157.5t87.5-129Q249-783 323-815t157-32q84 0 158 32t129 87.5q55 55.5 87 129T886-441q0 84-32 158t-87 129q-55 55-129 87T480-35Zm102-225 76-76-125-124v-182H427v228l155 154ZM204-922l75 74L73-641l-74-75 205-206Zm552 0 206 206-74 75-207-207 75-74Z',
-                                    ],
-                                    'Vehicles' => [
-                                        'text' =>
-                                            'track and manage your fleet, ensuring each vehicle is well-maintained and available for rentals',
-                                        'path' =>
-                                            'M244-161v8q0 30.6-22.5 51.3Q199-81 166.7-81h-10.89Q125-81 102.5-103.29 80-125.58 80-156v-331.43L167-735q9.64-28.8 34.86-46.4Q227.08-799 258-799h444q30.92 0 56.14 17.6T793-735l87 247.57V-156q0 30.42-22.5 52.71T804.19-81H793.3q-32.3 0-54.8-20.7T716-153v-8H244Zm1-404h470l-36-105H281l-36 105Zm60 241q26 0 44-18.38t18-43.5q0-25.12-18-43.62-18-18.5-43.5-18.5T262-429.62q-18 18.38-18 43.5t18.13 43.62Q280.25-324 305-324Zm349.5 0q25.5 0 43.5-18.38t18-43.5q0-25.12-18.12-43.62Q679.75-448 655-448q-26 0-44 18.38t-18 43.5q0 25.12 18 43.62 18 18.5 43.5 18.5Z',
                                     ],
                                 ];
                             @endphp
                             @foreach ($bollets as $head => $arr)
-                                <li class="w-full items-start flex flex-wrap gap-4">
-                                    <span class="flex items-center justify-center w-14 h-14 rounded-full bg-x-white">
-                                        <svg class="block text-x-prime w-8 h-8 pointer-events-none"
-                                            fill="currentcolor" viewBox="0 -960 960 960">
-                                            <path d="{{ $arr['path'] }}" />
-                                        </svg>
-                                    </span>
-                                    <div class="w-0 flex-1 flex flex-col mt-3">
-                                        <span
-                                            class="block flex-1 text-x-black text-base font-x-thin">{{ __($head) }}</span>
-                                        <p class="text-base text-x-black">
-                                            {{ ucfirst(__($arr['text'])) }}.
-                                        </p>
-                                    </div>
+                                <li
+                                    class="flex flex-col gap-2 items-start bg-x-white rounded-x-huge p-6 border-2 border-x-prime border-dashed">
+                                    <svg class="block text-x-black mb-3 w-12 h-12 pointer-events-none"
+                                        fill="currentcolor" viewBox="0 -960 960 960">
+                                        <path d="{{ $arr['path'] }}" />
+                                    </svg>
+                                    <h5 class="font-x-thin text-x-black text-start text-lg lg:text-xl">
+                                        {{ ucwords($head) }}
+                                    </h5>
+                                    <p class="text-x-black text-start text-base">
+                                        {{ ucfirst($arr['text']) }}.
+                                    </p>
                                 </li>
                             @endforeach
                         </ul>
-                        <div>
+                        <div class="hidden lg:flex flex-col gap-4">
+                            <h3
+                                class="font-x-thin text-center lg:text-start text-x-prime text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
+                                {{ ucwords(__('a cutting-edge, full-stack system for processing car rentals')) }}
+                            </h3>
+                            <p class="text-center lg:text-start text-x-black text-lg lg:text-xl">
+                                {{ ucfirst(__('this full-stack solution transforms car rental operations by integrating booking, vehicle management, payments, and reporting into one seamless system. With modern technology and a user-friendly interface, it simplifies fleet management and enhances overall operations')) }}
+                            </p>
                             <img src="{{ asset('img/mobile.png') }}?v={{ env('APP_VERSION') }}"
-                                alt="{{ env('APP_NAME') }} mobile image" class="block w-full" width="916"
-                                height="516" loading="lazy" />
+                                alt="cars rental phone app"
+                                class="hidden lg:block w-10/12 mx-auto object-contain object-center mt-6" />
                         </div>
                     </div>
                 </div>
             </section>
-            <section class="w-full py-6 bg-no-repeat bg-cover bg-center bg-x-acent relative isolate"
+            <section class="w-full py-10 bg-no-repeat bg-cover bg-center bg-x-acent relative isolate"
                 style="background-image: url({{ asset('img/svg/shape-1.svg') }}?v={{ env('APP_VERSION') }})">
                 <div class="w-full h-full bg-x-black bg-opacity-10 absolute inset-0 z-[-1]"></div>
                 <div class="container mx-auto p-4">
                     <div class="grid grid-rows-1 grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0">
                         <div class="grid grid-rows-1 grid-cols-1 gap-10">
                             <div class="flex flex-col gap-3">
-                                <h3 class="font-x-thin text-start text-x-white text-2xl lg:text-4xl">
+                                <h3
+                                    class="font-x-thin text-start text-x-white text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
                                     {{ ucwords(__('trusted by 13,643 businesses')) }} <br>
                                     {{ ucwords(__('all around morocco')) }}
                                 </h3>
                             </div>
                             <ul class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-4">
                                 <li class="flex flex-col">
-                                    <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
+                                    <h5 class="font-x-thin text-x-white text-start text-2xl lg:text-4xl">
                                         207,930.50 MAD
                                     </h5>
                                     <p class="text-x-white text-start text-lg">
@@ -284,7 +309,7 @@
                                     </p>
                                 </li>
                                 <li class="flex flex-col">
-                                    <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
+                                    <h5 class="font-x-thin text-x-white text-start text-2xl lg:text-4xl">
                                         230,312,895
                                     </h5>
                                     <p class="text-x-white text-start text-lg">
@@ -292,7 +317,7 @@
                                     </p>
                                 </li>
                                 <li class="flex flex-col">
-                                    <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
+                                    <h5 class="font-x-thin text-x-white text-start text-2xl lg:text-4xl">
                                         4,000
                                     </h5>
                                     <p class="text-x-white text-start text-lg">
@@ -300,7 +325,7 @@
                                     </p>
                                 </li>
                                 <li class="flex flex-col">
-                                    <h5 class="font-x-thin text-x-white text-start text-xl lg:text-3xl">
+                                    <h5 class="font-x-thin text-x-white text-start text-2xl lg:text-4xl">
                                         2,648
                                     </h5>
                                     <p class="text-x-white text-start text-lg">
@@ -322,8 +347,9 @@
                                 <ul>
                                     @for ($i = 0; $i < 10; $i++)
                                         <li
-                                            class="flex bg-x-white w-full rounded-x-huge justify-center items-center px-16 py-8 lg:p-6">
-                                            <div class="flex flex-col gap-4">
+                                            class="flex bg-x-white w-full rounded-x-huge justify-center items-center p-6 lg:p-3">
+                                            <div
+                                                class="flex flex-col gap-4 rounded-x-huge p-8 lg:p-4 border border-x-shade border-dashed">
                                                 <div class="flex flex-wrap items-center gap-4">
                                                     <div class="w-10 h-10 rounded-full bg-red-500"></div>
                                                     <ul class="w-0 flex-1 flex flex-col">
@@ -360,11 +386,11 @@
                     </div>
                 </div>
             </section>
-            <section class="w-full py-6 bg-no-repeat bg-cover bg-center"
+            <section class="w-full py-16 bg-no-repeat bg-cover bg-center"
                 style="background: url({{ asset('img/svg/pattern-3.svg') }}?v={{ env('APP_VERSION') }})">
                 <div class="p-4 container mx-auto flex flex-col gap-10">
-                    <div class="flex flex-col gap-3 lg:w-10/12 lg:mx-auto">
-                        <h3 class="font-x-thin text-center text-x-black text-2xl lg:text-4xl">
+                    <div class="flex flex-col gap-4 lg:w-10/12 lg:mx-auto">
+                        <h3 class="font-x-thin text-center text-x-black text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
                             {{ ucwords(__('frequently asked questions')) }}
                         </h3>
                         <p class="text-center text-x-black text-lg lg:text-xl">
@@ -374,22 +400,30 @@
                     <ul class="lg:w-8/12 lg:mx-auto flex flex-col gap-4">
                         @php
                             $bollets = [
-                                'what features does this platform offer' =>
+                                __('what features does this platform offer') => __(
                                     'our platform includes fleet management, reservation systems, customer management, payment processing, and analytics tools',
-                                'can i customize the software for my business' =>
+                                ),
+                                __('can i customize the software for my business') => __(
                                     'yes, the platform allows customization to fit your brand, pricing models, and rental policies',
-                                'what support is available' =>
+                                ),
+                                __('what support is available') => __(
                                     'we provide 24/7 customer support and training resources',
-                                'how secure is the platform' =>
+                                ),
+                                __('how secure is the platform') => __(
                                     'we use industry-standard encryption and data security measures to protect your business and customer data',
-                                'do you offer training for new users' =>
+                                ),
+                                __('do you offer training for new users') => __(
                                     'yes, we provide onboarding and training materials, as well as live support during setup',
-                                'is there a mobile app for managing rentals' =>
+                                ),
+                                __('is there a mobile app for managing rentals') => __(
                                     'yes, we offer a mobile app for managing bookings and fleet operations on the go',
-                                'how do i access customer reports' =>
+                                ),
+                                __('how do i access customer reports') => __(
                                     'detailed customer and reservation reports are available through the analytics dashboard',
-                                'what are the system requirements' =>
+                                ),
+                                __('what are the system requirements') => __(
                                     'the platform is cloud-based, accessible via any modern web browser without special hardware requirements',
+                                ),
                             ];
                         @endphp
                         @foreach ($bollets as $head => $text)
@@ -397,7 +431,7 @@
                                 class="tab-main tab-open w-full rounded-x-huge border bg-opacity-70 border-x-light bg-x-light">
                                 <div class="tab-header px-6 py-3 cursor-pointer flex flex-wrap gap-4 items-center">
                                     <h5 class="w-0 flex-1 text-x-black text-lg lg:text-xl">
-                                        {{ ucwords(__($head)) }}?
+                                        {{ ucwords($head) }}?
                                     </h5>
                                     <svg class="tab-icon block text-x-black w-8 h-8 pointer-events-none"
                                         fill="currentcolor" viewBox="0 -960 960 960">
@@ -407,7 +441,7 @@
                                 <div class="tab-content overflow-hidden transition-all duration-150"
                                     style="max-height: 0px">
                                     <p class="text-x-black text-base p-6 border-t border-x-prime">
-                                        {{ ucfirst(__($text)) }}
+                                        {{ ucfirst($text) }}
                                     </p>
                                 </div>
                             </li>
@@ -415,7 +449,34 @@
                     </ul>
                 </div>
             </section>
+            <section class="w-full py-20 relative overflow-hidden">
+                <div
+                    class="absolute h-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-between items-center flex-col z-[-100] w-full">
+                    <div class="w-2/12 -mt-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    </div>
+                    <div class="w-2/12 -mb-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    </div>
+                </div>
+                <div class="p-4 container mx-auto flex flex-col gap-10">
+                    <div class="w-full lg:w-10/12 mx-auto flex flex-col gap-4">
+                        <h3
+                            class="font-x-huge text-center text-x-black text-[2.75rem] lg:text-[3.5rem] !leading-[1.2] rtl:!leading-[1.4]">
+                            {{ ucwords(__('boost your car rental profits with our comprehensive solution')) }}
+                        </h3>
+                        <h4 class="text-center text-x-black text-xl lg:text-2xl">
+                            {{ ucfirst(__('streamline operations, elevate profits, and create seamless customer experiences')) }}
+                        </h4>
+                        <div class="flex items-center justify-center gap-4 mt-2">
+                            <a href="{{ route('views.companies.store') }}"
+                                class="block w-max px-4 py-2 lg:px-10 lg:py-4 rounded-x-thin bg-x-prime outline-none hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent text-x-white text-base lg:text-2xl font-x-thin pointer-events-auto">
+                                {{ __('Get Started Today') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
+        <footer class="p-20 bg-x-white"></footer>
     </neo-wrapper>
     <neo-toaster horisontal="end" vertical="start"></neo-toaster>
     @include('shared.base.scripts', ['type' => 'admin'])
@@ -428,29 +489,29 @@
                 content = tab.querySelector(".tab-content"),
                 icon = tab.querySelector(".tab-icon");
 
-            header.addEventListener("click", e => {
+            header.addEventListener("click", () => {
+                // Close all tabs except the clicked one
                 tabs.forEach(_tab => {
-                    if (tab === _tab) return;
-                    _tab.classList.remove("tab-open", "bg-opacity-20", "border-x-prime",
-                        "bg-x-prime");
-                    _tab.classList.add("bg-opacity-70", "border-x-light", "bg-x-light");
-                    _tab.querySelector(".tab-icon").classList.remove("rotate-180");
-                    _tab.querySelector(".tab-content").style.maxHeight = "0px";
-                });
-                setTimeout(() => {
-                    if (tab.classList.contains("tab-open")) {
-                        tab.classList.remove("tab-open", "bg-opacity-20", "border-x-prime",
+                    if (_tab !== tab) {
+                        _tab.classList.remove("tab-open", "bg-opacity-20", "border-x-prime",
                             "bg-x-prime");
-                        tab.classList.add("bg-opacity-70", "border-x-light", "bg-x-light");
-                        icon.classList.remove("rotate-180");
-                        content.style.maxHeight = "0px";
-                    } else {
-                        tab.classList.add("tab-open", "bg-opacity-20", "border-x-prime",
-                            "bg-x-prime");
-                        tab.classList.remove("bg-opacity-70", "border-x-light", "bg-x-light");
-                        icon.classList.add("rotate-180");
-                        content.style.maxHeight = "500px";
+                        _tab.classList.add("bg-opacity-70", "border-x-light", "bg-x-light");
+                        _tab.querySelector(".tab-icon").classList.remove("rotate-180");
+                        _tab.querySelector(".tab-content").style.maxHeight = "0px";
                     }
+                });
+
+                // Toggle the clicked tab with a smoother effect
+                setTimeout(() => {
+                    const isOpen = tab.classList.toggle("tab-open");
+                    tab.classList.toggle("bg-opacity-20", isOpen);
+                    tab.classList.toggle("border-x-prime", isOpen);
+                    tab.classList.toggle("bg-x-prime", isOpen);
+                    tab.classList.toggle("bg-opacity-70", !isOpen);
+                    tab.classList.toggle("border-x-light", !isOpen);
+                    tab.classList.toggle("bg-x-light", !isOpen);
+                    icon.classList.toggle("rotate-180", isOpen);
+                    content.style.maxHeight = isOpen ? "500px" : "0px";
                 }, 500);
             });
         });
