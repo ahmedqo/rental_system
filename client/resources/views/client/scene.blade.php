@@ -60,7 +60,7 @@
                     </div>
                     <canvas id="donut" class="w-full h-full"></canvas>
                 </div>
-                <ul class="lg:col-span-4 grid grid-rows-1 grid-cols-1 lg:grid-rows-2 lg:grid-cols-3 gap-6">
+                <ul class="lg:col-span-4 grid grid-rows-1 grid-cols-2 lg:grid-rows-2 lg:grid-cols-3 gap-6">
                     <li
                         class="rounded-x-thin bg-x-white p-4 gap-4 flex flex-col flex-wrap items-center lg:flex-row border border-x-shade relative">
                         <div

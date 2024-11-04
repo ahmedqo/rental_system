@@ -73,7 +73,7 @@
                     <div class="w-full lg:w-10/12 mx-auto flex flex-col gap-6 lg:gap-10">
                         <div class="w-full flex flex-col gap-4">
                             <h1
-                                class="font-x-huge text-center text-x-black text-[2.75rem] lg:text-[3.5rem] !leading-[1.2] rtl:!leading-[1.4]">
+                                class="font-x-huge text-center text-x-black text-[2.25rem] lg:text-[3.5rem] !leading-[1.2] rtl:!leading-[1.4]">
                                 {{ ucwords(__('revolutionize your car rental business with our all-in-one solution')) }}
                             </h1>
                             <h2 class="text-center text-x-black text-xl lg:text-2xl">
@@ -111,10 +111,10 @@
             </div>
         </header>
         <main class="w-full flex flex-col">
-            <section class="w-full py-10 bg-x-light">
+            <section class="w-full py-6 lg:py-10 bg-x-light">
                 <div class="p-4 container mx-auto flex flex-col gap-10">
                     <div class="flex flex-col gap-4 lg:w-9/12 lg:mx-auto">
-                        <h3 class="font-x-thin text-center text-x-black text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
+                        <h3 class="font-x-thin text-center text-x-black text-[1.6rem] lg:text-[2.75rem] !leading-[1.2]">
                             {{ ucwords(__('why we’re the best choice for your car rental business')) }}
                         </h3>
                         <p class="text-center text-x-black text-lg lg:text-xl">
@@ -188,27 +188,20 @@
                     </ul>
                 </div>
             </section>
-            <section class="w-full py-16 bg-no-repeat bg-cover bg-center overflow-hidden"
+            <section class="w-full py-6 lg:py-16 bg-no-repeat bg-cover bg-center overflow-hidden"
                 style="background: url({{ asset('img/svg/pattern-2.svg') }}?v={{ env('APP_VERSION') }})">
                 <div class="p-4 container mx-auto flex flex-col gap-10">
                     <div class="grid grid-rows-1 grid-cols-1 lg:grid-cols-2 items-start gap-10">
                         <div class="flex lg:hidden flex-col gap-4">
                             <h3
-                                class="font-x-thin text-center lg:text-start text-x-prime text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
+                                class="font-x-thin text-center lg:text-start text-x-prime text-[1.6rem] lg:text-[2.75rem] !leading-[1.2]">
                                 {{ ucwords(__('a cutting-edge, full-stack system for processing car rentals')) }}
                             </h3>
                             <p class="text-center lg:text-start text-x-black text-lg lg:text-xl">
                                 {{ ucfirst(__('this full-stack solution transforms car rental operations by integrating booking, vehicle management, payments, and reporting into one seamless system. With modern technology and a user-friendly interface, it simplifies fleet management and enhances overall operations')) }}
                             </p>
                         </div>
-                        <ul class="relative grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div
-                                class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center z-[-100] w-full">
-                                <div class="w-2/12 aspect-square blur-[150px] rounded-full bg-x-prime">
-                                </div>
-                                <div class="w-2/12 aspect-square blur-[150px] rounded-full bg-x-prime">
-                                </div>
-                            </div>
+                        <ul class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-6">
                             @php
                                 $bollets = [
                                     __('Reservations') => [
@@ -257,7 +250,7 @@
                             @endphp
                             @foreach ($bollets as $head => $arr)
                                 <li
-                                    class="flex flex-col gap-2 items-start bg-x-white rounded-x-huge p-6 border-2 border-x-prime border-dashed">
+                                    class="flex flex-col gap-2 items-start rounded-x-huge p-6 border-2 border-x-prime border-dashed">
                                     <svg class="block text-x-black mb-3 w-12 h-12 pointer-events-none"
                                         fill="currentcolor" viewBox="0 -960 960 960">
                                         <path d="{{ $arr['path'] }}" />
@@ -273,7 +266,7 @@
                         </ul>
                         <div class="hidden lg:flex flex-col gap-4">
                             <h3
-                                class="font-x-thin text-center lg:text-start text-x-prime text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
+                                class="font-x-thin text-center lg:text-start text-x-prime text-[1.6rem] lg:text-[2.75rem] !leading-[1.2]">
                                 {{ ucwords(__('a cutting-edge, full-stack system for processing car rentals')) }}
                             </h3>
                             <p class="text-center lg:text-start text-x-black text-lg lg:text-xl">
@@ -286,49 +279,60 @@
                     </div>
                 </div>
             </section>
-            <section class="w-full py-10 bg-no-repeat bg-cover bg-center bg-x-acent relative isolate"
-                style="background-image: url({{ asset('img/svg/shape-1.svg') }}?v={{ env('APP_VERSION') }})">
-                <div class="w-full h-full bg-x-black bg-opacity-10 absolute inset-0 z-[-1]"></div>
+            <section class="w-full py-6 lg:py-10 bg-x-acent bg-opacity-5 overflow-hidden relative isolate">
+                <div
+                    class="absolute h-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-between items-start z-[-100] w-full">
+                    <div class="w-5/12 lg:w-3/12 -mt-96 -ms-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    </div>
+                    <div class="w-5/12 lg:w-3/12 -mt-96 -me-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    </div>
+                </div>
+                <div
+                    class="absolute h-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-end z-[-100] w-full">
+                    <div class="w-5/12 lg:w-3/12 -mb-96 aspect-square blur-[100px] rounded-full bg-x-prime">
+                    </div>
+                    <div class="w-5/12 lg:w-3/12 -mb-96 aspect-square blur-[100px] rounded-full bg-x-prime">
+                    </div>
+                </div>
                 <div class="container mx-auto p-4">
                     <div class="grid grid-rows-1 grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0">
                         <div class="grid grid-rows-1 grid-cols-1 gap-10">
                             <div class="flex flex-col gap-3">
                                 <h3
-                                    class="font-x-thin text-start text-x-white text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
-                                    {{ ucwords(__('trusted by 13,643 businesses')) }} <br>
-                                    {{ ucwords(__('all around morocco')) }}
+                                    class="font-x-thin text-start text-x-black text-[1.6rem] lg:text-[2.75rem] !leading-[1.2]">
+                                    {{ ucwords(__('trusted by 13,643 businesses all around MOROCCO')) }}
                                 </h3>
                             </div>
                             <ul class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-4">
                                 <li class="flex flex-col">
-                                    <h5 class="font-x-thin text-x-white text-start text-2xl lg:text-4xl">
+                                    <h5 class="font-x-thin text-x-black text-start text-2xl lg:text-4xl">
                                         207,930.50 MAD
                                     </h5>
-                                    <p class="text-x-white text-start text-lg">
+                                    <p class="text-x-black text-start text-lg">
                                         {{ ucfirst(__('reservations paid')) }}.
                                     </p>
                                 </li>
                                 <li class="flex flex-col">
-                                    <h5 class="font-x-thin text-x-white text-start text-2xl lg:text-4xl">
+                                    <h5 class="font-x-thin text-x-black text-start text-2xl lg:text-4xl">
                                         230,312,895
                                     </h5>
-                                    <p class="text-x-white text-start text-lg">
+                                    <p class="text-x-black text-start text-lg">
                                         {{ ucfirst(__('minutes tracked')) }}.
                                     </p>
                                 </li>
                                 <li class="flex flex-col">
-                                    <h5 class="font-x-thin text-x-white text-start text-2xl lg:text-4xl">
+                                    <h5 class="font-x-thin text-x-black text-start text-2xl lg:text-4xl">
                                         4,000
                                     </h5>
-                                    <p class="text-x-white text-start text-lg">
+                                    <p class="text-x-black text-start text-lg">
                                         {{ ucfirst(__('reservations completed')) }}.
                                     </p>
                                 </li>
                                 <li class="flex flex-col">
-                                    <h5 class="font-x-thin text-x-white text-start text-2xl lg:text-4xl">
+                                    <h5 class="font-x-thin text-x-black text-start text-2xl lg:text-4xl">
                                         2,648
                                     </h5>
-                                    <p class="text-x-white text-start text-lg">
+                                    <p class="text-x-black text-start text-lg">
                                         {{ ucfirst(__('agencies signed')) }}.
                                     </p>
                                 </li>
@@ -386,11 +390,12 @@
                     </div>
                 </div>
             </section>
-            <section class="w-full py-16 bg-no-repeat bg-cover bg-center"
+            <section class="w-full py-6 lg:py-16 bg-no-repeat bg-cover bg-center"
                 style="background: url({{ asset('img/svg/pattern-3.svg') }}?v={{ env('APP_VERSION') }})">
                 <div class="p-4 container mx-auto flex flex-col gap-10">
                     <div class="flex flex-col gap-4 lg:w-10/12 lg:mx-auto">
-                        <h3 class="font-x-thin text-center text-x-black text-[2rem] lg:text-[2.75rem] !leading-[1.2]">
+                        <h3
+                            class="font-x-thin text-center text-x-black text-[1.6rem] lg:text-[2.75rem] !leading-[1.2]">
                             {{ ucwords(__('frequently asked questions')) }}
                         </h3>
                         <p class="text-center text-x-black text-lg lg:text-xl">
@@ -449,18 +454,25 @@
                     </ul>
                 </div>
             </section>
-            <section class="w-full py-20 relative overflow-hidden">
+            <section class="w-full py-8 lg:py-20 bg-x-acent bg-opacity-5 relative isolate overflow-hidden">
                 <div
                     class="absolute h-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-between items-center flex-col z-[-100] w-full">
-                    <div class="w-2/12 -mt-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    <div class="w-5/12 lg:w-2/12 -mt-96 aspect-square blur-[200px] rounded-full bg-x-prime">
                     </div>
-                    <div class="w-2/12 -mb-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    <div class="w-5/12 lg:w-2/12 -mb-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    </div>
+                </div>
+                <div
+                    class="absolute h-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-between items-center z-[-100] w-full">
+                    <div class="w-5/12 lg:w-2/12 -ms-96 aspect-square blur-[100px] rounded-full bg-x-prime">
+                    </div>
+                    <div class="w-5/12 lg:w-2/12 -me-96 aspect-square blur-[100px] rounded-full bg-x-prime">
                     </div>
                 </div>
                 <div class="p-4 container mx-auto flex flex-col gap-10">
                     <div class="w-full lg:w-10/12 mx-auto flex flex-col gap-4">
                         <h3
-                            class="font-x-huge text-center text-x-black text-[2.75rem] lg:text-[3.5rem] !leading-[1.2] rtl:!leading-[1.4]">
+                            class="font-x-huge text-center text-x-black text-[2.25rem] lg:text-[3.5rem] !leading-[1.2] rtl:!leading-[1.4]">
                             {{ ucwords(__('boost your car rental profits with our comprehensive solution')) }}
                         </h3>
                         <h4 class="text-center text-x-black text-xl lg:text-2xl">

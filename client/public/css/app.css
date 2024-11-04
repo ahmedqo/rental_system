@@ -290,7 +290,7 @@ neo-topbar.main-topbar::part(content) {
 
 .ui-grid {
     scroll-snap-type: x mandatory;
-    grid-auto-columns: 90%;
+    grid-auto-columns: 80%;
     grid-auto-flow: column;
     overflow-x: auto;
 }
@@ -339,9 +339,15 @@ neo-datavisualizer.scene-table::part(tools) {
     display: none;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 425px) {
     .ui-grid {
         grid-auto-columns: 60%;
+    }
+}
+
+@media (min-width: 768px) {
+    .ui-grid {
+        grid-auto-columns: 40%;
     }
 }
 
