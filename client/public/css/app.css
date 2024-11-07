@@ -129,7 +129,12 @@ body[close]>#neo-page-cover {
     height: 100dvh;
     inset: 0;
     z-index: 999999;
-    background: rgb(var(--light));
+    background-color: rgb(var(--light));
+    background-image: radial-gradient(circle, rgba(var(--prime) / .1) 0%, rgba(var(--acent) / .05) 100%);
+}
+
+.bg-x-gradient {
+    background-image: radial-gradient(circle, rgba(var(--prime) / .1) 0%, rgba(var(--acent) / .05) 100%);
 }
 
 .bg-x-core {

@@ -31,14 +31,14 @@
     @endif
 </head>
 
-<body close class="bg-x-light">
+<body close class="bg-x-light bg-x-gradient">
     <section id="neo-page-cover">
         <img src="{{ Core::company() ? Core::company('Image')->Link : asset('img/logo.png') }}?v={{ env('APP_VERSION') }}"
             alt="{{ env('APP_NAME') }} logo image" class="block w-36" width="916" height="516" />
     </section>
     <neo-wrapper class="flex flex-wrap">
         @include('shared.core.sidebar')
-        <main class="w-full lg:w-0 lg:flex-1">
+        <main class="w-full lg:w-0 lg:flex-1 h-[100dvh] overflow-auto">
             @include('shared.core.topbar')
             <div class="p-4 py-8 md:pt-0 container mx-auto">
                 @yield('content')
