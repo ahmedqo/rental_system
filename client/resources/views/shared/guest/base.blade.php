@@ -10,7 +10,7 @@
     <title>@yield('title')</title>
 </head>
 
-<body close class="bg-x-light">
+<body close class="bg-x-light bg-x-gradient">
     <section id="neo-page-cover">
         <img src="{{ asset('img/logo.webp') }}?v={{ env('APP_VERSION') }}" alt="{{ env('APP_NAME') }} logo image"
             class="block w-36" width="916" height="516" loading="lazy" />

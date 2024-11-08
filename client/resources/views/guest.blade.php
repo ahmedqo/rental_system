@@ -79,7 +79,7 @@
                             <h2 class="text-center text-x-black text-xl lg:text-2xl">
                                 {{ ucfirst(__('enhance your business operations, increase profits, and deliver better customer experiences')) }}
                             </h2>
-                            <div class="flex items-center justify-center gap-4 mt-2">
+                            <div class="flex items-center justify-center gap-4 mt-5">
                                 <a href="{{ route('views.companies.store') }}"
                                     class="block w-max px-4 py-2 lg:px-10 lg:py-4 rounded-x-thin bg-x-prime outline-none hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent text-x-white text-base lg:text-2xl font-x-thin pointer-events-auto">
                                     {{ __('Subscribe') }}
@@ -279,19 +279,18 @@
                     </div>
                 </div>
             </section>
-            <section class="w-full py-6 lg:py-10 bg-x-acent bg-opacity-5 overflow-hidden relative isolate">
+            <section
+                class="w-full py-6 lg:py-10 bg-x-acent bg-x-gradient bg-opacity-5 overflow-hidden relative isolate">
                 <div
                     class="absolute h-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-between items-start z-[-100] w-full">
-                    <div class="w-5/12 lg:w-3/12 -mt-96 -ms-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    <div class="w-8/12 lg:w-3/12 -mt-44 -ms-44 aspect-square blur-[150px] rounded-full bg-x-prime">
                     </div>
-                    <div class="w-5/12 lg:w-3/12 -mt-96 -me-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    <div class="w-8/12 lg:w-3/12 -mt-44 -me-44 aspect-square blur-[150px] rounded-full bg-x-prime">
                     </div>
                 </div>
                 <div
                     class="absolute h-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-end z-[-100] w-full">
-                    <div class="w-5/12 lg:w-3/12 -mb-96 aspect-square blur-[100px] rounded-full bg-x-prime">
-                    </div>
-                    <div class="w-5/12 lg:w-3/12 -mb-96 aspect-square blur-[100px] rounded-full bg-x-prime">
+                    <div class="w-8/12 lg:w-3/12 -mb-56 aspect-square blur-[150px] rounded-full bg-x-prime">
                     </div>
                 </div>
                 <div class="container mx-auto p-4">
@@ -454,19 +453,23 @@
                     </ul>
                 </div>
             </section>
-            <section class="w-full py-8 lg:py-20 bg-x-acent bg-opacity-5 relative isolate overflow-hidden">
+            <section class="w-full py-8 lg:py-20 relative isolate overflow-hidden">
                 <div
                     class="absolute h-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-between items-center flex-col z-[-100] w-full">
-                    <div class="w-5/12 lg:w-2/12 -mt-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    <div
+                        class="w-4/12 lg:w-2/12 -mt-44 aspect-square blur-[100px] lg:blur-[150px] rounded-full bg-x-prime">
                     </div>
-                    <div class="w-5/12 lg:w-2/12 -mb-96 aspect-square blur-[200px] rounded-full bg-x-prime">
+                    <div
+                        class="w-4/12 lg:w-2/12 -mb-44 aspect-square blur-[100px] lg:blur-[150px] rounded-full bg-x-prime">
                     </div>
                 </div>
                 <div
                     class="absolute h-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-between items-center z-[-100] w-full">
-                    <div class="w-5/12 lg:w-2/12 -ms-96 aspect-square blur-[100px] rounded-full bg-x-prime">
+                    <div
+                        class="w-4/12 lg:w-2/12 -ms-44 aspect-square blur-[100px] lg:blur-[150px] rounded-full bg-x-prime">
                     </div>
-                    <div class="w-5/12 lg:w-2/12 -me-96 aspect-square blur-[100px] rounded-full bg-x-prime">
+                    <div
+                        class="w-4/12 lg:w-2/12 -me-44 aspect-square blur-[100px] lg:blur-[150px] rounded-full bg-x-prime">
                     </div>
                 </div>
                 <div class="p-4 container mx-auto flex flex-col gap-10">
@@ -478,7 +481,7 @@
                         <h4 class="text-center text-x-black text-xl lg:text-2xl">
                             {{ ucfirst(__('streamline operations, elevate profits, and create seamless customer experiences')) }}
                         </h4>
-                        <div class="flex items-center justify-center gap-4 mt-2">
+                        <div class="flex items-center justify-center gap-4 mt-5">
                             <a href="{{ route('views.companies.store') }}"
                                 class="block w-max px-4 py-2 lg:px-10 lg:py-4 rounded-x-thin bg-x-prime outline-none hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent text-x-white text-base lg:text-2xl font-x-thin pointer-events-auto">
                                 {{ __('Get Started Today') }}
