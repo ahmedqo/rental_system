@@ -12,7 +12,7 @@
 @endsection
 
 @section('content')
-    <div class="p-6 bg-x-white rounded-x-thin shadow-x-core">
+    <div class="bg-x-white rounded-x-thin shadow-x-core">
         <neo-datavisualizer print search filter download title="{{ __('Restrictions list') }}">
             {{-- <a slot="end" title="{{ __('Create') }}" href="{{ route('views.restrictions.store') }}"
                 aria-label="create_page_link"

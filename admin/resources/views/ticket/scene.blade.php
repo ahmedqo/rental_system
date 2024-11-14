@@ -50,12 +50,12 @@
                     @foreach ($data->Comments as $comment)
                         <li class="flex flex-wrap">
                             <div
-                                class="flex gap-2 flex-col w-max min-w-[30%] max-w-[80%] rounded-x-thin bg-x-white px-4 py-2 {{ $comment->target_type == 'App\\Models\\Admin' ? 'ms-auto' : 'me-auto' }}">
-                                <p class="text-x-black text-base">
+                                class="flex flex-col w-max min-w-[30%] max-w-[80%] rounded-x-thin bg-x-white {{ $comment->target_type == 'App\\Models\\Admin' ? 'ms-auto' : 'me-auto' }}">
+                                <p class="text-x-black text-base p-2">
                                     {!! nl2br($comment->content) !!}
                                 </p>
                                 <div class="w-full h-px bg-x-light"></div>
-                                <p class="text-x-black text-xs w-max ms-auto">
+                                <p class="text-x-black text-xs w-max ms-auto px-2 py-1">
                                     {{ \Carbon\Carbon::parse($comment->created_at)->translatedFormat(Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'Y-m-d') }}
                                 </p>
                             </div>

@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-    <div class="p-6 bg-x-white rounded-x-thin shadow-x-core">
+    <div class="bg-x-white rounded-x-thin shadow-x-core">
         <neo-datavisualizer print search filter download title="{{ __('Reservations list') }}">
             <neo-switch slot="start" id="filter" active></neo-switch>
             {{-- <a slot="end" title="{{ __('Create') }}" href="{{ route('views.reservations.store') }}"

@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-    <div class="p-6 bg-x-white rounded-x-thin shadow-x-core">
+    <div class="bg-x-white rounded-x-thin shadow-x-core">
         <neo-datavisualizer print search filter download title="{{ __('Payments list') }}">
             <neo-switch slot="start" id="filter" active></neo-switch>
             @include('shared.page.print')

@@ -171,7 +171,8 @@ neo-imagetransfer {
     background-color: rgb(var(--white) / 1);
 }
 
-neo-select::part(field),
+
+/* neo-select::part(field),
 neo-textbox::part(field),
 neo-password::part(field),
 neo-textarea::part(field),
@@ -180,7 +181,7 @@ neo-datepicker::part(field),
 neo-timepicker::part(field),
 neo-autocomplete::part(field) {
     padding-block: .375rem;
-}
+} */
 
 neo-select::part(content),
 neo-sidebar::part(content),
@@ -230,35 +231,39 @@ neo-select-item,
 neo-autocomplete,
 neo-imagetransfer,
 neo-autocomplete::part(item) {
-    padding: .5rem 1rem;
+    padding: 1rem;
 }
 
 neo-button {
-    padding-block: .688rem;
+    padding-block: .813rem;
 }
 
 neo-datavisualizer::part(topbar) {
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: .75rem;
-    gap: 0;
+    border-bottom: 1px solid rgb(var(--shade) / 1);
+    padding: .75rem 1.5rem;
+    margin: 0;
+}
+
+neo-datavisualizer::part(wrapper) {
+    border-radius: 0 !important;
+    border: unset;
 }
 
 neo-datavisualizer::part(title) {
-    display: none;
+    font-weight: var(--w-thin);
+    font-size: 1.25rem;
+    line-height: 1.75rem;
 }
 
-neo-datavisualizer::part(tools) {
+
+/* neo-datavisualizer::part(tools) {
     margin: auto;
     order: 0;
-}
+} */
 
 neo-datavisualizer::part(search-wrapper) {
     border: 1px solid rgb(var(--shade) / 1);
     background-color: rgb(var(--white) / 1);
-    margin-top: .5rem;
-    max-width: 100%;
-    order: 1;
 }
 
 neo-datavisualizer::part(wrapper),
@@ -314,6 +319,8 @@ neo-topbar.main-topbar::part(content) {
     text-overflow: ellipsis;
 }
 
+
+/* 
 neo-datavisualizer.scene-table::part(topbar) {
     margin: 0 0 .5rem 0;
     flex-direction: row;
@@ -338,7 +345,7 @@ neo-datavisualizer.scene-table::part(tools) {
     margin: 0;
     margin-inline-start: auto;
     order: 0;
-}
+} */
 
 .hide-icon::part(icon) {
     display: none;
@@ -383,18 +390,17 @@ neo-datavisualizer.scene-table::part(tools) {
     neo-topbar.main-topbar::part(content) {
         gap: 1rem;
     }
-    neo-datavisualizer.scene-table::part(topbar) {
-        gap: 1rem;
-        flex-direction: row;
+    neo-datavisualizer::part(topbar) {
+        align-items: center;
     }
-    neo-datavisualizer.scene-table::part(search-wrapper) {
+    /* neo-datavisualizer.scene-table::part(search-wrapper) {
         width: 300px;
         order: 0;
     }
     neo-datavisualizer.scene-table::part(title) {
         font-size: 1.25rem;
         line-height: 1.75rem;
-    }
+    } */
 }
 
 .animate-turn {

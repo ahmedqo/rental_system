@@ -12,7 +12,7 @@
 @endsection
 
 @section('content')
-    <div class="p-6 bg-x-white rounded-x-thin shadow-x-core">
+    <div class="bg-x-white rounded-x-thin shadow-x-core">
         <neo-datavisualizer print search filter download title="{{ __('Users list') }}">
             <a slot="end" title="{{ __('Create') }}" href="{{ route('views.users.store') }}" aria-label="create_page_link"
                 class="flex w-8 h-8 items-center justify-center text-x-white outline-none rounded-x-thin bg-x-prime hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent">
