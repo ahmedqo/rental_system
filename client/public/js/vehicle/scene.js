@@ -53,7 +53,7 @@ new Chart(donut, {
 (async() => {
     const data = await getData($routes.chart);
     if (!zero(data['creances']) && !zero(data['payments']) && !zero(data['charges'])) {
-        chart.parentElement.innerHTML = `<span class="block text-x-black font-x-thin text-lg text-center">${$trans("No data found")}</span>`;
+        chart.parentElement.innerHTML = notFound();
     } else {
         data['keys'] = data['keys'].map(e => $trans(e));
         new Chart(chart, {

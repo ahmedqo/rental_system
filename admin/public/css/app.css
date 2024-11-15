@@ -227,11 +227,14 @@ neo-textarea,
 neo-explorer,
 neo-datepicker,
 neo-timepicker,
-neo-select-item,
 neo-autocomplete,
 neo-imagetransfer,
 neo-autocomplete::part(item) {
     padding: 1rem;
+}
+
+neo-select-item {
+    padding: .5rem 1rem;
 }
 
 neo-button {

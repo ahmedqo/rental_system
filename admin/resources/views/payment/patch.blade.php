@@ -65,7 +65,7 @@
                         </div>
                     @endif
                     @if ($data->Reservation && $data->Reservation->agency)
-                        <div class="flex flex-col gap-1 lg:col-span-2">
+                        <div class="flex flex-col gap-1">
                             <label class="text-x-black font-x-thin text-base">
                                 {{ __('Agency') }}
                             </label>
