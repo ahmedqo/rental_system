@@ -96,7 +96,7 @@ Artisan::command('notification:update', function () {
                         ->where('dropoff_date', '<', $today);
                 });
         })->get()->map(function ($Carry) {
-            $text = 'Reservation ":reference" ' . ($Carry->dropoff_date < now() ? 'ended at' : 'will end at') . ' ":date" <a href=":route" class="text-x-prime underline underline-offset-2 ms-2">view</a>';
+            $text = 'Reservation ":reference" ' . ($Carry->dropoff_date < now() ? 'ended at' : 'will end at') . ' ":date" <a href=":route" class="text-x-prime underline underline-offset-2">view</a>';
             $vars = json_encode([
                 'route' => route('views.recoveries.patch', $Carry->Recovery->id),
                 'reference' => $Carry->reference,
