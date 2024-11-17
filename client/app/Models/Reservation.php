@@ -7,6 +7,7 @@ use App\Traits\HasSearch;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Reservation extends Model
 {
@@ -101,6 +102,11 @@ class Reservation extends Model
         return $this->belongsTo(Agency::class, 'agency');
     }
 
+    public function Recovery()
+    {
+        return $this->hasOne(Recovery::class, 'reservation');
+    }
+
     public function Vehicle()
     {
         return $this->belongsTo(Vehicle::class, 'vehicle');
@@ -111,8 +117,8 @@ class Reservation extends Model
         return $this->hasOne(Payment::class, 'reservation');
     }
 
-    public function Recovery()
+    public function Notifications(): MorphMany
     {
-        return $this->hasOne(Recovery::class, 'reservation');
+        return $this->MorphMany(Notification::class, 'target');
     }
 }

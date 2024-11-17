@@ -16,62 +16,21 @@
     <div class="lg:flex-1 min-w-max items-center justify-end flex flex-wrap gap-1">
         <neo-dropdown label="{{ __('Notifications') }}" position="{{ Core::lang('ar') ? 'start' : 'end' }}">
             @php
-                $recoveries = Core::recoveries(10);
-                $reminders = Core::reminders(10);
-
-                $all = array_merge(
-                    $recoveries
-                        ->map(function ($recovery) {
-                            return __('Reservation') .
-                                ' "' .
-                                $recovery->reference .
-                                '" ' .
-                                ($recovery->dropoff_date < now() ? __('ended at') : __('will end at')) .
-                                ' "' .
-                                $recovery->dropoff_date .
-                                '" <a href="' .
-                                route('views.recoveries.patch', $recovery->Recovery->id) .
-                                '" class="w-max ms-2 text-sm font-x-thin text-x-prime underline underline-offset-2">' .
-                                __('view') .
-                                '</a>';
-                        })
-                        ->toArray(),
-                    $reminders
-                        ->map(function ($reminder) {
-                            return '"' .
-                                ucfirst(__($reminder->consumable_name)) .
-                                '" ' .
-                                __('on') .
-                                ' "' .
-                                ucfirst(__($reminder->Vehicle->brand)) .
-                                ' ' .
-                                ucfirst(__($reminder->Vehicle->model)) .
-                                ' ' .
-                                $reminder->Vehicle->year .
-                                ' (' .
-                                strtoupper($reminder->Vehicle->registration_number) .
-                                ')" ' .
-                                __('at') .
-                                ' "' .
-                                $reminder->view_issued_at .
-                                '"';
-                        })
-                        ->toArray(),
-                );
+                [$notifications, $count] = Core::notifications(10, true);
             @endphp
-            <button slot="trigger" aria-label="notifications_trigger"
+            <button id="notify" slot="trigger" aria-label="notifications_trigger"
                 class="flex w-8 h-8 items-center justify-center text-x-white md:text-x-black outline-none rounded-x-thin !bg-opacity-5 hover:bg-x-black focus:bg-x-black focus-within:bg-x-black">
-                <svg class="block w-6 h-6 pointer-events-none {{ count($all) ? 'animate-ring duration-500' : '*:' }}"
+                <svg class="block w-6 h-6 pointer-events-none {{ $count ? 'animate-ring duration-500' : '' }}"
                     fill="currentcolor" viewBox="0 -960 960 960">
                     <path
                         d="M139-179v-91h71v-278q0-91.69 51.5-166.35Q313-789 405-810v-17q0-30.58 21.84-53.29T479.88-903q31.2 0 53.16 22.71Q555-857.58 555-827v17q91 19 144 94.39T752-548v278h71v91H139ZM480.46-51q-36.94 0-62.2-25.85Q393-102.7 393-139h175q0 37-25.95 62.5T480.46-51Z" />
                 </svg>
             </button>
-            <ul class="w-full lg:w-[300px] flex flex-col">
-                @if (count($all))
-                    @foreach ($all as $simgle)
+            <ul class="w-full lg:w-[400px] flex flex-col">
+                @if (count($notifications))
+                    @foreach ($notifications as $simgle)
                         <li
-                            class="text-x-black p-4 text-base font-x-thin rounded-x-thin flex items-center border-b border-b-x-light last:border-b-0">
+                            class="text-x-black p-4 text-base font-x-thin rounded-x-thin border-b border-b-x-light last:border-b-0">
                             {!! $simgle !!}
                         </li>
                     @endforeach
@@ -105,7 +64,7 @@
                         d="M408-59q-18 0-31-10.5T363-98l-15-94q-14-4-31-14t-28-19l-86 41q-15 6-32.5 1.5T144-204L72-332q-10-16-5-32.5T85-391l80-59q-1-5-1-14.5v-30q0-8.5 1-15.5l-81-58q-13-11-17.5-27.5T72-628l72-127q9-16 26.5-21t32.5 0l88 41q10-7 27-17t30-14l15-98q1-16 14.5-27t31.5-11h143q17 0 30.5 11t15.5 27l14 97q15 4 31.5 14t27.5 18l86-41q15-5 32.5 0t26.5 21l73 126q9 16 5 33t-19 28l-81 55q1 8 2.5 17t1.5 16q0 7-1.5 15.5T794-449l81 58q13 10 18.5 26.5T890-332l-74 128q-10 17-27 21.5t-32-1.5l-86-41q-11 9-28.5 19.5T613-192l-15 94q-2 18-15 28.5T552-59H408Zm71-294q53 0 90-37t37-90q0-52-37-89.5T479-607q-54 0-90.5 37.5T352-480q0 53 36.5 90t90.5 37Z" />
                 </svg>
             </button>
-            <ul class="sys-colors w-full flex flex-col">
+            <ul class="sys-colors w-full lg:w-[170px] flex flex-col">
                 <li class="w-full">
                     <a href="{{ route('views.profile.patch') }}"
                         class="w-full flex flex-wrap gap-2 px-4 py-2 text-start items-center outline-none hover:text-x-white hover:bg-x-acent focus:text-x-white focus:bg-x-acent focus-within:text-x-white focus-within:bg-x-acent {{ request()->routeIs('views.profile.patch') ? 'bg-x-prime text-x-white' : 'text-x-black' }}">

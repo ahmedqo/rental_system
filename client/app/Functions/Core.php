@@ -2,6 +2,7 @@
 
 namespace App\Functions;
 
+use App\Models\Notification;
 use App\Models\Reminder;
 use App\Models\Reservation;
 use Carbon\Carbon;
@@ -142,6 +143,33 @@ class Core
         return $Setting;
     }
 
+    public static function notifications($limit = null, $size = null)
+    {
+        $notifications = Notification::where('company', Core::company('id'));
+
+        $count = Notification::where('company', Core::company('id'))->where(function ($Query) {
+            $Query->whereNull('view')
+                ->orWhereRaw('view NOT LIKE ?', ['%' . Auth::user()->id . '%']);
+        })->count();
+
+        Notification::where('company', Core::company('id'))->where(function ($Query) {
+            $Query->whereNull('view')
+                ->orWhereRaw('view NOT LIKE ?', ['%' . Auth::user()->id . '%']);
+        })->each(function ($Carry) {
+            $Carry->update([
+                'view' => $Carry->view ? $Carry->view . ',' . Auth::user()->id : (string) Auth::user()->id
+            ]);
+        });
+
+        if ($limit) $notifications = $notifications->limit($limit);
+
+        $notifications = $notifications->orderBy('id', 'DESC')->get()->map(function ($Carry) {
+            return $Carry->content;
+        });
+
+        return $size ? [$notifications, $count] : $notifications;
+    }
+
     public static function reminders($limit = null)
     {
         $today = Carbon::today();
@@ -163,8 +191,10 @@ class Core
             ->where('company', Core::company('id'))
             ->where(function ($query) use ($today) {
                 $query->whereBetween('dropoff_date', [
-                    Carbon::parse($today)->subDay()->startOfDay(),
-                    Carbon::parse($today)->endOfDay()
+                    // Carbon::parse($today)->addDay()->endOfDay(),
+                    // Carbon::parse($today)->endOfDay()
+                    Carbon::parse($today)->endOfDay(),                // End of today
+                    Carbon::parse($today)->addDay()->endOfDay()      // End of tomorrow
                 ])
                     ->orWhere(function ($sub) use ($today) {
                         $sub->where('status', '!=', 'completed')
