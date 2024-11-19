@@ -1,0 +1,91 @@
+<style>
+    :host {
+        width: 100%;
+        display: block;
+        min-height: 100dvh;
+        {$ if @props.close $}
+            height: 100dvh;
+            overflow: hidden;
+        {$ endif $}
+    }
+
+    {$ if @props.close && @state.screen $}
+        @media (min-width: 1024px) {
+            :host {
+                height: unset;
+                overflow: unset;
+            }
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-wrapper">
+    <slot></slot>
+</template>
+
+<script>
+    export default {
+        attrs: ["close"],
+        props: {
+            close: false
+        },
+        state: {
+            screen: true,
+            scroll: 0,
+        },
+        rules: {
+            resize() {
+                if(!this.state.screen) return;
+                if(matchMedia("(min-width: 1024px)").matches) document.documentElement.style.scrollBehavior = "";
+                else document.documentElement.style.scrollBehavior = "unset";
+            },
+            closed() {
+                document.documentElement.style.scrollBehavior = "unset";
+                this.setState({
+                    screen: false, 
+                    scroll: window.scrollY
+                });
+                this.props.close = true;    
+                this.scroll(0, this.state.scroll);
+            },
+            smonly() {
+                window.addEventListener("resize", this.rules.resize);
+                document.documentElement.style.scrollBehavior = "unset";
+                this.setState({
+                    screen: true, 
+                    scroll: window.scrollY
+                });
+                this.props.close = true;
+                this.scroll(0, this.state.scroll);
+            },
+            opened() {
+                this.state.screen = true;
+                this.props.close = false;
+                window.scroll(0, this.state.scroll);
+                document.documentElement.style.scrollBehavior = "";
+                window.removeEventListener("resize", this.rules.resize);
+            },
+        },
+        cycle: {
+            created() {
+                Neo.Wrapper = this;
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "close": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute("close") && !["false", "null", "undefined"].includes(this.getAttribute("close"));
+                        },
+                    },
+                    props: {
+                        "close": () => {
+                            this.emit("change:" + name, {
+                                data: next
+                            });
+                        },
+                    }
+                }[type], name);
+            },
+        }
+    }
+</script>
