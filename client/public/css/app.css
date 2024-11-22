@@ -258,11 +258,14 @@ neo-datavisualizer::part(title) {
     line-height: 1.75rem;
 }
 
+neo-datavisualizer::part(title),
+neo-datavisualizer::part(tools) {
+    margin: 0;
+}
 
-/* neo-datavisualizer::part(tools) {
-    margin: auto;
-    order: 0;
-} */
+neo-datavisualizer::part(tools) {
+    margin-inline-start: auto;
+}
 
 neo-datavisualizer::part(search-wrapper) {
     border: 1px solid rgb(var(--shade) / 1);
