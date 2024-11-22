@@ -2,22 +2,21 @@
 @section('title', __('Preview ticket') . ' #' . $data->id)
 
 @section('content')
-    <div class="w-full items-start grid grid-rows-1 grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="flex flex-col p-6 bg-x-white rounded-x-thin shadow-x-core">
-            @if ($data->status !== 'closed')
-                <a title="{{ __('Close') }}" href="{{ route('actions.tickets.close', $data->id) }}"
-                    aria-label="create_page_link"
-                    class="flex text-base px-2 py-1 w-max ms-auto font-x-thin items-center justify-center bg-red-400 outline-none rounded-x-thin text-x-white hover:bg-red-300 focus:bg-red-300 focus-within:bg-red-300">
-                    {{ __('Close ticket') }}
-                </a>
-            @endif
-            <div class="grid grid-rows-1 grid-cols-1 gap-6">
-                <div class="flex flex-col gap-1">
-                    <label class="text-x-black font-x-thin text-base">
-                        {{ __('Reference') }}
-                    </label>
-                    <neo-textbox placeholder="{{ __('Reference') }}" value="{{ $data->reference }}" disable></neo-textbox>
-                </div>
+    <div class="w-full items-start grid grid-rows-1 grid-cols-1 lg:grid-cols-5 gap-6">
+        <div class="flex flex-col bg-x-white rounded-x-thin shadow-x-core lg:col-span-2">
+            <div class="py-3 px-6 border-b border-x-shade flex gap-4 items-center">
+                <label class="text-x-black font-x-thin text-xl">
+                    #{{ $data->reference }}
+                </label>
+                @if ($data->status !== 'closed')
+                    <a title="{{ __('Close') }}" href="{{ route('actions.tickets.close', $data->id) }}"
+                        aria-label="create_page_link"
+                        class="flex text-base px-2 py-1 w-max ms-auto font-x-thin items-center justify-center bg-red-400 outline-none rounded-x-thin text-x-white hover:bg-red-300 focus:bg-red-300 focus-within:bg-red-300">
+                        {{ __('Close ticket') }}
+                    </a>
+                @endif
+            </div>
+            <div class="grid grid-rows-1 grid-cols-1 gap-6 p-6">
                 <div class="flex flex-col gap-1">
                     <label class="text-x-black font-x-thin text-base">
                         {{ __('Category') }}
@@ -51,8 +50,13 @@
                 </div>
             </div>
         </div>
-        <div class="lg:-order-1 lg:col-span-2 flex flex-col p-6 bg-x-white rounded-x-thin shadow-x-core">
-            <div class="flex flex-col gap-4">
+        <div class="lg:-order-1 lg:col-span-3 flex flex-col bg-x-white rounded-x-thin shadow-x-core">
+            <div class="py-3 px-6 border-b border-x-shade">
+                <label class="text-x-black font-x-thin text-xl">
+                    {{ __('Discussion') }}
+                </label>
+            </div>
+            <div class="flex flex-col gap-4 p-6">
                 <ul class="flex flex-col gap-4 bg-x-light p-6 rounded-x-thin h-[400px] overflow-auto">
                     @foreach ($data->Comments as $comment)
                         <li class="flex flex-wrap">
@@ -81,13 +85,13 @@
                                 <neo-textarea rules="required"
                                     errors='{"required": "{{ __('The content field is required') }}"}'
                                     placeholder="{{ __('Content') }} (*)" name="content" value="{{ old('content') }}"
-                                    rows="2" auto="false">
+                                    rows="4" auto="false">
                                 </neo-textarea>
                             </div>
                             <div class="w-full flex flex-wrap gap-6">
                                 <neo-button id="save"
                                     class="w-max px-10 ms-auto text-base lg:text-lg font-x-huge text-x-white bg-x-prime hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent">
-                                    <span>{{ __('Save') }}</span>
+                                    <span>{{ __('Send') }}</span>
                                 </neo-button>
                             </div>
                         </div>

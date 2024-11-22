@@ -130,8 +130,8 @@ class Core
 
     public static function route($id = null)
     {
-        if ($id) return env('APP_URI') . 'api/companies/' . $id . '/upload';
-        else return env('APP_URI') . 'storage/IMAGES/';
+        if ($id) return env('APP_URI') . '/api/companies/' . $id . '/upload';
+        else return env('APP_URI') . '/storage/IMAGES/';
     }
 
     public static function company($prop = null)

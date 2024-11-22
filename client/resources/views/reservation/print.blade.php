@@ -358,7 +358,7 @@
                             {{ __('Vehicle Condition') }}
                         </span>
                     </div>
-                    <div class="w-full flex items-end p-4 border-b border-b-shade flex-col lg:flex-row">
+                    <div class="w-full flex items-end p-4 border-b border-b-shade flex-col lg:flex-row gap-2 lg:gap-0">
                         <div class="w-full flex flex-col gap-2 md:gap-0">
                             <div class="flex flex-col md:flex-row">
                                 <div class="flex flex-wrap items-center">
