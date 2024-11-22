@@ -130,9 +130,8 @@ class Core
 
     public static function route($id = null)
     {
-        $base = 'http://127.0.0.1:5000/';
-        if ($id)  return $base . 'api/companies/' . $id . '/upload';
-        else return $base . 'storage/IMAGES/';
+        if ($id) return env('APP_URI') . 'api/companies/' . $id . '/upload';
+        else return env('APP_URI') . 'storage/IMAGES/';
     }
 
     public static function company($prop = null)
