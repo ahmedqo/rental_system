@@ -14,5 +14,7 @@ Route::group(['middleware' => ['auth', 'active']], function () {
     Route::get('/notifications', [CoreController::class, 'notify_view'])->name('views.core.notify');
 
     Route::get('/data/popular', [CoreController::class, 'popular_action'])->name('actions.core.popular');
+    Route::get('/data/notify', [CoreController::class, 'notify_action'])->name('actions.core.notify');
     Route::get('/data/chart', [CoreController::class, 'chart_action'])->name('actions.core.chart');
+    Route::get('/data/read', [CoreController::class, 'read_action'])->name('actions.core.read');
 });

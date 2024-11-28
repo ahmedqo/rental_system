@@ -5,12 +5,13 @@
     <div class="w-full items-start grid grid-rows-1 grid-cols-1 gap-1">
         <ul class="w-full flex flex-col gap-1">
             @php
-                [$notifications, $count] = Core::notifications(10, true);
+                $notifications = Core::notifications();
             @endphp
             @if (count($notifications))
                 @foreach ($notifications as $single)
-                    <li class="bg-x-white rounded-x-thin text-x-black p-4 text-base font-x-thin shadow-x-core">
-                        {!! $single !!}
+                    <li
+                        class="rounded-x-thin text-x-black p-4 text-base font-x-thin shadow-x-core {{ $single->ring ? 'bg-x-prime bg-opacity-20' : 'bg-x-white ' }}">
+                        {!! $single->content !!}
                     </li>
                 @endforeach
             @else

@@ -399,14 +399,9 @@ neo-datavisualizer.scene-table::part(tools) {
     neo-datavisualizer::part(topbar) {
         align-items: center;
     }
-    /* neo-datavisualizer.scene-table::part(search-wrapper) {
-        width: 300px;
-        order: 0;
+    #notify::part(content) {
+        max-height: unset;
     }
-    neo-datavisualizer.scene-table::part(title) {
-        font-size: 1.25rem;
-        line-height: 1.75rem;
-    } */
 }
 
 .animate-turn {

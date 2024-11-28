@@ -12,6 +12,8 @@
     @if (Core::setting())
         <meta name="core"
             content="{{ json_encode([
+                'read' => route('actions.core.read'),
+                'notify' => route('actions.core.notify'),
                 'format' => Core::formatsList(Core::setting('date_format'), 0),
                 'currency' => Core::setting('currency'),
             ]) }}">
@@ -48,6 +50,7 @@
     <neo-toaster horisontal="end" vertical="start" class="full-size"></neo-toaster>
     @include('shared.base.scripts', ['type' => 'admin'])
     @yield('scripts')
+    <script src="{{ asset('js/notify.min.js') }}?v={{ env('APP_VERSION') }}"></script>
 </body>
 
 </html>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Functions\Core;
 use App\Models\Charge;
 use App\Models\Company;
+use App\Models\Notification;
 use App\Models\Reservation;
+use Illuminate\Support\Facades\Auth;
 
 class CoreController extends Controller
 {
@@ -36,6 +38,33 @@ class CoreController extends Controller
     public function notify_view()
     {
         return view('core.notify');
+    }
+
+    public function notify_action()
+    {
+        $id = Auth::id();
+
+        $data = Notification::where('company', Core::company('id'))->limit(5)
+            ->orderBy('id', 'DESC')->get()->map(function ($Carry) use ($id) {
+                $Carry->content =  $Carry->content;
+                $Carry->ring = !str_contains($Carry->view, (string) $id);
+                return $Carry;
+            });
+
+        return response()->json($data);
+    }
+
+    public function read_action()
+    {
+        $id = Auth::id();
+        Notification::where('company', Core::company('id'))->where(function ($Query) use ($id) {
+            $Query->whereNull('view')
+                ->orWhereRaw('view NOT LIKE ?', ['%' . $id . '%']);
+        })->each(function ($Carry) use ($id) {
+            $Carry->update([
+                'view' => $Carry->view ? $Carry->view . ',' . $id : (string) $id
+            ]);
+        });
     }
 
     public function popular_action()

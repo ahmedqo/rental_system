@@ -143,14 +143,15 @@ class Core
         return $Setting;
     }
 
-    public static function notifications($limit = null, $size = null)
+    public static function notifications()
     {
-        $notifications = Notification::where('company', Core::company('id'));
-
-        $count = Notification::where('company', Core::company('id'))->where(function ($Query) {
-            $Query->whereNull('view')
-                ->orWhereRaw('view NOT LIKE ?', ['%' . Auth::user()->id . '%']);
-        })->count();
+        $id = Auth::id();
+        $data = Notification::where('company', Core::company('id'))
+            ->orderBy('id', 'DESC')->get()->map(function ($Carry) use ($id) {
+                $Carry->content =  $Carry->content;
+                $Carry->ring = !str_contains($Carry->view, (string) $id);
+                return $Carry;
+            });
 
         Notification::where('company', Core::company('id'))->where(function ($Query) {
             $Query->whereNull('view')
@@ -161,13 +162,7 @@ class Core
             ]);
         });
 
-        if ($limit) $notifications = $notifications->limit($limit);
-
-        $notifications = $notifications->orderBy('id', 'DESC')->get()->map(function ($Carry) {
-            return $Carry->content;
-        });
-
-        return $size ? [$notifications, $count] : $notifications;
+        return $data;
     }
 
     public static function reminders($limit = null)

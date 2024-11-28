@@ -307,16 +307,6 @@ $queryAll("neo-tab-wrapper").forEach(wrapper => {
     wrapper.setAttribute("outlet", wrapper.getAttribute("outlet"));
 });
 
-function notify(e) {
-    const svg = $query("svg", e.target);
-    if (svg.classList.contains("animate-ring")) {
-        svg.classList.remove("animate-ring", "duration-500");
-        e.target.removeEventListener("click", notify);
-    }
-}
-
-$query("#notify").addEventListener("click", notify);
-
 Neo.load(function() {
     $queryAll("neo-tab-wrapper").forEach(wrapper => {
         const tabPrev = $query("#prev", wrapper),
