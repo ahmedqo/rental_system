@@ -13,6 +13,18 @@ class Core
     public static function getDates($period = null)
     {
         switch ($period ?? Core::setting('report_frequency')) {
+            case "day":
+                $hours = [];
+                for ($hour = 0; $hour < 24; $hour += 3) {
+                    $startHour = sprintf('%02d:00', $hour);
+                    $endHour = sprintf('%02d:00', $hour + 2);
+                    $hours["$startHour - $endHour"] = 0;
+                }
+                return [
+                    Carbon::now()->startOfDay(),
+                    Carbon::now()->endOfDay(),
+                    $hours
+                ];
             case "week":
                 return [
                     Carbon::now()->startOfWeek(Carbon::MONDAY),
@@ -69,6 +81,11 @@ class Core
     public static function groupKey($model, $period = null)
     {
         switch ($period ?? Core::setting('report_frequency')) {
+            case 'day':
+                $hour = $model->created_at->hour;
+                $startHour = (int) floor($hour / 3) * 3;
+                $endHour = $startHour + 2;
+                return sprintf('%02d:00 - %02d:00', $startHour, $endHour);
             case 'week':
                 return __($model->created_at->format('l'));
             case 'month':
@@ -282,17 +299,17 @@ class Core
 
     public static function timesList($time)
     {
-        return ['week' => 7, 'month' => 30, 'year' => 365][$time];
+        return ['day' => 1, 'week' => 7, 'month' => 30, 'year' => 365][$time];
     }
 
     public static function periodsList()
     {
-        return ['week', 'month', 'year'];
+        return ['day', 'week', 'month', 'year'];
     }
 
     public static function unitsList()
     {
-        return ['week', 'month', 'year', 'mileage'];
+        return ['day', 'week', 'month', 'year', 'mileage'];
     }
 
     public static function damagesList()

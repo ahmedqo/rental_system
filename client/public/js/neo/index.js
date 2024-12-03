@@ -360,7 +360,15 @@ const Neo = (function Neo() {
             if (target && target.length) {
                 for (let i = 0; i < target.length; i++) {
                     if (target[i].nodeType === 3) {
-                        target[i].nodeValue.trim() && fiber.props.children.push(new Fiber(NEO_TEXT_SYMBOL, { nodeValue: target[i].nodeValue.replace(/\s\s+|\n|\r\n/g, '') }));
+                        if (target[i].nodeValue.trim()) {
+                            const index = target[i].nodeValue.replace(/\s\s+|\n|\r\n/g, '');
+                            const isElement = Parser.join.test(index) && this.props[+index.match(Parser.nbr)];
+                            if (isElement) {
+                                fiber.props.children.push(new Fiber(isElement, { children: [] }));
+                            } else {
+                                fiber.props.children.push(new Fiber(NEO_TEXT_SYMBOL, { nodeValue: index }));
+                            }
+                        }
                     } else {
                         fiber.props.children.push(new Fiber());
                         this.tree(target[i], fiber.props.children[fiber.props.children.length - 1]);
@@ -925,7 +933,7 @@ const Neo = (function Neo() {
                 const { type, props } = fiber;
                 const dom =
                     type === NEO_TEXT_SYMBOL ?
-                    document.createTextNode("") :
+                    document.createTextNode("") : type instanceof HTMLElement ? type :
                     type in NEO_SVG_NODES ?
                     document.createElementNS("http://www.w3.org/2000/svg", type) :
                     document.createElement(type);

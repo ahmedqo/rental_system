@@ -3,8 +3,6 @@
 namespace App\Functions;
 
 use App\Models\Notification;
-use App\Models\Reminder;
-use App\Models\Reservation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -14,6 +12,18 @@ class Core
     public static function getDates($period = null)
     {
         switch ($period ?? Core::setting('report_frequency')) {
+            case "day":
+                $hours = [];
+                for ($hour = 0; $hour < 24; $hour += 3) {
+                    $startHour = sprintf('%02d:00', $hour);
+                    $endHour = sprintf('%02d:00', $hour + 2);
+                    $hours["$startHour - $endHour"] = 0;
+                }
+                return [
+                    Carbon::now()->startOfDay(),
+                    Carbon::now()->endOfDay(),
+                    $hours
+                ];
             case "week":
                 return [
                     Carbon::now()->startOfWeek(Carbon::MONDAY),
@@ -70,6 +80,11 @@ class Core
     public static function groupKey($model, $period = null)
     {
         switch ($period ?? Core::setting('report_frequency')) {
+            case 'day':
+                $hour = $model->created_at->hour;
+                $startHour = (int) floor($hour / 3) * 3;
+                $endHour = $startHour + 2;
+                return sprintf('%02d:00 - %02d:00', $startHour, $endHour);
             case 'week':
                 return __($model->created_at->format('l'));
             case 'month':
@@ -163,45 +178,6 @@ class Core
         });
 
         return $data;
-    }
-
-    public static function reminders($limit = null)
-    {
-        $today = Carbon::today();
-        $reminders = Reminder::with('Vehicle')->where('company', Core::company('id'))
-            ->whereRaw("? BETWEEN DATE_SUB(view_issued_at, INTERVAL threshold_value HOUR) AND view_issued_at", [$today]);
-
-        if ($limit) $reminders = $reminders->limit($limit);
-
-        return $reminders->get();
-    }
-
-    public static function recoveries($limit = null)
-    {
-        $today = Carbon::today();
-
-        $recoveries = Reservation::with(['Recovery' => function ($query) {
-            $query->select('id', 'reservation');
-        }])
-            ->where('company', Core::company('id'))
-            ->where(function ($query) use ($today) {
-                $query->whereBetween('dropoff_date', [
-                    // Carbon::parse($today)->addDay()->endOfDay(),
-                    // Carbon::parse($today)->endOfDay()
-                    Carbon::parse($today)->endOfDay(),                // End of today
-                    Carbon::parse($today)->addDay()->endOfDay()      // End of tomorrow
-                ])
-                    ->orWhere(function ($sub) use ($today) {
-                        $sub->where('status', '!=', 'completed')
-                            ->where('dropoff_date', '<', $today);
-                    });
-            });
-
-        if ($limit) {
-            $recoveries->limit($limit);
-        }
-
-        return $recoveries->get();
     }
 
     public static function genderList()
@@ -301,17 +277,17 @@ class Core
 
     public static function timesList($time)
     {
-        return ['week' => 7, 'month' => 30, 'year' => 365][$time];
+        return ['day' => 1, 'week' => 7, 'month' => 30, 'year' => 365][$time];
     }
 
     public static function periodsList()
     {
-        return ['week', 'month', 'year'];
+        return ['day', 'week', 'month', 'year'];
     }
 
     public static function unitsList()
     {
-        return ['week', 'month', 'year', 'mileage'];
+        return ['day', 'week', 'month', 'year', 'mileage'];
     }
 
     public static function damagesList()
