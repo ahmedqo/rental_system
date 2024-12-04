@@ -364,7 +364,9 @@ const Neo = (function Neo() {
                             const index = target[i].nodeValue.replace(/\s\s+|\n|\r\n/g, '');
                             const isElement = Parser.join.test(index) && this.props[+index.match(Parser.nbr)];
                             if (isElement) {
-                                fiber.props.children.push(new Fiber(isElement, { children: [] }));
+                                const _fiber = new Fiber(isElement, { children: [] });
+                                fiber.props.children.push(_fiber);
+                                this.attrs(isElement, _fiber);
                             } else {
                                 fiber.props.children.push(new Fiber(NEO_TEXT_SYMBOL, { nodeValue: index }));
                             }
