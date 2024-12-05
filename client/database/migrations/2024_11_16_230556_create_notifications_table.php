@@ -17,7 +17,7 @@ return new class extends Migration
 
             $table->string('target_id');
             $table->string('target_type');
-            $table->string('text')->nullable();
+            $table->longText('text')->nullable();
             $table->string('vars')->nullable();
             $table->string('view')->nullable();
             $table->timestamps();

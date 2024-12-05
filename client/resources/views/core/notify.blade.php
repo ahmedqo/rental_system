@@ -10,7 +10,7 @@
             @if (count($notifications))
                 @foreach ($notifications as $single)
                     <li
-                        class="rounded-x-thin text-x-black p-4 text-base font-x-thin shadow-x-core {{ $single->ring ? 'bg-x-prime bg-opacity-20' : 'bg-x-white ' }}">
+                        class="rounded-x-thin text-x-black text-base font-x-thin shadow-x-core {{ $single->ring ? 'bg-x-prime bg-opacity-20' : 'bg-x-white ' }}">
                         {!! $single->content !!}
                     </li>
                 @endforeach

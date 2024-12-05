@@ -29,6 +29,6 @@ Route::get('/clean/{password}', function ($password) {
 });
 
 Route::get('/reminders-update', function () {
-    Artisan::call('reminder:update');
+    Artisan::call('notification:update');
     return 'done';
 });

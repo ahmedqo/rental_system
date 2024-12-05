@@ -23,7 +23,7 @@
                         d="M139-179v-91h71v-278q0-91.69 51.5-166.35Q313-789 405-810v-17q0-30.58 21.84-53.29T479.88-903q31.2 0 53.16 22.71Q555-857.58 555-827v17q91 19 144 94.39T752-548v278h71v91H139ZM480.46-51q-36.94 0-62.2-25.85Q393-102.7 393-139h175q0 37-25.95 62.5T480.46-51Z" />
                 </svg>
             </button>
-            <ul class="w-full flex flex-col">
+            <ul class="w-full flex flex-col lg:w-[400px]">
                 <li>
                     <ul id="notify_content" class="w-full flex flex-col"></ul>
                 </li>
