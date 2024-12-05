@@ -71,7 +71,7 @@ class RecoveryController extends Controller
 
         Recovery::findorfail($id)->update($Request->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);

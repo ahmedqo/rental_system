@@ -51,7 +51,7 @@ class RestrictionController extends Controller
 
         Restriction::create($Request->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -72,7 +72,7 @@ class RestrictionController extends Controller
 
         Restriction::findorfail($id)->update($Request->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);
@@ -82,7 +82,7 @@ class RestrictionController extends Controller
     {
         Restriction::findorfail($id)->delete();
 
-        return Redirect::route('views.restrictions.index')->with([
+        return Redirect::route('views.restrictions.index')->withInput()->with([
             'message' => __('Deleted successfully'),
             'type' => 'success'
         ]);

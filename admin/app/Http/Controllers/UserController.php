@@ -72,7 +72,7 @@ class UserController extends Controller
 
         Mailer::reset($Request->email);
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -99,7 +99,7 @@ class UserController extends Controller
             'last_name' => strtolower($Request->last_name)
         ])->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);
@@ -109,7 +109,7 @@ class UserController extends Controller
     {
         User::findorfail($id)->delete();
 
-        return Redirect::route('views.users.index')->with([
+        return Redirect::route('views.users.index')->withInput()->with([
             'message' => __('Deleted successfully'),
             'type' => 'success'
         ]);

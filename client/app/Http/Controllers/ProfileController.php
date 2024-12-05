@@ -56,7 +56,7 @@ class ProfileController extends Controller
             "password" => $password
         ]);
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Changed successfully'),
             'type' => 'success'
         ]);
@@ -87,7 +87,7 @@ class ProfileController extends Controller
             ])->all()
         );
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);

@@ -53,7 +53,7 @@ class ChargeController extends Controller
 
         Charge::create($Request->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -76,7 +76,7 @@ class ChargeController extends Controller
 
         Charge::findorfail($id)->update($Request->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -86,7 +86,7 @@ class ChargeController extends Controller
     {
         Charge::findorfail($id)->delete();
 
-        return Redirect::route('views.charges.index')->with([
+        return Redirect::route('views.charges.index')->withInput()->with([
             'message' => __('Deleted successfully'),
             'type' => 'success'
         ]);

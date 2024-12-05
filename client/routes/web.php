@@ -3,6 +3,7 @@
 use App\Functions\Core;
 use Illuminate\Support\Facades\Route;
 
+
 require __DIR__ . '/guest.php';
 require __DIR__ . '/company.php';
 require __DIR__ . '/setting.php';
@@ -25,6 +26,7 @@ require __DIR__ . '/recovery.php';
 require __DIR__ . '/payment.php';
 require __DIR__ . '/charge.php';
 require __DIR__ . '/ticket.php';
+
 
 
 function array_flatten($array)

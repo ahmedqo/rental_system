@@ -73,7 +73,7 @@ class ReminderController extends Controller
 
         Reminder::create($Request->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -116,7 +116,7 @@ class ReminderController extends Controller
         $Reminder = Reminder::findorfail($id);
         $Reminder->update($Request->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);
@@ -126,7 +126,7 @@ class ReminderController extends Controller
     {
         Reminder::findorfail($id)->delete();
 
-        return Redirect::route('views.reminders.index')->with([
+        return Redirect::route('views.reminders.index')->withInput()->with([
             'message' => __('Deleted successfully'),
             'type' => 'success'
         ]);

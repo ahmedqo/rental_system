@@ -75,7 +75,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Please check your email for password reset instructions'),
             'type' => 'success'
         ]);
@@ -124,7 +124,7 @@ class AuthController extends Controller
         $user->password = Hash::make($Request->new_password);
         $user->save();
 
-        return Redirect::route("views.login.index")->with([
+        return Redirect::route("views.login.index")->withInput()->with([
             'message' => __('Changed successfully'),
             'type' => 'success'
         ]);
@@ -134,7 +134,7 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        return Redirect::route("views.login.index")->with([
+        return Redirect::route("views.login.index")->withInput()->with([
             'message' => __('Logout successfully'),
             'type' => 'success'
         ]);

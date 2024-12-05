@@ -347,7 +347,7 @@ class CompanyController extends Controller
 
         Mailer::reset($Request->representative_email);
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -420,7 +420,7 @@ class CompanyController extends Controller
             ]);
         }
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);
@@ -433,7 +433,7 @@ class CompanyController extends Controller
             'clear' => true
         ]);
 
-        return Redirect::route('views.companies.index')->with([
+        return Redirect::route('views.companies.index')->withInput()->with([
             'message' => __('Deleted successfully'),
             'type' => 'success'
         ]);

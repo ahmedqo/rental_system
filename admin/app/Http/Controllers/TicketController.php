@@ -102,7 +102,7 @@ class TicketController extends Controller
             'content' => $Request->content,
         ]);
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);
@@ -115,7 +115,7 @@ class TicketController extends Controller
     //         'status' => 'closed'
     //     ]);
 
-    //     return Redirect::back()->with([
+    //     return Redirect::back()->withInput()->with([
     //         'message' => __('Updated successfully'),
     //         'type' => 'success'
     //     ]);

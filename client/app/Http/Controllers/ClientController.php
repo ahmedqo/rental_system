@@ -236,7 +236,7 @@ class ClientController extends Controller
             'last_name' => strtolower($Request->last_name)
         ])->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -280,7 +280,7 @@ class ClientController extends Controller
             'last_name' => strtolower($Request->last_name)
         ])->all());
 
-        return Redirect::back()->with([
+        return Redirect::back()->withInput()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);
@@ -290,7 +290,7 @@ class ClientController extends Controller
     {
         Client::findorfail($id)->delete();
 
-        return Redirect::route('views.clients.index')->with([
+        return Redirect::route('views.clients.index')->withInput()->with([
             'message' => __('Deleted successfully'),
             'type' => 'success'
         ]);
