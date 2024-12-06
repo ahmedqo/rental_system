@@ -30,17 +30,31 @@
 
 @section('content')
     <div class="w-full items-start grid grid-rows-1 grid-cols-1 gap-6">
-        @if ($vals->ended)
-            <div class="bg-red-500 text-x-white p-4 text-base font-x-thin rounded-x-thin shadow-x-core">
-                {{ __('This vehicle has :num pending reservations where the dropoff date has passed', ['num' => $vals->ended]) }}
-            </div>
-        @endif
-        @if ($reminders->count())
+        @if ($reminders->count() || $vals->ended)
             <ul class="w-full flex flex-col gap-1">
+                @if ($vals->ended)
+                    <li
+                        class="flex flex-wrap items-center gap-4 bg-red-500 text-x-white p-4 text-base font-x-thin rounded-x-thin shadow-x-core">
+                        <svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M480-40q-26 0-50.94-10.74Q404.12-61.48 384-80L80-384q-18.52-20.12-29.26-45.06Q40-454 40-480q0-26 10.59-51.12Q61.17-556.24 80-576l304-304q20.12-20.48 45.06-30.24Q454-920 480-920q26 0 51.12 9.91Q556.24-900.17 576-880l304 304q20.17 19.76 30.09 44.88Q920-506 920-480q0 26-9.76 50.94Q900.48-404.12 880-384L576-80q-19.76 18.83-44.88 29.41Q506-40 480-40Zm-60-382h120v-250H420v250Zm60 160q25.38 0 42.69-17.81Q540-297.63 540-322q0-25.38-17.31-42.69T480-382q-25.37 0-42.69 17.31Q420-347.38 420-322q0 24.37 17.31 42.19Q454.63-262 480-262Z" />
+                        </svg>
+                        <span class="w-0 flex-1">
+                            {{ __('This vehicle has :num pending reservations where the dropoff date has passed', ['num' => $vals->ended]) }}
+                        </span>
+                    </li>
+                @endif
                 @foreach ($reminders as $row)
-                    <li class="bg-yellow-500 text-x-white p-4 text-base font-x-thin rounded-x-thin shadow-x-core">
-                        "{{ ucfirst(__($row->consumable_name)) }}" {{ __('at') }}
-                        "{{ $row->view_issued_at }}"
+                    <li
+                        class="flex flex-wrap items-center gap-4 bg-yellow-500 text-x-white p-4 text-base font-x-thin rounded-x-thin shadow-x-core">
+                        <svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M739-423v-114h210v114H739Zm80 299L651-249l69-92 167 125-68 92Zm-99-495-69-92 168-125 68 92-167 125ZM129-161v-161h-6q-48-6-80-42.5T11-450v-60q0-52 37.5-90t90.5-38h131l247-149v614L270-322h-5v161H129Zm444-149v-340q42 28 67 73t25 97q0 52-25 97t-67 73Z" />
+                        </svg>
+                        <span class="w-0 flex-1">
+                            "{{ ucfirst(__($row->consumable_name)) }}" {{ __('at') }}
+                            "{{ $row->view_issued_at }}"
+                        </span>
                     </li>
                 @endforeach
             </ul>

@@ -22,27 +22,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Artisan::command('reminder:update', function () {
-    $today = Carbon::today();
-    Reminder::whereDate('view_issued_at', '<', $today)->get()->map(function ($item) {
-        if ($item->unit_of_measurement === 'mileage') {
-            $mileage = $item->Owner->mileage_per_day;
-            $item->update([
-                'view_issued_at' => Carbon::parse(Carbon::today())->addDays(ceil($item->recurrence_amount / $mileage)),
-                'threshold_value' => $item->threshold_value / $mileage
-            ]);
-        } else {
-            $time = Core::timesList($item->unit_of_measurement) * $item->recurrence_amount;
-            $date = Carbon::parse($item->reminder_date);
-            while ($date < Carbon::today()) $date->addDays($time);
-            $item->update([
-                'view_issued_at' =>  $date,
-            ]);
-        }
-    });
-})->purpose('update reminders dates');
-
-
 Artisan::command('notification:update', function () {
     $today = Carbon::today();
 
@@ -91,9 +70,9 @@ Artisan::command('notification:update', function () {
                 Carbon::parse($today)->endOfDay(),
                 Carbon::parse($today)->addDay()->endOfDay()
             ])
-                ->orWhere(function ($sub) use ($today) {
+                ->orWhere(function ($sub) {
                     $sub->where('status', '!=', 'completed')
-                        ->where('dropoff_date', '<', $today);
+                        ->where('dropoff_date', '<', now());
                 });
         })->get()->map(function ($Carry) {
             $text = '<a href=":route" class="flex flex-wrap items-center gap-4 p-4 hover:bg-x-light"><span class="w-10 h-10 rounded-full bg-x-prime text-x-white flex items-center justify-center"><svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor">' . ($Carry->dropoff_date < now() ? '<path d="M480-40q-26 0-50.94-10.74Q404.12-61.48 384-80L80-384q-18.52-20.12-29.26-45.06Q40-454 40-480q0-26 10.59-51.12Q61.17-556.24 80-576l304-304q20.12-20.48 45.06-30.24Q454-920 480-920q26 0 51.12 9.91Q556.24-900.17 576-880l304 304q20.17 19.76 30.09 44.88Q920-506 920-480q0 26-9.76 50.94Q900.48-404.12 880-384L576-80q-19.76 18.83-44.88 29.41Q506-40 480-40Zm-60-382h120v-250H420v250Zm60 160q25.38 0 42.69-17.81Q540-297.63 540-322q0-25.38-17.31-42.69T480-382q-25.37 0-42.69 17.31Q420-347.38 420-322q0 24.37 17.31 42.19Q454.63-262 480-262Z"/>' : '<path d="M480-35q-83 0-157-32t-129.5-87Q138-209 106-283T74-441q0-84 32-157.5t87.5-129Q249-783 323-815t157-32q84 0 158 32t129 87.5q55 55.5 87 129T886-441q0 84-32 158t-87 129q-55 55-129 87T480-35Zm102-225 76-76-125-124v-182H427v228l155 154ZM204-922l75 74L73-641l-74-75 205-206Zm552 0 206 206-74 75-207-207 75-74Z"/>') . '</svg></span><span class="w-0 flex-1">Reservation ":reference" ' . ($Carry->dropoff_date < now() ? 'ended at' : 'will end at') . ' ":date"</span></a>';
