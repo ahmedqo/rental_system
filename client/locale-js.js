@@ -27,8 +27,7 @@ const readFiles = (dir, fileList = []) => {
 
 // Function to extract text between __('')
 const extractText = (content) => {
-    //const regex = /name=["']([^"']*)["']/g;
-    const regex = /__\(\s*['"`]((?:[^'"`]|\\['"`]|"(?:[^"\\]|\\.)*")*?)['"`]\s*,?\s*[\)|\[]/g;
+    const regex = /[@$]trans\(\s*['"`]((?:[^'"`]|\\['"`]|"(?:[^"\\]|\\.)*")*?)['"`]\s*,?\s*[\)|\[]/g;
     const matches = content.matchAll(regex);
     const params = Array.from(matches, match => match[1]);
     return params;
@@ -54,11 +53,11 @@ const extractTextFromFiles = (dir, js) => {
 function main() {
     const dictionary = {},
         args = process.argv,
-        ends = args.includes("--view") ? '.blade.php' : '',
-        base = args.includes("--view") ? 'resources/views' : '';
+        ends = args.includes("--view") ? '.js' : '',
+        base = args.includes("--view") ? 'public/js' : '';
 
-    const enter = args.indexOf("--enter") !== -1 ? [args[args.indexOf("--enter") + 1] + ends] : ['app/Http/Controllers', 'app/Functions', 'resources/views'],
-        leave = args.indexOf("--leave") !== -1 ? args[args.indexOf("--leave") + 1] : "locale";
+    const enter = args.indexOf("--enter") !== -1 ? [args[args.indexOf("--enter") + 1] + ends] : ['public/js'],
+        leave = args.indexOf("--leave") !== -1 ? args[args.indexOf("--leave") + 1] : "locale-js";
 
     enter.forEach(_path => {
         const extractedText = extractTextFromFiles(path.join(base, _path));
