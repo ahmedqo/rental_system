@@ -482,8 +482,15 @@
     [part="table-body-row"] {
         border-top-width: 1px;
         border-top-style: solid;
-        border-top-color: {{ @props.outline ? @Theme.colors("BLACK") : @Theme.colors("BLACK", 20) }};
+        border-top-color: {{ @props.outline ? @Theme.colors("BLACK") : @Theme.colors("BLACK", 20) }};        
     }
+
+    {$ if @props.rowClick instanceof Function $}
+        [part="table-body-row"]:hover {
+            cursor: pointer;
+            background: {{ @Theme.colors("PRIME", 5) }};
+        }
+    {$ endif $}
 
     [part="page"],
     [part="frame"],

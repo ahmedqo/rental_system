@@ -366,7 +366,8 @@ const Neo = (function Neo() {
                             if (isElement) {
                                 const _fiber = new Fiber(isElement, { children: [] });
                                 fiber.props.children.push(_fiber);
-                                this.attrs(isElement, _fiber);
+                                //this.attrs(isElement, _fiber);
+                                this.tree(isElement, fiber.props.children[fiber.props.children.length - 1]);
                             } else {
                                 fiber.props.children.push(new Fiber(NEO_TEXT_SYMBOL, { nodeValue: index }));
                             }
