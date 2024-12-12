@@ -447,7 +447,7 @@
                     <div class="w-full flex flex-col lg:flex-row gap-4 lg:px-10">
                         <div class="flex w-full p-2 border border-x-shade lg:me-8 min-h-[3.5rem]">
                             <span class="block mx-auto text-x-black font-x-thin text-sm text-center">
-                                {{ Core::company() ? ucfirst(Core::company('name')) : '' }}
+                                {{ $data->Owner ? ucfirst($data->Owner->name) : '' }}
                             </span>
                         </div>
                         <div class="flex w-full p-2 border border-x-shade min-h-[3.5rem]">

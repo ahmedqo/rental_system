@@ -31,7 +31,7 @@ class ReservationController extends Controller
 
     public function print_view($id)
     {
-        $data = Reservation::with('Client', 'SClient', 'Vehicle', 'Agency', 'Payment', 'Recovery')->findorfail($id);
+        $data = Reservation::with('Owner', 'Client', 'SClient', 'Vehicle', 'Agency', 'Payment', 'Recovery')->findorfail($id);
         return view('reservation.print', compact('data'));
     }
 
