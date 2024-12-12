@@ -435,3 +435,25 @@ neo-datavisualizer.scene-table::part(tools) {
         transform: rotate(0deg);
     }
 }
+
+@keyframes slide-off {
+    0% {
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(20px);
+    }
+}
+
+neo-dropdown::part(content) {
+    animation: slide-on 200ms ease-in-out forwards
+}
+
+@keyframes slide-on {
+    0% {
+        transform: translateX(20px);
+    }
+    100% {
+        transform: translateX(0px);
+    }
+}

@@ -159,7 +159,7 @@ function exec({
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}" print="${print}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"print="${print}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },

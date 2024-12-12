@@ -265,7 +265,7 @@ function execReservations({ patch, print }) {
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}" print="${print}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"print="${print}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -372,7 +372,7 @@ function execRecoveries({ patch }) {
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -493,7 +493,7 @@ function execPayments({ patch }) {
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -568,7 +568,7 @@ TableVisualizer($query("#data-charges"), ({
     text: $trans("Actions"),
     headStyle: { width: 20, textAlign: "center" },
     bodyStyle: { width: 20, textAlign: "center" },
-    bodyRender: (row) => `<action-tools target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-tools>`,
+    bodyRender: (row) => `<action-menu target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-menu>`,
     headPdfStyle: function() {
         return this.headStyle
     },

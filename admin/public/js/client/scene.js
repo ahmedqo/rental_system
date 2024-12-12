@@ -107,7 +107,7 @@ filterReservations.addEventListener("change", e => {
         search: $routes[e.detail.data ? 'filterReservations' : 'entireReservations'],
         patch: $routes.patchReservation,
         scene: $routes.sceneReservation,
-    });
+    }, true);
 });
 
 filterRecoveries.addEventListener("change", e => {
@@ -126,7 +126,6 @@ filterPayments.addEventListener("change", e => {
 
 function execReservations({
     patch,
-    scene,
 }) {
     return [{
         name: "reference",
@@ -271,7 +270,7 @@ function execReservations({
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}" scene="${scene}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -386,7 +385,7 @@ function execRecoveries({ patch }) {
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -515,7 +514,7 @@ function execPayments({ patch }) {
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -528,7 +527,7 @@ TableVisualizer(dataReservations, execReservations, {
     search: $routes.filterReservations,
     patch: $routes.patchReservation,
     scene: $routes.sceneReservation,
-});
+}, true);
 
 TableVisualizer(dataRecoveries, execRecoveries, {
     search: $routes.filterRecoveries,

@@ -486,9 +486,9 @@
     }
 
     {$ if @props.rowClick instanceof Function $}
-        [part="table-body-row"]:hover {
+        [part="table-body-row"]:hover [part="table-body-col"] {
             cursor: pointer;
-            background: {{ @Theme.colors("PRIME", 5) }};
+            background: {{ @Theme.colors("PRIME", 40) }} !important;
         }
     {$ endif $}
 

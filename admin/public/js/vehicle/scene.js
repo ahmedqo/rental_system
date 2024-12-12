@@ -118,7 +118,7 @@ filterReservations.addEventListener("change", e => {
         search: $routes[e.detail.data ? 'filterReservations' : 'entireReservations'],
         patch: $routes.patchReservation,
         scene: $routes.sceneReservation,
-    });
+    }, true);
 });
 
 filterRecoveries.addEventListener("change", e => {
@@ -135,7 +135,7 @@ filterPayments.addEventListener("change", e => {
     });
 });
 
-function execReservations({ patch, scene }) {
+function execReservations({ patch }) {
     return [{
         name: "reference",
         text: $trans("Reference"),
@@ -265,7 +265,7 @@ function execReservations({ patch, scene }) {
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}" scene="${scene}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -372,7 +372,7 @@ function execRecoveries({ patch }) {
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -493,7 +493,7 @@ function execPayments({ patch }) {
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -506,7 +506,7 @@ TableVisualizer(dataReservations, execReservations, {
     search: $routes.filterReservations,
     patch: $routes.patchReservation,
     scene: $routes.sceneReservation,
-});
+}, true);
 
 TableVisualizer(dataRecoveries, execRecoveries, {
     search: $routes.filterRecoveries,
@@ -567,7 +567,7 @@ TableVisualizer($query("#data-charges"), ({
     text: $trans("Actions"),
     headStyle: { width: 20, textAlign: "center" },
     bodyStyle: { width: 20, textAlign: "center" },
-    bodyRender: (row) => `<action-tools target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-tools>`,
+    bodyRender: (row) => `<action-menu target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-menu>`,
     headPdfStyle: function() {
         return this.headStyle
     },

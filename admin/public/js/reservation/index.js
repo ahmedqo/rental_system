@@ -4,12 +4,11 @@ const filter = $query("#filter"),
 filter.addEventListener("change", e => {
     TableVisualizer(data, exec, {
         search: $routes[e.detail.data ? 'filter' : 'entire']
-    });
+    }, true);
 });
 
 function exec({
     patch,
-    scene,
 }) {
     return [{
         name: "reference",
@@ -175,7 +174,7 @@ function exec({
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-tools target="${row.id}" patch="${patch}" scene="${scene}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -186,4 +185,4 @@ function exec({
 
 TableVisualizer(data, exec, {
     search: $routes.filter
-});
+}, true);

@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="lg:-order-1 lg:col-span-3 flex flex-col bg-x-white rounded-x-thin shadow-x-core">
+        <div class="lg:col-span-3 flex flex-col bg-x-white rounded-x-thin shadow-x-core">
             <div class="py-3 px-6 border-b border-x-shade">
                 <label class="text-x-black font-x-thin text-xl">
                     {{ __('Discussion') }}

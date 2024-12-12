@@ -175,11 +175,10 @@ TableVisualizer($query("#data-popular"), () => [{
 filter.addEventListener("change", e => {
     TableVisualizer(data, exec, {
         search: $routes[e.detail.data ? 'filter' : 'entire'],
-        scene: $routes.scene
-    });
+    }, true);
 });
 
-function exec({ scene }) {
+function exec() {
     return [{
         name: "reference",
         text: $trans("Reference"),
@@ -241,26 +240,9 @@ function exec({ scene }) {
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
-    }, {
-        name: "action",
-        text: $trans("Actions"),
-        headStyle: { width: 20, textAlign: "center" },
-        bodyStyle: function(row) {
-            return {...bgtick(row), width: 20, textAlign: "center" };
-        },
-        bodyPdfStyle: function(row) {
-            return this.bodyStyle(row);
-        },
-        bodyRender: (row) => `<action-tools target="${row.id}" scene="${scene}"></action-tools>`,
-        headPdfStyle: function() {
-            return this.headStyle
-        },
-        bodyPdfRender: () => empty(),
-        bodyCsvRender: () => empty(),
     }];
 }
 
 TableVisualizer(data, exec, {
     search: $routes.filter,
-    scene: $routes.scene
-});
+}, true);

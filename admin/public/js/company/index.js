@@ -1,7 +1,6 @@
 TableVisualizer($query("neo-datavisualizer"), ({
     csrf,
     patch,
-    scene,
     clear
 }) => [{
         name: "status",
@@ -104,7 +103,7 @@ TableVisualizer($query("neo-datavisualizer"), ({
         text: $trans("Actions"),
         headStyle: { width: 20, textAlign: "center" },
         bodyStyle: { width: 20, textAlign: "center" },
-        bodyRender: (row) => `<action-tools target="${row.id}"csrf="${csrf}"patch="${patch}"scene="${scene}"clear="${clear}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
@@ -114,4 +113,4 @@ TableVisualizer($query("neo-datavisualizer"), ({
         bodyPdfRender: () => empty(),
         bodyCsvRender: () => empty(),
     }
-]);
+], {}, true);

@@ -8,9 +8,7 @@ filter.addEventListener("change", e => {
 });
 
 function exec({
-    csrf,
     patch,
-    clear
 }) {
     return [{
         name: "reference",
@@ -137,7 +135,7 @@ function exec({
         text: $trans("Actions"),
         headStyle: { width: 20, textAlign: "center" },
         bodyStyle: { width: 20, textAlign: "center" },
-        bodyRender: (row) => `<action-tools target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-tools>`,
+        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
         headPdfStyle: function() {
             return this.headStyle
         },
