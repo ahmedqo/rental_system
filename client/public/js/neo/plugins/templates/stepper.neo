@@ -1,0 +1,194 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    :host {
+        display: block;
+    }
+
+    [part="progress"] {
+        margin: 0;
+        padding: 0;
+        gap: .5rem;
+        display: flex;
+        list-style: none;
+        align-items: center;
+        margin-bottom: 1rem;
+        justify-content: space-between;
+    }
+
+    [part="chip"] {
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        outline: none;
+        font-weight: 700;
+        cursor: pointer;
+        align-items: center;
+        border-radius: .25rem;
+        justify-content: center;
+        color: {{ @Theme.colors("BLACK") }};
+        font-size: {{ @Theme.sizes("LARGE") }};
+        line-height: {{ @Theme.lines("LARGE") }};
+        background: {{ @Theme.colors("LIGHT") }};
+        transition: background 250ms ease-in-out;
+    }
+
+    [part="separator"] {
+        flex: 1;
+        width: 0;
+        height: .3rem;
+        border-radius: .25rem;
+        background: {{ @Theme.colors("LIGHT") }};
+    }
+
+    [part="separator"] div {
+        width: 0;
+        height: 100%;
+        transition: width 250ms ease-in-out;
+        background: {{ @Theme.colors("PRIME") }};
+    }
+
+    [part="icon"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        display: block;
+        fill: currentColor;
+        pointer-events: none;
+    }
+
+    [part="chip"].validate, .active {
+        color: {{ @Theme.colors("WHITE") }};
+        background: {{ @Theme.colors("PRIME") }};
+    }
+
+    [part="separator"].validate div {
+        width: 100%;
+    }
+
+    [part="chip"]:hover,
+    [part="chip"]:focus,
+    [part="chip"]:focus-within {
+        background: {{ @Theme.colors("PRIME", 40) }};
+    }
+</style>
+
+<template name="neo-stepper">
+    <ul part="progress">
+        {$ each step into @range(@props.steps) $}
+            <li tabindex="0" part="chip" @click="{{ (event) => @rules.exec(event, step) }}" @keydown:propagation="{{ (event) => @rules.exec(event, step) }}" class="{{ @when(step <= @props.current, @when(step == @props.current, "active", "validate"), "") }}">
+                {$ if step < @props.current $}
+                    <svg part="icon" viewBox="0 -960 960 960">
+                        <path d="M261-167-5-433l95-95 172 171 95 95-96 95Zm240-32L232-467l97-95 172 171 369-369 96 96-465 465Zm-7-280-95-95 186-186 95 95-186 186Z"></path>
+                    </svg>
+                {$ else $}
+                   {{ step + 1 }}
+                {$ endif $}
+            </li>
+            {$ if !@loop.last $}
+                <li part="separator" class="{{ @when(step < @props.current, "validate", "") }}">
+                    <div></div>
+                </li>
+            {$ endif $}
+        {$ endeach $}
+    </ul>
+    <slot name="active"></slot>
+</template>
+
+<script>
+    export default {
+        props: {
+            step: "",
+            steps: "",
+            current: -1,
+        },
+       rules: {
+            exec(event, step) {
+                if (event.type === "click" || event.keyCode === 13) {
+                    this.rules.goto(step);
+                }
+            },
+            change() {
+                const step = Array.from(this.children).find(step => step.step === this.props.step);
+                if (step) {
+                    this.props.current = Array.from(this.children).indexOf(step);
+                    step.active = true;
+                }
+            },
+            next() {
+                if (this.props.current + 1 > this.steps - 1) return;
+                this.emit("next", {
+                    step: this.children[this.props.current]
+                }, () => {
+                    this.props.step = this.children[this.props.current + 1].step;
+                })
+            },
+            prev() {
+                if (this.props.current - 1 < 0) return;
+                this.emit("prev", {
+                    step: this.children[this.props.current]
+                }, () => {
+                    this.props.step = this.children[this.props.current - 1].step;
+                });
+            },
+            goto(index) {
+                if (index < 0 || index > this.steps - 1 || this.props.current === index) return;
+                this.emit(this.props.current < index ? "next" : "prev", {
+                    step: this.children[this.props.current]
+                }, () => {
+                    this.props.step = this.children[index].step;
+                });
+            }
+        },
+        cycle: {
+            created() {
+                this.next = this.rules.next;
+                this.prev = this.rules.prev;
+                this.goto = this.rules.goto;
+            },
+            mounted() {
+                this.state.observer = new MutationObserver((mutationsList, observer) =>{
+                    for(const mutation of mutationsList){
+                        if (mutation.type === 'childList') {
+                            [...this.querySelectorAll(":scope>:not(neo-stepper-item)")]
+                                .map((other) => other.remove()); 
+                            this.props.steps = this.children.length; 
+                        } 
+                    }             
+                });
+                this.state.observer.observe(this, { childList: true, subtree: true });
+
+                if (this.hasAttribute("step")) {
+                    this.props.step = this.getAttribute("step");
+                    this.removeAttribute("step");
+                }
+
+               this.props.steps = this.children.length;
+            },
+            removed() {
+                this.state.observer.disconnect();
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    props: {
+                        "current": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "step": () => {
+                            const step = Array.from(this.children).find(step => step.step === prev);
+                            if (step) step.active = false;
+                            this.rules.change();
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                    }
+                }[type], name);
+            },    
+        }
+    }
+</script>

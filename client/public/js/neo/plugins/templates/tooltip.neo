@@ -1,0 +1,101 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    :host {
+        display: inline-flex;
+        width: max-content;
+    }
+
+    {$ if @props.label && @state.show $}
+        [part="label"] {
+            opacity: 0;
+            display: flex;
+            font-weight: 700;
+            font-size: .75rem;
+            width: max-content;
+            position: absolute;
+            padding:.1rem .25rem;
+            border-radius: .25rem;
+            top: {{ @state.pos.y }}px;
+            left: {{ @state.pos.x }}px;
+            color: {{ @Theme.colors("WHITE") }};
+            background: {{ @Theme.colors("GRAY", 800) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: opacity 200ms ease-in-out;
+            {$ endeach $}
+        }
+
+        :host(:hover) [part="label"] {
+            opacity: 1;
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-tooltip">
+    <slot></slot>
+    {$ if @props.label && @state.show $}
+        <label part="label" ref="label">{{ @props.label }}</label>
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["label"],
+        props: {
+            label: "",
+        },
+        state: {
+            show: false,
+            pos: { x: 0, y: 0 },
+        },
+        rules: {
+            enter() {
+                this.state.show = true;
+                const { x, y, height, width } = this.getBoundingClientRect();
+                const labelWidth = this.refs.label.clientWidth;
+                const labelHeight = this.refs.label.clientHeight;
+                const scrollX = window.scrollX || window.pageXOffset;
+                const scrollY = window.scrollY || window.pageYOffset;
+                const posX = x + scrollX + (width - labelWidth) / 2;
+                const posY = (y - labelHeight > 0)  ? y + scrollY - labelHeight : y + scrollY + height;
+
+                this.state.pos = {
+                    y: posY,
+                    x: posX,
+                };
+            },
+            leave() {
+                this.state.show = false;
+            }
+        },
+        cycle: {
+            mounted(){
+                this.addEventListener("mouseenter", this.rules.enter);
+                this.addEventListener("mouseleave", this.rules.leave);
+            },
+            removed(){
+                this.removeEventListener("mouseenter", this.rules.enter);
+                this.removeEventListener("mouseleave", this.rules.leave);
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "label": () => {
+                            this.props[name] = next;
+                        },
+                    },
+                    props: {
+                        "label": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        }
+                    }
+                }[type], name);
+            },
+        }
+    }
+</script>

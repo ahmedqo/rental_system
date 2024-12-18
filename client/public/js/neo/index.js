@@ -1418,7 +1418,6 @@ const Neo = (function Neo() {
         return Validator;
     })();
 
-
     Neo.Component = (function Component() {
         function Component(options) {
             const selector = options.tag || "",
