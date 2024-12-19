@@ -21,6 +21,7 @@
             border-radius: .25rem;
             top: {{ @state.pos.y }}px;
             left: {{ @state.pos.x }}px;
+            z-index: {{ @Theme.layer() }};
             color: {{ @Theme.colors("WHITE") }};
             background: {{ @Theme.colors("GRAY", 800) }};
             {$ each _media into @Theme.MEDIA $}
