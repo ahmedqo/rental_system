@@ -1,0 +1,116 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    :host {
+        gap: .5rem;
+        outline: none;
+        cursor: default;
+        flex-wrap: wrap;
+        font-weight: 600;
+        border-width: 1px;
+        width: max-content;
+        align-items: center;
+        border-style: solid;
+        display: inline-flex;
+        border-radius: .25rem;
+        justify-content: center;
+        padding: .6rem 1.5rem;
+        {$ if @props.vertical $} flex-direction: column; {$ endif $}
+        {$ if @props.outline $} color: {{ @Theme.colors("PRIME") }};
+        {$ else $}
+            color: {{ @Theme.colors("WHITE") }};
+            background: {{ @Theme.colors("PRIME") }};
+        {$ endif $}
+        border-color: {{ @Theme.colors("PRIME") }};
+        font-size: {{ @Theme.sizes("MEDIUM") }};
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}transition: 150ms ease-in-out color, 150ms ease-in-out border-color, 150ms ease-in-out backgroun;
+        {$ endeach $}
+    }
+
+    {$ if !@props.disable $}
+        :host(:hover),
+        :host(:focus),
+        :host(:focus-within) {
+            {$ if @props.outline $}
+                color: {{ @Theme.colors("WHITE") }};
+                border-color: {{ @Theme.colors("PRIME") }};
+                background: {{ @Theme.colors("PRIME") }};
+            {$ else $}
+                color: {{ @Theme.colors("BLACK") }};
+                border-color: {{ @Theme.colors("PRIME", 40) }};
+                background: {{ @Theme.colors("PRIME", 40) }};
+            {$ endif $}
+        }
+    {$ endif $}
+
+    ::slotted(*) {
+        pointer-events: none;
+    }
+</style>
+
+<template name="neo-button" ctl="true">
+    <slot name="start"></slot>
+    <slot></slot>
+    <slot name="end"></slot>
+</template>
+
+<script>
+    export default {
+        attrs: ["type", "disable", "outline", "vertical"],
+        props: {
+            type: "submit",
+            disable: false,
+            outline: false,
+            vertical: false,
+        },
+        rules: {
+            click(event) {
+                if (this.props.disable) return;
+                if ((event.type === "click" || event.keyCode === 13) && this.ctl.form) {
+                    Neo.Helper.option({
+                        "submit": () => this.ctl.form.requestSubmit(),
+                        "reset": () => this.ctl.form.reset()
+                    }, this.props.type);
+                }
+            },
+            keydown(event) {
+                if (event.keyCode === 13) this.click();
+            }
+        },
+        cycle: {
+            mounted() {
+                this.tabIndex = 0;
+                this.addEventListener("click", this.rules.click);
+                this.addEventListener("keydown", this.rules.keydown);
+            },
+            removed() {
+                this.removeEventListener("click", this.rules.click);
+                this.removeEventListener("keydown", this.rules.keydown);
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "type": () => {
+                            this.props[name] = next;
+                        },
+                        "vertical,outline,disable": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name));
+                        }
+                    },
+                    props: {
+                        "type,vertical,outline,disable": () => {
+                            name === "disable" && (this.tabIndex = next ? -1 : 0);
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                    }
+                }[type], name);
+            },
+        }
+    }
+</script>

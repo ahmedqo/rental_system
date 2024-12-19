@@ -1,0 +1,232 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+    
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes opacity-off {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @{{ media }}keyframes slide-off {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes opacity-on {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @{{ media }}keyframes slide-on {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+        }
+    {$ endeach $}
+
+    {$ if @state.show $}
+        ::-webkit-scrollbar {
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}appearance: none;
+            {$ endeach $}
+            background: transparent;
+            height: 5px;
+            width: 5px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            border-radius: 2px; 
+            background: {{ @Theme.colors("GRAY", 300) }};
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: {{ @Theme.colors("GRAY", 400) }};
+        }  
+    {$ endif $}
+
+    :host {
+        inset: 0;
+        width: 100%;
+        display: flex;
+        height: 100dvh;
+        position: fixed;
+        align-items: end;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+        {$ if !@props.expand $}
+            pointer-events: none;
+        {$ endif $}
+        z-index: {{ @Theme.layer() }};
+        background: {{ @Theme.colors("BLACK", 60) }};
+        {$ if @state.init $}
+            opacity: 0;
+        {$ else $}
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}animation: opacity-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        {$ endif $}
+    }
+
+    {$ if @state.show $}
+        [part="content"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            max-height: 90dvh; 
+            border-radius: .25rem;
+            flex-direction: column;
+            background: {{ @Theme.colors("WHITE") }};
+            border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}box-shadow: 0px 8px 8px -8px {{ @Theme.colors("BLACK", 20) }};
+                {{ _media }}animation: slide-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        }
+
+        {$ if @truty(@props.label) $}
+            [part="label"] {
+                width: 100%;
+                display: block;
+                font-weight: 700;
+                text-align: center;
+                padding: .5rem .75rem;
+                color: {{ @Theme.colors("BLACK") }};
+                font-size: {{ @Theme.sizes("SMALL") }};
+                line-height: {{ @Theme.lines("SMALL") }};
+                border-bottom: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            }
+        {$ endif $}
+
+        [part="items"] {
+            flex: 1;
+            width: 100%;
+            overflow: overlay;
+        }
+    {$ endif $}
+
+    @media (min-width: 1024px) {    
+        :host {
+            align-items: center;
+            justify-content: center;
+        }
+
+        {$ if @state.show $}
+            [part="content"] {
+                width: 50%;
+                max-height: 80dvh; 
+            }
+        {$ endif $}
+    }
+</style>
+
+<template name="neo-overlay">
+    {$ if @state.show $}
+        <div ref="content" part="content" @click:propagation="{{ () => {} }}">
+            {$ if @truty(@props.label) $}
+                <label ref="label" part="label">{{ @props.label }}</label>
+            {$ endif $}
+            <div ref="items" part="items">
+                <slot></slot>
+            </div>
+        </div>
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["label", "expand"],
+        props: {
+            label: "",
+            expand: false,
+        },
+        state: {
+            show: false,
+            init: true
+        },
+        rules: {
+            toggle() {
+                this.props.expand = !this.props.expand;
+            },
+            blur(event) {
+                if (!this.root.contains(event.target) && this.props.expand) {
+                    this.rules.toggle();
+                }
+            },
+        },
+        cycle: {
+            created() {
+                this.show = function() {
+                    this.props.expand = true;
+                }
+
+                this.hide = function() {
+                    this.props.expand = false;
+                }
+
+                this.toggle = this.rules.toggle;
+            },
+            removed() {
+                window.removeEventListener("click", this.rules.blur);
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "label": () => {
+                            this.props.label = next;
+                        },
+                        "expand": () => {
+                            this.props.expand = Neo.Helper.truty(next);
+                        }
+                    },
+                    state: {
+                        "show": () => {
+                            Neo.Wrapper && Neo.Wrapper.rules[next ? "closed" : "opened"]();
+                            setTimeout(() => {
+                                window[(next ? "add" : "remove") + "EventListener"]("click", this.rules.blur);
+                            }, 0);
+                            this.emit("change:expand", {
+                                data: next,
+                            });
+                        }
+                    },
+                    props: {
+                        "label": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "expand": () => {
+                            this.state.init = false;
+                            next ? (this.state.show = next) :
+                            setTimeout(() => {
+                                this.state.show = next;
+                            }, 250);
+                        }
+                    }
+                }[type], name);
+            },
+        },
+    }
+</script>

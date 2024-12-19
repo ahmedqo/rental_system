@@ -1,0 +1,64 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    :host {
+        display: block;
+    }
+</style>
+
+<template name="neo-stepper-item">
+    <slot></slot>
+</template>
+
+<script>
+    export default {
+        attrs: ["active"],
+        props: {
+            step: "",
+            active: false,
+            complete: false,
+        },
+        cycle: {
+            mounted(){
+                if(this.hasAttribute("step")) {
+                    this.props.step = this.getAttribute("step");
+                    this.removeAttribute("step");
+                    const parent = this.parentElement;
+                    if(this.props.step === parent.step) {
+                        this.props.active = true;
+                        parent.rules.change();
+                    }
+                    if(!parent.step && Array.from(parent.children).find(step => step.step) === this) {
+                        parent.step = this.props.step;
+                    }
+                }
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "active": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name)); 
+                        }
+                    },
+                    props: {
+                        "step,complete": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        }, 
+                        "active": () => {
+                            this.slot = next ? "active" : "";
+                            this.props.complete = !next;
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        }
+                    }
+                }[type], name);
+            },    
+        }
+    }
+</script>

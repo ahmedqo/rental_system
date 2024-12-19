@@ -1,0 +1,241 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    ::-webkit-search-cancel-button,
+    ::-webkit-inner-spin-button,
+    ::-webkit-outer-spin-button {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: none;
+        {$ endeach $}
+        display: none;
+    }
+    
+    input {
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}appearance: textfield;
+        {$ endeach $}
+    }
+
+    :host {
+        gap: .5rem;
+        width: auto;
+        max-width: 100%;
+        flex-wrap: wrap;
+        border-width: 1px;
+        align-items: center;
+        border-style: solid;
+        display: inline-flex;
+        border-radius: .25rem;
+        padding: .4rem .75rem;
+        {$ if @props.outline $}
+            border-color: {{ @Theme.colors("BLACK") }};
+        {$ else $}
+            background: {{ @Theme.colors("LIGHT") }};
+            border-color: {{ @Theme.colors("SHADE") }};
+        {$ endif $}
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus),
+        :host(:focus-within) {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-style: solid;
+            outline-color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+
+    [part="wrapper"] {
+        flex: 1;
+        width: 0%;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+    }
+
+    {$ if @truty(@props.label) $}
+        [part="label"] {
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            font-weight: 600;
+            inset: 0 0 auto 0;  
+            position: absolute; 
+            padding: .437rem 0;
+            white-space: nowrap;
+            flex-direction: column;
+            text-overflow: ellipsis;
+            justify-content: center;
+            color: {{ @Theme.colors("BLACK", 50) }};
+            font-size: {{ @Theme.sizes("BASE") }};
+            line-height: {{ @Theme.lines("SMALL") }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transition: 200ms ease-in-out padding, 200ms ease-in-out color, 200ms ease-in-out font-size, 200ms ease-in-out line-height;
+            {$ endeach $}
+        }
+
+        [part="label"]:has(+ [part="field"]:not(:placeholder-shown)),
+        [part="label"]:has(+ [part="field"]:focus) {
+            padding: 0;
+            overflow: visible;
+            color: {{ @Theme.colors("BLACK", 80) }};
+            font-size: {{ @Theme.sizes("XSMALL") }};
+            line-height: {{ @Theme.lines("THIN") }};
+        }
+    {$ endif $}
+
+     [part="field"] {
+        padding: 0;
+        width: 100%;
+        outline: none;
+        border: unset;
+        display: block;
+        background: transparent;
+        color: {{ @Theme.colors("BLACK") }};
+        font-size: {{ @Theme.sizes("BASE") }};
+        line-height: {{ @Theme.lines("SMALL") }};
+        caret-color: {{ @Theme.colors("PRIME", 400) }};
+        margin: {{ @truty(@props.label) ? ".75rem 0 0 0" : "0" }};
+    }
+
+    [part="icon"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        display: block;
+        pointer-events: none;
+        color: {{ @Theme.colors("BLACK") }};
+    }
+
+    {$ if !@props.disable $}
+        :host(:focus) [part="icon"],
+        :host(:focus-within) [part="icon"] {
+            color: {{ @Theme.colors("PRIME", 400) }};
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-explorer">
+    <slot name="start"></slot>
+    <div ref="wrapper" part="wrapper">
+        {$ if @truty(@props.label) $}
+            <label ref="label" part="label" for="{{ @state.uid }}">{{ @props.label }}</label>
+        {$ endif $}
+        <input ref="field" part="field" id="{{ @state.uid }}" 
+            {$ if @this.name $} name="{{ @this.name }}" {$ endif $}
+            @keypress="{{ @rules.keypress }}" 
+            @keydown="{{ @rules.keydown }}" 
+            @change="{{ @rules.change }}" 
+            @keyup="{{ @rules.keyup }}" 
+            @input="{{ @rules.search }}" 
+            @focus="{{ @rules.focus }}" 
+            @blur="{{ @rules.blur }}" 
+            value="{{ @props.value }}"
+            type="search" 
+            placeholder="{{ @when(@truty(@props.placeholder), @props.placeholder, ' ') }}"
+            {$ if @props.disable $} disabled="{{ @props.disable }}" {$ endif $}
+        />
+    </div>
+    <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+        <path d="M39.7 43.2L26.2894 29.8C25.2965 30.5641 24.1591 31.1635 22.8771 31.5981C21.5951 32.0327 20.1934 32.25 18.6719 32.25C14.8282 32.25 11.597 30.9383 8.9782 28.3149C6.35943 25.6914 5.05005 22.4998 5.05005 18.7399C5.05005 14.98 6.36177 11.7917 8.9852 9.175C11.6086 6.55833 14.8003 5.25 18.5602 5.25C22.3201 5.25 25.5084 6.56073 28.125 9.1822C30.7417 11.8037 32.05 14.9954 32.05 18.7575C32.05 20.2858 31.8334 21.675 31.4 22.925C30.9667 24.175 30.3334 25.3667 29.5 26.5L43 39.9L39.7 43.2ZM18.5721 27.7C21.1049 27.7 23.2261 26.841 24.9357 25.1229C26.6453 23.4049 27.5 21.2874 27.5 18.7706C27.5 16.2538 26.6443 14.1295 24.9327 12.3977C23.2212 10.6659 21.1025 9.8 18.5765 9.8C16.0228 9.8 13.8882 10.6659 12.1729 12.3977C10.4577 14.1295 9.60005 16.2538 9.60005 18.7706C9.60005 21.2874 10.4552 23.4049 12.1656 25.1229C13.876 26.841 16.0115 27.7 18.5721 27.7Z" />
+    </svg>
+    <slot name="end"></slot>
+</template>
+
+<script>
+    export default {
+        attrs: ["label", "target", "outline", "disable", "placeholder"],
+        props: {
+            label: "",
+            value: "",
+            target: "",
+            outline: false,
+            disable: false,
+            placeholder: "",
+        },
+        state: {
+            uid: "uid_" + Neo.Helper.random(),
+        },
+        rules: {
+            focus() {
+                this.emit("focus", { data: this.props.value });
+            },
+            blur() {
+                this.emit("blur", { data: this.props.value });
+            },
+            change() {
+                this.emit("change", { data: this.props.value });
+            },
+            keyup() {
+                this.emit("keyup", { data: this.props.value });
+            },
+            keydown() {
+                this.emit("keydown", { data: this.props.value });
+            },
+            keypress() {
+                this.emit("keypress", { data: this.props.value });
+            },
+            search(event) {
+                this.props.value = event.target.value;
+                const value = new Set(event.target.value.toUpperCase()
+                                .trim().split(/[-_.\\\/\s]/g));
+                this.emit("search", { data: this.props.value }, function() {
+                    clearTimeout(this.state.time);
+                    this.state.time = setTimeout(() => {
+                        if (Neo.Helper.truty(this.props.target)) {
+                            [...document.querySelectorAll(this.props.target)].map(item => {
+                                const phrase = item.innerText.toUpperCase().trim(),
+                                    score = [];
+                                for (const niddle of value) {
+                                    if (phrase.includes(niddle)) score.push(1);
+                                    else score.push(0);
+                                }
+                                if (score.includes(1)) item.style.display = "";
+                                else item.style.display = "none";
+                            });
+                        }
+                    }, 500);
+                });
+            },
+        },
+        cycle: {
+            created() {
+                this.reset = function() {
+                    document.querySelectorAll(this.props.target)
+                        .forEach(target => target.style.display = "");
+                    this.props.value = "";
+                    this.emit("reset");
+                }
+                this.focus = function() { this.refs.field.focus() }
+                this.blur = function() { this.refs.field.blur() }
+            },
+            mounted() {
+                if (this.hasAttribute("value")) {
+                    this.props.value = this.getAttribute("value");
+                    this.removeAttribute("value");
+                }
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "label,target,placeholder": () => {
+                            this.props[name] = next;
+                        },
+                        "outline,disable": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name));
+                        }
+                    },
+                    props: {
+                        "label,target,outline,disable,placeholder": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        }
+                    }
+                }[type], name);
+            },
+        },
+    }
+</script>

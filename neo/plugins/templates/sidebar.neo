@@ -1,0 +1,260 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+    
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes opacity-off {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @{{ media }}keyframes slide-off {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateX(0px); 
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateX({{ @props.position === "end" ? document.documentElement.dir === "rtl" ? -20 : 20 : document.documentElement.dir === "rtl" ? 20 : -20 }}px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes width-off {
+            0% { width: 240px; }
+            100% { width: 0; }
+        }
+
+        @{{ media }}keyframes opacity-on {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @{{ media }}keyframes slide-on {
+            0% {
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateX({{ @props.position === "end" ? document.documentElement.dir === "rtl" ? -20 : 20 : document.documentElement.dir === "rtl" ? 20 : -20 }}px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateX(0px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes width-on {
+            0% { width: 0; }
+            100% { width: 240px; }
+        }
+    {$ endeach $}
+
+    {$ if @state.show $}
+        ::-webkit-scrollbar {
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}appearance: none;
+            {$ endeach $}
+            background: transparent;
+            height: 5px;
+            width: 5px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            border-radius: 2px; 
+            background: {{ @Theme.colors("GRAY", 300) }};
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: {{ @Theme.colors("GRAY", 400) }};
+        }  
+    {$ endif $}
+
+    :host {
+        inset: 0;
+        width: 100%;
+        display: flex;
+        height: 100dvh;
+        position: fixed;
+        backdrop-filter: blur(5px);
+        {$ if !@props.expand || @props.expand && @props.stick && @state.init $}
+            pointer-events: none;
+        {$ endif $}
+        z-index: {{ @Theme.layer() }};
+        justify-content: {{ @props.position }};
+        background: {{ @Theme.colors("BLACK", 60) }};
+        {$ if @state.init $}
+            opacity: 0;
+        {$ else $}
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}animation: opacity-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        {$ endif $}
+    }
+
+    {$ if @state.show $}
+        [part="target"] {
+            width: 0;
+            height: 0;
+            opacity: 0;
+            left: -9999px;
+            right: -9999px;
+            display: block;
+            position: fixed;
+        }
+
+        [part="content"] {
+            height: 100%; 
+            width: 16rem;
+            display: flex;
+            overflow: overlay;
+            flex-direction: column; 
+            background: {{ @Theme.colors("WHITE") }};
+            border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}box-shadow: 0px 8px 8px -8px {{ @Theme.colors("BLACK", 20) }};
+                {$ if @state.init $}
+                    {{ _media }}transform: translateX({{ @props.position === "end" ? document.documentElement.dir === "rtl" ? -20 : 20 : document.documentElement.dir === "rtl" ? 20 : -20 }}px);
+                {$ else $}
+                    {{ _media }}animation: slide-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+                {$ endif $}
+            {$ endeach $}
+        }
+    {$ endif $}
+
+    {$ if !@props.stick $}
+        @media (min-width: 1024px) {
+            :host {
+                z-index: 0;
+                position: sticky;
+                {$ if @state.init $}
+                    opacity: 1;
+                    width: 240px;
+                    max-width: 240px;
+                {$ else $}
+                    {$ each _media into @Theme.MEDIA $}
+                        {{ _media }}animation: opacity-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards, width-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+                    {$ endeach $}
+                {$ endif $}
+            }
+
+            [part="content"] {
+                width: 100%;
+                {$ if @state.init $}
+                    {$ each _media into @Theme.MEDIA $}
+                        {{ _media }}transform: translateX(0px);
+                    {$ endeach $}
+                {$ endif $}
+            }
+        }  
+    {$ endif $}
+</style>
+
+<template name="neo-sidebar">
+    {$ if @state.show $}
+        <div ref="content" part="content" @click:propagation="{{ () => {} }}">
+            <a aria-label="anchor_link" href="#" ref="target" part="target"></a>
+            <slot></slot>
+        </div>
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["position", "stick"],
+        props: {
+            expand: matchMedia("(min-width: 1024px)").matches,
+            position: "start",
+            stick: false,
+        },
+        state: {
+            show: matchMedia("(min-width: 1024px)").matches,
+            init: true
+        },
+        rules: {
+            toggle() {
+                this.props.expand = !this.props.expand;
+            },
+            blur(event) {
+                if (!this.root.contains(event.target) && this.props.expand) {
+                    this.rules.toggle();
+                }
+            },
+            resize() {
+                if (matchMedia("(min-width: 1024px)").matches) this.show();
+                else this.hide();
+            }
+        },
+        cycle: {
+            created() {
+                this.show = function() {
+                    this.props.expand = true;
+                }
+
+                this.hide = function() {
+                    this.props.expand = false;
+                }
+
+                this.toggle = this.rules.toggle;
+            },
+            mounted() {
+                if (this.hasAttribute("stick")){
+                    this.cache.props.expand = false;
+                    this.cache.state.show = false;
+                } else window.addEventListener("resize", this.rules.resize);
+            },
+            removed() {
+                window.removeEventListener("click", this.rules.blur);
+                window.removeEventListener("resize", this.rules.resize);
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "position": () => {
+                            this.props.position = next;
+                        },
+                        "stick": () => {
+                            this.props.stick = Neo.Helper.truty(next) || this.hasAttribute("stick") && !["false", "null", "undefined"].includes(this.getAttribute("stick"));
+                        }
+                    },
+                    state: {
+                        "show": () => {
+                            Neo.Wrapper && Neo.Wrapper.rules[next ? (this.props.stick ? "closed" : "smonly") : "opened"]();
+                            next && this.refs.target.focus();
+                            setTimeout(() => {
+                                if (!next) window.removeEventListener("click", this.rules.blur);
+                                else {
+                                    if (this.props.stick || !matchMedia("(min-width: 1024px)").matches) window.addEventListener("click", this.rules.blur);
+                                }
+                            }, 0);
+                            this.emit("change:expand", { 
+                                data: next
+                            });
+                        }
+                    },
+                    props: {
+                        "stick": () => {
+                            window[(next ? "remove" : "add") + "EventListener"]("resize", this.rules.resize);
+                            this.emit("change:stick", { 
+                                data: next
+                            });
+                        },
+                        "expand": () => {
+                            this.state.init = false;
+                            next ? (this.state.show = next) :
+                            setTimeout(() => {
+                                this.state.show = next;
+                            }, 250);
+                        }
+                    }
+                }[type], name);
+            },
+        },
+    }
+</script>

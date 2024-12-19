@@ -1,0 +1,263 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+    
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes opacity-off {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @{{ media }}keyframes slide-off {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes opacity-on {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @{{ media }}keyframes slide-on {
+            0% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(20px);
+                {$ endeach $}
+            }
+            100% { 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+        }
+    {$ endeach $}
+
+    {$ if @state.show $}
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}appearance: none;
+            {$ endeach $}
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            border-radius: 2px; 
+            background: {{ @Theme.colors("GRAY", 300) }};
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: {{ @Theme.colors("GRAY", 400) }};
+        }
+    {$ endif $}  
+
+    :host {
+        position: relative;
+        display: inline-block;
+    }
+
+    {$ if @state.show $}
+        [part="modal"] {
+            inset: 0;
+            width: 100%;
+            display: flex;
+            height: 100dvh;
+            position: fixed;
+            align-items: end;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            {$ if !@props.expand $}
+                pointer-events: none;
+            {$ endif $}
+            z-index: {{ @Theme.layer() }};
+            background: {{ @Theme.colors("BLACK", 60) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}animation: opacity-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        }
+
+        [part="content"] {
+            width: 100%;
+            outline: none;
+            display: flex;
+            overflow: hidden;
+            max-height: 90dvh; 
+            border-radius: .25rem;
+            flex-direction: column;
+            background: {{ @Theme.colors("WHITE") }};
+            border: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}box-shadow: 0px 8px 8px -8px {{ @Theme.colors("BLACK", 20) }};
+                {{ _media }}animation: slide-{{ @props.expand ? "on" : "off" }} 200ms ease-in-out forwards;
+            {$ endeach $}
+        }
+
+        {$ if @truty(@props.label) $}
+            [part="label"] {
+                width: 100%;
+                display: block;
+                font-weight: 700;
+                text-align: center;
+                padding: .5rem .75rem;
+                color: {{ @Theme.colors("BLACK") }};
+                font-size: {{ @Theme.sizes("SMALL") }};
+                line-height: {{ @Theme.lines("SMALL") }};
+                border-bottom: 1px solid {{ @Theme.colors("BLACK", 20) }};
+            }
+        {$ endif $}
+
+        [part="items"] {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            overflow: overlay;
+            flex-direction: column; 
+        }
+
+        @media (min-width: 1024px) {
+            [part="modal"] {
+                inset: auto;
+                max-width: 400px;
+                width: max-content;
+                position: absolute;
+                height: max-content;
+                background: transparent;
+                {{ @state.pos ? "bottom" : "top" }}: 0;
+                {$ if @props.position === "start" $}
+                    left: 0;
+                {$ elif @props.position === "end" $}
+                    right: 0;
+                {$ else $}
+                    left: 50%;
+                    {$ each _media into @Theme.MEDIA $}
+                        {{ _media }}transform: translateX(-50%);
+                    {$ endeach $}
+                {$ endif $}
+            }
+
+            [part="content"] {
+                max-height: 300px;
+            }
+
+            {$ if @truty(@props.label) $}
+                [part="label"] {
+                    display: none;
+                }
+            {$ endif $}
+        }
+    {$ endif $}
+</style>
+
+<template name="neo-dropdown">
+    <slot name="trigger"></slot>
+    {$ if @state.show $}
+        <div ref="modal" part="modal">
+            <div ref="content" part="content" @click:propagation="{{ () => {} }}">
+                {$ if @truty(@props.label) $}
+                    <label ref="label" part="label">{{ @props.label }}</label>
+                {$ endif $}
+                <div ref="items" part="items">
+                    <slot></slot>                   
+                </div>
+            </div>
+        </div>
+    {$ endif $}
+</template>
+
+<script>
+    export default {
+        attrs: ["label", "position"],
+        props: {
+            position: "center",
+            expand: false,
+            label: "",
+        },
+        state: {
+            show: false,
+            pos: false,
+        },
+        rules: {
+            toggle() {
+                this.props.expand = !this.props.expand;
+            },
+            blur(event) {
+                if (!this.root.contains(event.target) && this.props.expand) {
+                    this.rules.toggle();
+                }
+            },
+            pos() {
+                this.state.show && (this.state.pos = window.innerHeight - this.getBoundingClientRect().top < this.refs.modal.clientHeight);
+            },
+        },
+        cycle: {
+            created() {
+                this.show = function() {
+                    this.props.expand = true;
+                }
+
+                this.hide = function() {
+                    this.props.expand = false;
+                }
+
+                this.toggle = this.rules.toggle;
+            },
+            mounted() {
+                window.addEventListener("scroll", this.rules.pos);
+                this.querySelector("[slot=trigger]").addEventListener("click", this.rules.toggle);
+            },
+            removed() {
+                window.removeEventListener("click", this.rules.blur);
+                window.removeEventListener("scroll", this.rules.pos);
+                this.querySelector("[slot=trigger]").removeEventListener("click", this.rules.toggle);
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "label,position": () => {
+                            this.props[name] = next;
+                        }
+                    },
+                    state: {
+                        "show": () => {
+                            Neo.Wrapper && Neo.Wrapper.rules[next ? "smonly" : "opened"]();
+                            setTimeout(() => {
+                                window[(next ? "add" : "remove") + "EventListener"]("click", this.rules.blur);
+                            }, 0);
+                            this.emit("change:expand", {
+                                data: next,
+                            });
+                        },
+                    },
+                    props: {
+                        "label,position": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "expand": () => {
+                            next ? (this.state.show = next, this.rules.pos()) :
+                            setTimeout(() => {
+                                this.state.show = next;
+                            }, 250);
+                        }
+                    }
+                }[type], name);
+            },
+        },
+    }
+</script>

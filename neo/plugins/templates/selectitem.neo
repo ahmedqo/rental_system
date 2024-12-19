@@ -1,0 +1,148 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    {$ if @props.hidden $}
+        :host {
+            display: none;
+        }
+    {$ else $}
+        :host {
+            width: 100%;
+            outline: none;
+            display: block;
+            font-family: inherit;
+            padding: .25rem .5rem;
+            font-size: {{  @Theme.sizes("MEDIUM") }};
+            line-height: {{  @Theme.lines("MEDIUM") }};
+            {$ if @props.active $}
+                color: {{ @Theme.colors("WHITE") }};
+                background: {{ @Theme.colors("PRIME") }};
+            {$ endif $}
+            {$ if @props.disable $}
+                pointer-events: none;
+                color: {{ @Theme.colors("BLACK") }};
+                background: {{ @Theme.colors("BLACK", 40) }};
+            {$ endif $}
+        }
+
+        {$ if !@props.disable $}
+            :host(:hover),
+            :host(:focus),
+            :host(:focus-within) {
+                color: {{ @Theme.colors("BLACK") }};
+                background: {{ @Theme.colors("PRIME", 40) }};
+            }
+        {$ endif $}
+    {$ endif $}
+
+    ::slotted(*) {
+        pointer-events: none;
+    }
+</style>
+
+<template name="neo-select-item">
+    <slot></slot>
+</template>
+
+<script>
+    export default {
+        attrs: ["text", "value", "hidden", "active", "disable", "tabindex"],
+        props: {
+            text: "",
+            value: "",
+            hidden: false,
+            active: false,
+            disable: false,            
+        },
+        rules: {
+            toggle(event) {
+                if (this.props.disable || this.props.hidden) return;
+                else if (event.type === "click" || event.keyCode === 13) {
+                    if (event.keyCode === 13) event.stopPropagation();
+                    if (this.closest("neo-select") && this.closest("neo-select").multiple) this.props.active = !this.props.active;
+                    else this.props.active = true;
+                }
+            },
+            change() {
+                if (!this.closest("neo-select")) return;
+                const select = this.closest("neo-select");
+                if (select.multiple) {
+                    var value = select.value || [];
+                    var text = select.text || [];
+                    if (this.props.active) {
+                        value.push(this.props.value);
+                        text.push((this.props.text || this.innerText).trim());
+                    } else {
+                        const index = value.indexOf(this.props.value);
+                        value.splice(index, 1) && text.splice(index, 1);
+                        !value.length && ((value = []), (text = []));
+                    }
+
+                    if (value.length) {
+                        select.value = value;
+                        select.text = text;
+
+                        const entries = new FormData();
+                        select.value.forEach((value) => {
+                            entries.append(select.name, value);
+                        });
+                        select.ctl.setFormValue(entries);
+                    } else {
+                        select.value = "";
+                        select.text = "";
+                        select.ctl.setFormValue(null);
+                    }
+                } else {
+                    this.props.active && select.querySelectorAll("neo-select-item").forEach((option) => {
+                        option !== this && (option.active = false);
+                    });
+                    select.ctl.setFormValue(this.props.value);
+                    select.text = (this.props.text || this.innerText).trim();
+                    select.value = this.props.value;
+                    select.expand = false;
+                }
+            },
+        },
+        cycle: {
+            mounted() {
+                this.tabIndex = this.props.disable || this.props.hidden ? -1 : 0;
+                this.addEventListener("click", this.rules.toggle);
+                this.addEventListener("keydown", this.rules.toggle);
+            },
+            removed() {
+                this.removeEventListener("click", this.rules.toggle);
+                this.removeEventListener("keydown", this.rules.toggle);
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "text,value": () => {
+                            this.props[name] = next;
+                        },
+                        "hidden,active,disable": () => {
+                            this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name)); 
+                        },
+                        "tabindex": () => {
+                            const tab = this.props.disable || this.props.hidden ? -1 : 0;
+                            this.tabIndex !== tab && (this.tabIndex = tab);
+                        }
+                    },
+                    props: {
+                        "text,value,hidden,disable": () => {
+                            ["hidden","disable"].includes(name) && (this.tabIndex = next ? -1 : 0); 
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        },
+                        "active": () => {
+                            this.rules.change();
+                        }
+                    }
+                }[type], name);
+            },    
+        }
+    }
+</script>

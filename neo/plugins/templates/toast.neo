@@ -1,0 +1,154 @@
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+
+    {$ each media into @Theme.MEDIA $}
+        @{{ media }}keyframes slide-up-off {
+            0% { 
+                opacity: 1; 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px); 
+                {$ endeach $}
+            }
+            100% { 
+                opacity: 0; 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(40px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes slide-down-off {
+            0% { 
+                opacity: 1; 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+            100% { 
+                opacity: 0; 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(-40px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes slide-up-on {
+            0% { 
+                opacity: 0; 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(40px);
+                {$ endeach $}
+            }
+            100% { 
+                opacity: 1; 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+        }
+
+        @{{ media }}keyframes slide-down-on {
+            0% { 
+                opacity: 0; 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(-40px);
+                {$ endeach $}
+            }
+            100% { 
+                opacity: 1; 
+                {$ each _media into @Theme.MEDIA $}
+                    {{ _media }}transform: translateY(0px);
+                {$ endeach $}
+            }
+        }
+    {$ endeach $}
+
+    :host {
+        width: 100%;
+        display: block;
+        font-weight: 600;
+        text-align: center;
+        pointer-events: all;
+        padding: .75rem 1rem;
+        border-radius: .25rem;
+        color: {{ @Theme.colors("WHITE") }};
+        font-size: {{ @Theme.sizes("BASE") }};
+        line-height: {{ @Theme.lines("BASE") }};
+        border: 1px solid {{ @Theme.colors("BLACK", 10) }};
+        background: var(--{{ @props.theme || "x" }}, {{ @Theme.colors("BLACK") }});
+        {$ each _media into @Theme.MEDIA $}
+            {{ _media }}box-shadow: 0px 8px 8px -8px {{ @Theme.colors("BLACK", 20) }};
+            {{ _media }}animation: {{ "slide-" + (@state.position === "start" ? "down" : "up") + "-" + (@state.flip ? "off" : "on") }} 200ms ease-in-out forwards;
+        {$ endeach $}
+        
+        --info: {{ @Theme.colors("BLUE", 500) }};
+        --error: {{ @Theme.colors("RED", 500) }};
+        --success: {{ @Theme.colors("GREEN", 500) }};
+        --warning: {{ @Theme.colors("YELLOW", 500) }};
+    }
+
+    @media (min-width: 1024px) {
+        :host {
+            min-width: 200px; 
+            max-width: 500px;
+            width: max-content;
+        }
+    }
+</style>
+
+<template name="neo-toast">
+    <slot name="start"></slot>
+    <slot></slot>
+    <slot name="end"></slot>
+</template>
+
+<script>
+    export default {
+        attrs: ["theme", "timer"],
+        props: {
+            theme: "",
+            timer: 5000,
+        },
+        state: {
+            position: "end",
+            flip: false,
+        },
+        cycle: {
+            created() {
+                if (Neo.Toaster) {
+                    this.state.position = Neo.Toaster.props.vertical;
+                }
+            },
+            mounted() {
+                setTimeout(() => {
+                    this.state.flip = true;
+                    setTimeout(() => {
+                        this.remove();
+                    }, 250);
+                }, this.props.timer);
+            },
+            updated(name, prev, next, type) {
+                Neo.Helper.option({
+                    attrs: {
+                        "theme": () => {
+                            this.props[name] = next;
+                        },
+                        "timer": () => {
+                            this.props[name] = +next || 5000;
+                        }
+                    },
+                    props: {
+                        "theme,timer": () => {
+                            this.emit("change:" + name, { 
+                                data: next 
+                            });
+                        }
+                    }
+                }[type], name);
+            },
+        }
+    }
+</script>
