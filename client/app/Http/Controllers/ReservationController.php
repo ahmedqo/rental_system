@@ -121,6 +121,7 @@ class ReservationController extends Controller
             $key => null,
             'pickup_date' => $pickup,
             'reference' => $reference,
+            'condition' => $Request->condition,
             'dropoff_date' => $dropoff,
             'rental_period_days' => $rental_period_days,
             'status' => $payment->sum('amount') >= $total ? 'completed' : 'pending'
@@ -190,6 +191,7 @@ class ReservationController extends Controller
             $key => null,
             'pickup_date' => $pickup,
             'dropoff_date' => $dropoff,
+            'condition' => $Request->condition,
             'rental_period_days' => $rental_period_days,
             'status' => $payment->sum('amount') >= $total ? 'completed' : 'pending'
         ]);

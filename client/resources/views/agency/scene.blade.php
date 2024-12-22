@@ -27,9 +27,16 @@
 @section('content')
     <div class="w-full items-start grid grid-rows-1 grid-cols-1 gap-6">
         @if ($vals->ended)
-            <div class="bg-red-500 text-x-white p-4 text-base font-x-thin rounded-x-thin shadow-x-core">
-                {{ __('This agency has :num pending reservations where the dropoff date has passed', ['num' => $vals->ended]) }}
-            </div>
+            <li
+                class="flex flex-wrap items-center gap-4 bg-red-500 text-x-white p-4 text-base font-x-thin rounded-x-thin shadow-x-core">
+                <svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor">
+                    <path
+                        d="M480-40q-26 0-50.94-10.74Q404.12-61.48 384-80L80-384q-18.52-20.12-29.26-45.06Q40-454 40-480q0-26 10.59-51.12Q61.17-556.24 80-576l304-304q20.12-20.48 45.06-30.24Q454-920 480-920q26 0 51.12 9.91Q556.24-900.17 576-880l304 304q20.17 19.76 30.09 44.88Q920-506 920-480q0 26-9.76 50.94Q900.48-404.12 880-384L576-80q-19.76 18.83-44.88 29.41Q506-40 480-40Zm-60-382h120v-250H420v250Zm60 160q25.38 0 42.69-17.81Q540-297.63 540-322q0-25.38-17.31-42.69T480-382q-25.37 0-42.69 17.31Q420-347.38 420-322q0 24.37 17.31 42.19Q454.63-262 480-262Z" />
+                </svg>
+                <span class="w-0 flex-1">
+                    {{ __('This agency has :num pending reservations where the dropoff date has passed', ['num' => $vals->ended]) }}
+                </span>
+            </li>
         @endif
         <div class="flex flex-col bg-x-white rounded-x-thin shadow-x-core">
             <div class="py-3 px-6 border-b border-x-shade">

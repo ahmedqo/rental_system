@@ -74,7 +74,7 @@
                         </div>
                         <div class="w-full h-full absolute inset-0 flex items-center justify-center pointer-events-none">
                             <h1 class="text-lg font-x-thin text-x-black pointer-events-auto">
-                                {{ !$vals->paid || $vals->paid < 0 ? (!$vals->charges ? '0.00' : '-100.00') : Core::formatNumber(100 - ($vals->charges / ($vals->paid > 0 ? $vals->paid : 1)) * 100) }}%
+                                {{ !+$vals->paid || +$vals->paid < 0 ? (!$vals->charges ? '0.00' : '-100.00') : Core::formatNumber(100 - ($vals->charges / ($vals->paid > 0 ? $vals->paid : 1)) * 100) }}%
                             </h1>
                         </div>
                         <canvas id="donut" class="w-full h-full"></canvas>

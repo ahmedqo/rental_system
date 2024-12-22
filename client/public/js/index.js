@@ -275,12 +275,12 @@ function TableVisualizer (dataVisualizer, callback, routes, rowClick, colClick) 
         }
     }
 
-    if(rowClick instanceof Function) dataVisualizer.rowClick = rowClick;
-    if(rowClick === true) dataVisualizer.rowClick = function rowClick (ev, meta) {
-        if(ev.target.tagName === "ACTION-MENU") return;
-        window.location.href = _routes.scene.replace("XXX", meta.row.id)
-    }
-    if(colClick instanceof Function) dataVisualizer.colClick = colClick;
+    if(rowClick instanceof Function || rowClick === true)
+        dataVisualizer.addEventListener("click:row", rowClick === true ? function rowClick (e) {
+            if(e.detail.target.tagName === "ACTION-MENU") return;
+            window.location.href = _routes.scene.replace("XXX", e.detail.meta.row.id)
+        } : rowClick);
+    if(colClick instanceof Function) dataVisualizer.addEventListener("click:col", colClick);
 
     dataVisualizer.cols = callback(_routes);
 

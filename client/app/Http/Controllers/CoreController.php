@@ -6,8 +6,11 @@ use App\Functions\Core;
 use App\Models\Charge;
 use App\Models\Company;
 use App\Models\Notification;
+use App\Models\Payment;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CoreController extends Controller
 {
@@ -110,17 +113,28 @@ class CoreController extends Controller
             'creances' => array_slice($columns, 0),
         ];
 
-        Reservation::with('Payment')->where('company', Core::company('id'))
+        Payment::where('company', Core::company('id'))
             ->whereBetween('created_at', [$startDate, $endDate])
             ->get()->groupBy(function ($model) {
                 return Core::groupKey($model);
             })->each(function ($group, $key) use (&$data) {
                 $group->each(function ($carry) use (&$data, &$key) {
-                    $data['creances'][$key] += $carry->Payment->rest;
-                    $data['payments'][$key] += $carry->Payment->paid;
+                    $data['creances'][$key] += $carry->rest;
                 });
             });
 
+        Payment::where('company', Core::company('id'))
+            ->whereBetween('updated_at', [$startDate, $endDate])
+            ->get()->map(function ($carry) {
+                return collect(json_decode($carry->logs));
+            })->flatten(1)->groupBy(function ($model) {
+                $model->date = str_replace('GMT+0100 (GMT+01:00)', '', $model->date);
+                return Core::groupKey($model, prop: "date");
+            })->each(function ($group, $key) use (&$data) {
+                $group->each(function ($carry) use (&$data, &$key) {
+                    $data['payments'][$key] += $carry->amount;
+                });
+            });
 
         Charge::where('company', Core::company('id'))->whereBetween('created_at', [$startDate, $endDate])
             ->get()->groupBy(function ($model) {

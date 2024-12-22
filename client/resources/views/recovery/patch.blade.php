@@ -138,7 +138,8 @@
                     </div>
                 </neo-tab-outlet>
                 <neo-tab-outlet name="outlet-3" class="grid grid-cols-1 grid-rows-1 gap-6">
-                    <input type="hidden" name="penalties" value='{{ old('penalties', $data->penalties) ?? '[]' }}'>
+                    <input type="hidden" name="penalties"
+                        value='{{ old('penalties', $data->penalties) ?? '[]' }}'>
                     <div class="flex flex-col flex-wrap gap-6 lg:flex-row lg:items-end">
                         <div class="flex flex-col gap-1 lg:flex-1">
                             <label class="text-x-black font-x-thin text-base">

@@ -9,6 +9,11 @@ use Illuminate\Support\Str;
 
 class Core
 {
+    public static function encode($json)
+    {
+        return str_starts_with($json, '"') ? $json : json_encode($json);
+    }
+
     public static function getDates($period = null)
     {
         switch ($period ?? Core::setting('report_frequency')) {
@@ -77,20 +82,21 @@ class Core
         }
     }
 
-    public static function groupKey($model, $period = null)
+    public static function groupKey($model, $period = null, $prop = 'created_at')
     {
+        $object = Carbon::parse($model->{$prop});
         switch ($period ?? Core::setting('report_frequency')) {
             case 'day':
-                $hour = $model->created_at->hour;
+                $hour = $object->hour;
                 $startHour = (int) floor($hour / 3) * 3;
                 $endHour = $startHour + 2;
                 return sprintf('%02d:00 - %02d:00', $startHour, $endHour);
             case 'week':
-                return __($model->created_at->format('l'));
+                return __($object->format('l'));
             case 'month':
-                return __('Week') . ' ' . Core::formatWeek($model->created_at->format('Y-m-d'));
+                return __('Week') . ' ' . Core::formatWeek($object->format('Y-m-d'));
             case 'year':
-                return __($model->created_at->format('F'));
+                return __($object->format('F'));
         }
     }
 

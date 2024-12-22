@@ -6,6 +6,7 @@
 @endsection
 
 @php
+    $condition = collect(json_decode($data->condition));
     $format_middle = Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'Y-m-d';
     $format_first = $format_middle . ' H:i';
     $format_last = Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'm/d/Y';
@@ -437,7 +438,7 @@
                             </svg>
                         </div>
                         <ul class="w-full lg:w-1/3 flex justify-center items-center flex-wrap gap-2 my-auto">
-                            @foreach (collect(json_decode($data->condition)) as $i)
+                            @foreach ($condition as $i)
                                 <li class="flex items-center gap-2 flex-wrap">
                                     <span class="block w-3 h-3 rounded-full"
                                         style="background:{{ $i->color }}"></span>
@@ -868,7 +869,7 @@
                             </svg>
                         </div>
                         <ul class="w-1/3 flex justify-center items-center flex-wrap gap-2 my-auto">
-                            @foreach (collect(json_decode($data->condition)) as $i)
+                            @foreach ($condition as $i)
                                 <li class="flex items-center gap-2 flex-wrap">
                                     <span class="block w-3 h-3 rounded-full"
                                         style="background:{{ $i->color }}"></span>

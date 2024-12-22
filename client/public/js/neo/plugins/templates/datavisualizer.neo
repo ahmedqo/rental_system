@@ -518,12 +518,10 @@
         border-top-color: {{ @props.outline ? @Theme.colors("BLACK") : @Theme.colors("BLACK", 20) }};        
     }
 
-    {$ if @props.rowClick instanceof Function $}
-        [part="table-body-row"]:hover {
-            cursor: pointer;
-            background: {{ @Theme.colors("PRIME", 5) }};
-        }
-    {$ endif $}
+    [part="table-body-row"]:hover {
+        cursor: pointer;
+        background: {{ @Theme.colors("PRIME", 5) }};
+    }
 
     [part="page"],
     [part="frame"],
@@ -717,18 +715,14 @@
                     <tbody ref="tablebody" part="table-body">
                         {$ forelse row into @state.rows $}
                             <tr ref="tablebodyrow" part="table-body-row" 
-                                {$ if @props.rowClick instanceof Function $}
-                                    @click="{{ (event) => @props.rowClick(event, {row: row, loop: @loop}) }}"
-                                {$ endif $}
+                                @click="{{ (event) => @rules.rowClick(event, { row: row, loop: @loop }) }}"
                             >
                                 {$ each col into @props.cols $}
                                     {$ if col.visible !== false $}
                                         <td ref="tablebodycol" part="table-body-col"
+                                            @click="{{ (event) => @rules.colClick(event, { row: row, col: col, loop: @loop }) }}"
                                             {$ if col.bodyStyle $}
                                                 style="{{ @style(typeof col.bodyStyle === 'function' ? col.bodyStyle(row, col) : col.bodyStyle) }}"
-                                            {$ endif $}
-                                            {$ if @props.colClick instanceof Function $}
-                                                @click="{{ (event) => @props.colClick(event, {row: row, col: col, loop: @loop}) }}"
                                             {$ endif $}
                                         >
                                             {{ @when(col.bodyRender, () => col.bodyRender(row, @loop), row[col.name]) }}
@@ -860,8 +854,6 @@
             size: "A4",
             cols: [],
             rows: [],
-            rowClick: null,
-            colClick: null,
         },
         state: {
             uid: "uid_" + Neo.Helper.random(),
@@ -875,6 +867,12 @@
             rows: [],
         },
         rules: {
+            rowClick(event, meta) {
+                this.emit("click:row", { meta, target: event.target });
+            },
+            colClick(event, meta) {
+                this.emit("click:col", { meta, target: event.target });
+            },
             download() {
                 const cols = [];
                 this.props.cols.forEach(col => {
