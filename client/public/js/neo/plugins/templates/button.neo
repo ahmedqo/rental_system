@@ -17,7 +17,7 @@
         display: inline-flex;
         border-radius: .25rem;
         justify-content: center;
-        padding: .6rem 1.5rem;
+        padding: .657rem 1.5rem;
         {$ if @props.vertical $} flex-direction: column; {$ endif $}
         {$ if @props.outline $} color: {{ @Theme.colors("PRIME") }};
         {$ else $}

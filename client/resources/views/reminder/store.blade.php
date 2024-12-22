@@ -4,6 +4,8 @@
 @section('meta')
     <meta name="routes" content='{!! json_encode([
         'search' => route('actions.vehicles.search'),
+    
+        'storeVehicle' => route('actions.vehicles.store'),
     ]) !!}' />
 @endsection
 

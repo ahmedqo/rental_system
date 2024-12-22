@@ -92,7 +92,7 @@
         border-style: solid;
         display: inline-flex;
         border-radius: .25rem;
-        padding: .4rem .75rem;
+        padding: .5rem .75rem;
         {$ if @props.outline $}
             border-color: {{ @Theme.colors("BLACK") }};
         {$ else $}
@@ -141,7 +141,7 @@
             {$ endeach $}
         }
 
-        {$ if @props.value $}
+        {$ if @props.value || @props.text $}
             [part="label"] {
                 padding: 0;
                 overflow: visible;
@@ -324,7 +324,11 @@
                     </div>
                 {$ endif $}
                 <div ref="items" part="items">
-                    <slot></slot>
+                    {$ if @state.empty $}
+                        {{ @when(@props.empty, @props.empty, "") }}
+                    {$ else $}
+                        <slot></slot>
+                    {$ endif $}
                 </div>
             </div>
         </div>
@@ -338,6 +342,7 @@
             text: "",
             value: "",
             label: "",
+            empty: null,
             expand: false,
             search: false,
             outline: false,
@@ -347,6 +352,7 @@
         },
         state: {
             uid: "uid_" + Neo.Helper.random(),
+            empty: false,
             show: false,
             pos: false,
         },
@@ -361,6 +367,7 @@
                 this.emit("search", { data: event.target.value }, () => {
                     clearTimeout(this.state.time);
                     this.state.time = setTimeout(() => {
+                        const found = [];
                         [...this.querySelectorAll("neo-select-item")].map(item => {
                             const phrase_int = item.innerText.toUpperCase().trim(),
                                 phrase_val = item.value.toUpperCase().trim(),
@@ -372,7 +379,9 @@
                             }
                             if (score.includes(1)) item.style.display = "";
                             else item.style.display = "none";
+                            found.push(score.includes(1));
                         });
+                        this.state.empty = found.every(e => !e);
                     }, 500);
                 });
             },
@@ -465,6 +474,7 @@
                                 item.style.display = "";
                             })) :
                             setTimeout(() => {
+                                this.state.empty = next;
                                 this.state.show = next;
                             }, 250);
                         },

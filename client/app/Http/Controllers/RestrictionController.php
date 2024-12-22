@@ -28,7 +28,11 @@ class RestrictionController extends Controller
 
     public function search_action(Request $Request)
     {
-        $data = Restriction::with('Client')->where('company', Core::company('id'))->orderBy('id', 'DESC');
+        $data = Restriction::with([
+            'Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+        ])->where('company', Core::company('id'))->orderBy('id', 'DESC');
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }

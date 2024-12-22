@@ -29,16 +29,31 @@ class PaymentController extends Controller
 
     public function search_action(Request $Request)
     {
-        $data = Payment::with('Reservation')->where('company', Core::company('id'))->where('status', '!=', 'completed')->orderBy('id', 'DESC');
+        $data = Payment::with([
+            'Reservation.Vehicle' =>  function ($Query) {
+                $Query->select('id', "brand", 'model', 'year', 'registration_number');
+            },
+            'Reservation.Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->where('company', Core::company('id'))->where('status', '!=', 'completed')->orderBy('id', 'DESC');
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50)->through(function ($carry) {
+            $carry->dropoff_date = $carry->Reservation->dropoff_date;
+            $carry->reference = $carry->Reservation->reference;
             $carry->vehicle = $carry->Reservation->Vehicle;
             $carry->sclient = $carry->Reservation->SClient;
             $carry->client = $carry->Reservation->Client;
             $carry->agency = $carry->Reservation->Agency;
-
+            unset($carry->Reservation);
             return $carry;
         });
         return response()->json($data);
@@ -46,16 +61,31 @@ class PaymentController extends Controller
 
     public function filter_action(Request $Request)
     {
-        $data = Payment::with('Reservation')->where('company', Core::company('id'))->orderBy('id', 'DESC');
+        $data = Payment::with([
+            'Reservation.Vehicle' =>  function ($Query) {
+                $Query->select('id', "brand", 'model', 'year', 'registration_number');
+            },
+            'Reservation.Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->where('company', Core::company('id'))->orderBy('id', 'DESC');
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50)->through(function ($carry) {
+            $carry->dropoff_date = $carry->Reservation->dropoff_date;
+            $carry->reference = $carry->Reservation->reference;
             $carry->vehicle = $carry->Reservation->Vehicle;
             $carry->sclient = $carry->Reservation->SClient;
             $carry->client = $carry->Reservation->Client;
             $carry->agency = $carry->Reservation->Agency;
-
+            unset($carry->Reservation);
             return $carry;
         });
         return response()->json($data);

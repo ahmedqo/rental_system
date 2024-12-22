@@ -94,7 +94,7 @@
         border-style: solid;
         display: inline-flex;
         border-radius: .25rem;
-        padding: .4rem .75rem;
+        padding: .5rem .75rem;
         {$ if @props.outline $}
             border-color: {{ @Theme.colors("BLACK") }};
         {$ else $}
@@ -217,7 +217,7 @@
             outline: none;
             display: block;
             font-family: inherit;
-            padding: .25rem .5rem;
+            padding: .5rem .75rem;
             font-size: {{ @Theme.sizes("MEDIUM") }};
             line-height: {{ @Theme.lines("MEDIUM") }};
         }
@@ -262,11 +262,13 @@
     {$ if @state.show $}
         <ul ref="content" part="content" @click:propagation="{{ () => {} }}">
             {$ if Array.isArray(@props.data) $}
-                {$ each result into @props.data $}
+                {$ forelse result into @props.data $}
                     <li ref="item" part="item" tabindex="0" @click:propagation="{{ (event) => @rules.select(event, result) }}" @keydown:propagation="{{ (event) => @rules.select(event, result) }}">
-                        {{ @rules.write(result, @props.setQuery) }}
+                        {{ @when(@props.item, () => @props.item(result, @loop), @rules.write(result, @props.setQuery)) }}
                     </li>
-                {$ endeach $}
+                {$ empty $}
+                    {{ @when(@props.empty, @props.empty, "") }}
+                {$ endforelse $}
             {$ endif $}
         </ul>
     {$ endif $}
@@ -280,6 +282,8 @@
             label: "",
             query: "",
             value: "",
+            item: null,
+            empty: null,
             setQuery: null,
             setValue: null,
             loading: false,
@@ -314,7 +318,10 @@
                 this.emit("keypress", { value: this.props.value, query: this.props.query });
             },
             input(event) {
-                this.props.value = "", this.props.query = event.target.value;
+                this.setProps({
+                    value: "", 
+                    query: event.target.value,
+                });
                 this.emit("input", { value: this.props.value, query: this.props.query });
             },
             select(event, result) {
@@ -417,7 +424,7 @@
                             this.ctl.setFormValue(next ? next : null);
                         },
                         "data": () => {
-                            this.state.expand = Array.isArray(next) && Boolean(next.length);
+                            this.state.expand = Array.isArray(next) && (this.props.empty || Boolean(next.length));
                         }
                     }
                 }[type], name);

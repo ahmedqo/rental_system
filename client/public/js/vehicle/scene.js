@@ -114,6 +114,7 @@ const filterReservations = $query("#filter-reservations"),
     dataPayments = $query("#data-payments");
 
 filterReservations.addEventListener("change", e => {
+    filterReservations.parentElement.label = e.detail.data ? $trans('Show all reservations') : $trans('Show pending reservations');
     TableVisualizer(dataReservations, execReservations, {
         search: $routes[e.detail.data ? 'filterReservations' : 'entireReservations'],
         patch: $routes.patchReservation,
@@ -122,6 +123,7 @@ filterReservations.addEventListener("change", e => {
 });
 
 filterRecoveries.addEventListener("change", e => {
+    filterRecoveries.parentElement.label = e.detail.data ? $trans('Show all recoveries') : $trans('Show pending recoveries');
     TableVisualizer(dataRecoveries, execRecoveries, {
         search: $routes[e.detail.data ? 'filterRecoveries' : 'entireRecoveries'],
         patch: $routes.patchRecovery
@@ -129,13 +131,14 @@ filterRecoveries.addEventListener("change", e => {
 });
 
 filterPayments.addEventListener("change", e => {
+    filterPayments.parentElement.label = e.detail.data ? $trans('Show all payments') : $trans('Show pending payments');
     TableVisualizer(dataPayments, execPayments, {
         search: $routes[e.detail.data ? 'filterPayments' : 'entirePayments'],
         patch: $routes.patchPayment
     });
 });
 
-function execReservations({ patch, print }) {
+function execReservations(props) {
     return [{
         name: "reference",
         text: $trans("Reference"),
@@ -255,36 +258,22 @@ function execReservations({ patch, print }) {
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
-    }, {
-        name: "action",
-        text: $trans("Actions"),
-        headStyle: { width: 20, textAlign: "center" },
-        bodyStyle: function(row) {
-            return {...bgdate(row), width: 20, textAlign: "center" };
-        },
-        bodyPdfStyle: function(row) {
-            return this.bodyStyle(row);
-        },
-        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"print="${print}"></action-menu>`,
-        headPdfStyle: function() {
-            return this.headStyle
-        },
-        bodyPdfRender: () => empty(),
-        bodyCsvRender: () => empty(),
-    }];
+    }, actionColumn({...props, css: { body: bgdate } })];
 }
 
-function execRecoveries({ patch }) {
+function execRecoveries(props) {
     return [{
         name: "reference",
         text: $trans("Reference"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyRender: (row) => row.reference,
         bodyPdfRender: function(row) {
@@ -296,9 +285,15 @@ function execRecoveries({ patch }) {
     }, {
         name: "renter",
         text: $trans("Renter"),
+        bodyStyle: function(row) {
+            return bgdate(row);
+        },
         bodyRender: (row) => {
             if (row.agency) return `<div>${$capitalize($trans("Agency"))}: ${$capitalize(row.agency.name)}</div>`;
             if (row.client) return `<div>${$capitalize($trans("Client"))}: ${row.client.last_name.toUpperCase() + " " + $capitalize(row.client.first_name)}</div>` + (row.sclient ? `<div>${$capitalize($trans("Secondary client"))}: ${row.sclient.last_name.toUpperCase() + " " + $capitalize(row.sclient.first_name)}</div>` : "");
+        },
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: (row) => {
@@ -309,13 +304,15 @@ function execRecoveries({ patch }) {
         name: "mileage",
         text: $trans("Mileage"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         bodyRender: (row) => row.mileage + " " + $trans('Km'),
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
@@ -323,13 +320,15 @@ function execRecoveries({ patch }) {
         name: "fuel_level",
         text: $trans("Fuel level"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         bodyRender: (row) => $money(+row.fuel_level, 2) + " %",
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
@@ -337,13 +336,15 @@ function execRecoveries({ patch }) {
         name: "penalties",
         text: $trans("Penalties"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         bodyRender: (row) => $money(+JSON.parse(row.penalties).reduce((a, e) => a + e.cost, 0), 2) + " " + $core.currency,
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
@@ -351,47 +352,34 @@ function execRecoveries({ patch }) {
         name: "status",
         text: $trans("Status"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         bodyRender: (row) => $capitalize($trans(row.status)),
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
-        },
-        bodyPdfRender: function(row) { return this.bodyRender(row); },
-        bodyCsvRender: function(row) { return this.bodyRender(row); },
-    }, {
-        name: "action",
-        text: $trans("Actions"),
-        headStyle: { width: 20, textAlign: "center" },
-        bodyStyle: function(row) {
-            if ((new Date(row.dropoff_date)).getTime() < (new Date).getTime() && row.status === "pending") return { background: "#ffc4c0", width: 20, textAlign: "center" };
-            return { width: 20, textAlign: "center" };
-        },
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
-        headPdfStyle: function() {
-            return this.headStyle
-        },
-        bodyPdfRender: () => empty(),
-        bodyCsvRender: () => empty(),
-    }];
+        bodyPdfRender: function(row) { return this.bodyRender(row); },
+        bodyCsvRender: function(row) { return this.bodyRender(row); },
+    }, actionColumn({...props, css: { body: bgdate } })];
 }
 
-function execPayments({ patch }) {
+function execPayments(props) {
     return [{
         name: "reference",
         text: $trans("Reference"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyRender: (row) => row.reference,
         bodyPdfRender: function(row) {
@@ -403,6 +391,12 @@ function execPayments({ patch }) {
     }, {
         name: "renter",
         text: $trans("Renter"),
+        bodyStyle: function(row) {
+            return bgdate(row);
+        },
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
+        },
         bodyRender: (row) => {
             if (row.agency) return `<div>${$capitalize($trans("Agency"))}: ${$capitalize(row.agency.name)}</div>`;
             if (row.client) return `<div>${$capitalize($trans("Client"))}: ${row.client.last_name.toUpperCase() + " " + $capitalize(row.client.first_name)}</div>` + (row.sclient ? `<div>${$capitalize($trans("Secondary client"))}: ${row.sclient.last_name.toUpperCase() + " " + $capitalize(row.sclient.first_name)}</div>` : "");
@@ -416,13 +410,15 @@ function execPayments({ patch }) {
         name: "daily_rate",
         text: $trans("Daily rate"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         bodyRender: (row) => $money(+row.daily_rate, 2) + " " + $core.currency,
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
@@ -430,13 +426,15 @@ function execPayments({ patch }) {
         name: "total",
         text: $trans("Total"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         bodyRender: (row) => $money(+row.total, 2) + " " + $core.currency,
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
@@ -444,13 +442,15 @@ function execPayments({ patch }) {
         name: "paid",
         text: $trans("Payment"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         bodyRender: (row) => $money(+row.paid, 2) + " " + $core.currency,
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
@@ -458,13 +458,15 @@ function execPayments({ patch }) {
         name: "rest",
         text: $trans("Creance"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         bodyRender: (row) => $money(+row.rest, 2) + " " + $core.currency,
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
+        bodyPdfStyle: function(row) {
+            return this.bodyStyle(row);
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
@@ -472,34 +474,19 @@ function execPayments({ patch }) {
         name: "status",
         text: $trans("Status"),
         headStyle: { textAlign: "center" },
-        bodyStyle: { textAlign: "center" },
+        bodyStyle: function(row) {
+            return {...bgdate(row), textAlign: "center" };
+        },
         bodyRender: (row) => $capitalize($trans(row.status)),
         headPdfStyle: function() {
             return this.headStyle
         },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
-        },
-        bodyPdfRender: function(row) { return this.bodyRender(row); },
-        bodyCsvRender: function(row) { return this.bodyRender(row); },
-    }, {
-        name: "action",
-        text: $trans("Actions"),
-        headStyle: { width: 20, textAlign: "center" },
-        bodyStyle: function(row) {
-            if ((new Date(row.dropoff_date)).getTime() < (new Date).getTime() && row.status === "pending") return { background: "#ffc4c0", width: 20, textAlign: "center" };
-            return { width: 20, textAlign: "center" };
-        },
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"></action-menu>`,
-        headPdfStyle: function() {
-            return this.headStyle
-        },
-        bodyPdfRender: () => empty(),
-        bodyCsvRender: () => empty(),
-    }];
+        bodyPdfRender: function(row) { return this.bodyRender(row); },
+        bodyCsvRender: function(row) { return this.bodyRender(row); },
+    }, actionColumn({...props, css: { body: bgdate } })];
 }
 
 
@@ -519,11 +506,7 @@ TableVisualizer(dataPayments, execPayments, {
     patch: $routes.patchPayment
 });
 
-TableVisualizer($query("#data-charges"), ({
-    csrf,
-    patch,
-    clear
-}) => [{
+TableVisualizer($query("#data-charges"), (props) => [{
     name: "name",
     text: $trans("Name"),
     bodyRender: (row) => $capitalize(row.name),
@@ -563,21 +546,7 @@ TableVisualizer($query("#data-charges"), ({
     bodyCsvRender: function(row) {
         return this.bodyRender(row);
     },
-}, {
-    name: "action",
-    text: $trans("Actions"),
-    headStyle: { width: 20, textAlign: "center" },
-    bodyStyle: { width: 20, textAlign: "center" },
-    bodyRender: (row) => `<action-menu target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-menu>`,
-    headPdfStyle: function() {
-        return this.headStyle
-    },
-    bodyPdfStyle: function() {
-        return this.bodyStyle;
-    },
-    bodyPdfRender: () => empty(),
-    bodyCsvRender: () => empty(),
-}], {
+}, actionColumn(props)], {
     search: $routes.entireCharges,
     patch: $routes.patchCharge,
     clear: $routes.clearCharge,

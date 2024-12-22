@@ -7,24 +7,27 @@
     :host {
         display: inline-flex;
         width: max-content;
+        position: relative;
     }
 
     {$ if @props.label && @state.show $}
         [part="label"] {
+            left: 50%;
             opacity: 0;
             display: flex;
             font-weight: 700;
             font-size: .75rem;
             width: max-content;
             position: absolute;
+            pointer-events: none;
             padding:.1rem .25rem;
             border-radius: .25rem;
-            top: {{ @state.pos.y }}px;
-            left: {{ @state.pos.x }}px;
             z-index: {{ @Theme.layer() }};
             color: {{ @Theme.colors("WHITE") }};
             background: {{ @Theme.colors("GRAY", 800) }};
+            {{ @state.pos ? "bottom" : "top" }}: 100%;
             {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transform: translateX(-50%);
                 {{ _media }}transition: opacity 200ms ease-in-out;
             {$ endeach $}
         }
@@ -50,12 +53,12 @@
         },
         state: {
             show: false,
-            pos: { x: 0, y: 0 },
+            pos: "bottom",
         },
         rules: {
             enter() {
                 this.state.show = true;
-                const { x, y, height, width } = this.getBoundingClientRect();
+                /*const { x, y, height, width } = this.getBoundingClientRect();
                 const labelWidth = this.refs.label.clientWidth;
                 const labelHeight = this.refs.label.clientHeight;
                 const scrollX = window.scrollX || window.pageXOffset;
@@ -66,7 +69,8 @@
                 this.state.pos = {
                     y: posY,
                     x: posX,
-                };
+                };*/
+                this.state.pos = this.getBoundingClientRect().y - this.refs.label.clientHeight > 0;
             },
             leave() {
                 this.state.show = false;

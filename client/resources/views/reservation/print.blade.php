@@ -17,13 +17,15 @@
             <label class="text-x-black font-x-thin text-xl">
                 #{{ $data->reference }}
             </label>
-            <button id="print" title="{{ __('Print') }}"
-                class="flex w-8 h-8 items-center justify-center text-x-black outline-none rounded-x-thin !bg-opacity-5 hover:bg-x-black focus:bg-x-black focus-within:bg-x-black">
-                <svg class="block w-6 h-6 pointer-events-none" fill="currentcolor" viewBox="0 -960 960 960">
-                    <path
-                        d="M766-724H194v-165h572v165Zm-76 321q25 0 42-16.81 17-16.82 17-42.19 0-25-16.81-42.5T690-522q-25 0-42.5 17.5T630-462q0 25 17.5 42t42.5 17Zm-60 220v-64H330v64h300ZM766-54H194v-180H28v-280q0-68 47.04-116T189-678h582q68.17 0 114.59 48Q932-582 932-514v280H766v180Z" />
-                </svg>
-            </button>
+            <neo-tooltip label="{{ __('Print') }}">
+                <button id="print"
+                    class="flex w-8 h-8 items-center justify-center text-x-black outline-none rounded-x-thin !bg-opacity-5 hover:bg-x-black focus:bg-x-black focus-within:bg-x-black">
+                    <svg class="block w-6 h-6 pointer-events-none" fill="currentcolor" viewBox="0 -960 960 960">
+                        <path
+                            d="M766-724H194v-165h572v165Zm-76 321q25 0 42-16.81 17-16.82 17-42.19 0-25-16.81-42.5T690-522q-25 0-42.5 17.5T630-462q0 25 17.5 42t42.5 17Zm-60 220v-64H330v64h300ZM766-54H194v-180H28v-280q0-68 47.04-116T189-678h582q68.17 0 114.59 48Q932-582 932-514v280H766v180Z" />
+                    </svg>
+                </button>
+            </neo-tooltip>
         </div>
         <div class="p-6 pt-8">
             <div class="w-full grid grid-rows-1 grid-cols-1 gap-6">
@@ -53,7 +55,7 @@
                                 <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                             </div>
                             <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                {{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}
+                                &#x202B;{{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}&#x202C;
                             </div>
                         </div>
                         <div class="flex flex-col md:flex-row">
@@ -537,7 +539,7 @@
                             </td>
                             <td class="w-4 text-xs text-x-black font-x-thin">:</td>
                             <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                {{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}
+                                &#x202B;{{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}&#x202C;
                             </td>
                         </tr>
                         <tr>
@@ -995,7 +997,7 @@
                         </span>
                         <span class="w-4 text-xs text-x-black font-x-thin">:</span>
                         <span class="text-xs text-x-prime text-opacity-70 font-x-thin">
-                            {{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}
+                            &#x202B;{{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}&#x202C;
                         </span>
                         <span class="w-max px-1 text-xs text-x-black font-x-thin">
                             {{ __('rented on') }}
@@ -1262,7 +1264,7 @@
                             {{ __('Immatriculé sous le numéro') }}:
                         </div>
                         <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
-                            {{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}
+                            &#x202B;{{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}&#x202C;
                         </div>
                         <div dir="rtl" class="p-1 w-[230px] text-xs text-x-black font-x-thin">
                             {{ __('أقر بأنني قد استأجرت السيارة') }}</br>

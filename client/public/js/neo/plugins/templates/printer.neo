@@ -180,7 +180,8 @@
             },
             createFrame() {
                 const frame = document.createElement("iframe");
-                this.root.appendChild(frame);
+                frame.style.display = "none";
+                document.body.appendChild(frame);
                 return frame;
             },
             insertStyles(page) {

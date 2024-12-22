@@ -37,7 +37,20 @@ class ReservationController extends Controller
 
     public function search_action(Request $Request)
     {
-        $data = Reservation::with('Vehicle', 'Client', 'Agency')->where('company', Core::company('id'))->where('status', '!=', 'completed')->orderBy('id', 'DESC');
+        $data = Reservation::with([
+            'Vehicle' =>  function ($Query) {
+                $Query->select('id', "brand", 'model', 'year', 'registration_number');
+            },
+            'Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->where('company', Core::company('id'))->where('status', '!=', 'completed')->orderBy('id', 'DESC');
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
@@ -47,7 +60,20 @@ class ReservationController extends Controller
 
     public function filter_action(Request $Request)
     {
-        $data = Reservation::with('Vehicle', 'Client', 'Agency')->where('company', Core::company('id'))->orderBy('id', 'DESC');
+        $data = Reservation::with([
+            'Vehicle' =>  function ($Query) {
+                $Query->select('id', "brand", 'model', 'year', 'registration_number');
+            },
+            'Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->where('company', Core::company('id'))->orderBy('id', 'DESC');
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }

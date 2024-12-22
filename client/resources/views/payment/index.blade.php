@@ -12,8 +12,10 @@
 
 @section('content')
     <div class="bg-x-white rounded-x-thin shadow-x-core">
-        <neo-datavisualizer print search filter download title="{{ __('Payments list') }}">
-            <neo-switch slot="start" id="filter" active></neo-switch>
+        <neo-datavisualizer print search filter download header="{{ __('Payments list') }}">
+            <neo-tooltip slot="start" label="{{ __('Show all payments') }}">
+                <neo-switch id="filter" active></neo-switch>
+            </neo-tooltip>
             @include('shared.page.print')
         </neo-datavisualizer>
     </div>

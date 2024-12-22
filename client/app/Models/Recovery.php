@@ -35,6 +35,30 @@ class Recovery extends Model
         'reservation.dropoff_date',
         'reservation.dropoff_location',
 
+        'reservation.client.identity_number',
+        'reservation.client.license_number',
+        'reservation.client.first_name',
+        'reservation.client.last_name',
+        'reservation.client.email',
+        'reservation.client.phone',
+
+        'reservation.sclient.identity_number',
+        'reservation.sclient.license_number',
+        'reservation.sclient.first_name',
+        'reservation.sclient.last_name',
+        'reservation.sclient.email',
+        'reservation.sclient.phone',
+
+        'reservation.agency.name',
+        'reservation.agency.phone',
+        'reservation.agency.email',
+
+        'reservation.vehicle.registration_number',
+        'reservation.vehicle.brand',
+        'reservation.vehicle.model',
+        'reservation.vehicle.year',
+
+
         'mileage',
         'fuel_level',
         'status',

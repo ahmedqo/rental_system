@@ -7,6 +7,10 @@
         'agency' => route('actions.agencies.search.all'),
         'vehicle' => route('actions.vehicles.search'),
         'info' => route('actions.vehicles.info', 'XXX'),
+
+        'storeClient' => route('actions.clients.store'),
+        'storeAgency' => route('actions.agencies.store'),
+        'storeVehicle' => route('actions.vehicles.store'),
     ]) !!}' />
 @endsection
 

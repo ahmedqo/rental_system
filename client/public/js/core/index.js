@@ -173,6 +173,7 @@ TableVisualizer($query("#data-popular"), () => [{
 ]);
 
 filter.addEventListener("change", e => {
+    filter.parentElement.label = e.detail.data ? $trans('Show all tickets') : $trans('Show open tickets');
     TableVisualizer(data, exec, {
         search: $routes[e.detail.data ? 'filter' : 'entire'],
     }, true);

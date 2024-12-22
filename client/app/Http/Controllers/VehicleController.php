@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Functions\Core;
 use App\Models\Charge;
+use App\Models\Payment;
+use App\Models\Recovery;
 use App\Models\Reminder;
 use App\Models\Vehicle;
 use App\Models\Reservation;
@@ -125,7 +127,17 @@ class VehicleController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
-        $data = Reservation::with('Client', 'SClient', 'Agency')->where('vehicle', $id)->where('status', '!=', 'completed')->whereBetween('created_at', [$startDate, $endDate]);
+        $data = Reservation::with([
+            'Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->where('vehicle', $id)->where('status', '!=', 'completed')->whereBetween('created_at', [$startDate, $endDate]);
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
@@ -137,7 +149,17 @@ class VehicleController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
-        $data = Reservation::with('Client', 'SClient', 'Agency')->where('vehicle', $id)->whereBetween('created_at', [$startDate, $endDate]);
+        $data = Reservation::with([
+            'Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->where('vehicle', $id)->whereBetween('created_at', [$startDate, $endDate]);
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
@@ -149,17 +171,31 @@ class VehicleController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
-        $data = Reservation::with('Client', 'SClient', 'Agency', 'Payment')->where('vehicle', $id)->where('status', '!=', 'completed')->whereBetween('created_at', [$startDate, $endDate]);
+        $data = Payment::with([
+            'Reservation',
+            'Reservation.Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->whereHas('Reservation', function ($query) use ($id) {
+            $query->where('vehicle', $id);
+        })->where('status', '!=', 'completed')->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'DESC');
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50)->through(function ($carry) {
-            return collect([
-                'reference' => $carry->reference,
-                'client' => $carry->Client,
-                'sclient' => $carry->SClient,
-                'agency' => $carry->Agency,
-            ])->merge($carry->Payment);
+            $carry->dropoff_date = $carry->Reservation->dropoff_date;
+            $carry->reference = $carry->Reservation->reference;
+            $carry->sclient = $carry->Reservation->SClient;
+            $carry->client = $carry->Reservation->Client;
+            $carry->agency = $carry->Reservation->Agency;
+            unset($carry->Reservation);
+            return $carry;
         });
         return response()->json($data);
     }
@@ -168,17 +204,32 @@ class VehicleController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
-        $data = Reservation::with('Client', 'SClient', 'Agency', 'Payment')->where('vehicle', $id)->whereBetween('created_at', [$startDate, $endDate]);
+        $data = Payment::with([
+            'Reservation',
+            'Reservation.Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->whereHas('Reservation', function ($query) use ($id) {
+            $query->where('vehicle', $id);
+        })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'DESC');
+
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50)->through(function ($carry) {
-            return collect([
-                'reference' => $carry->reference,
-                'client' => $carry->Client,
-                'sclient' => $carry->SClient,
-                'agency' => $carry->Agency,
-            ])->merge($carry->Payment);
+            $carry->dropoff_date = $carry->Reservation->dropoff_date;
+            $carry->reference = $carry->Reservation->reference;
+            $carry->sclient = $carry->Reservation->SClient;
+            $carry->client = $carry->Reservation->Client;
+            $carry->agency = $carry->Reservation->Agency;
+            unset($carry->Reservation);
+            return $carry;
         });
         return response()->json($data);
     }
@@ -187,17 +238,33 @@ class VehicleController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
-        $data = Reservation::with('Client', 'SClient', 'Agency', 'Recovery')->where('vehicle', $id)->where('status', '!=', 'completed')->whereBetween('created_at', [$startDate, $endDate]);
+        $data = Recovery::with([
+            'Reservation',
+            'Reservation.Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->whereHas('Reservation', function ($query) use ($id) {
+            $query->where('vehicle', $id);
+        })->where('status', '!=', 'completed')->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'DESC');
+
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
+
         $data = $data->cursorPaginate(50)->through(function ($carry) {
-            return collect([
-                'reference' => $carry->reference,
-                'client' => $carry->Client,
-                'sclient' => $carry->SClient,
-                'agency' => $carry->Agency,
-            ])->merge($carry->Recovery);
+            $carry->dropoff_date = $carry->Reservation->dropoff_date;
+            $carry->reference = $carry->Reservation->reference;
+            $carry->sclient = $carry->Reservation->SClient;
+            $carry->client = $carry->Reservation->Client;
+            $carry->agency = $carry->Reservation->Agency;
+            unset($carry->Reservation);
+            return $carry;
         });
         return response()->json($data);
     }
@@ -206,17 +273,32 @@ class VehicleController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
-        $data = Reservation::with('Client', 'SClient', 'Agency', 'Recovery')->where('vehicle', $id)->whereBetween('created_at', [$startDate, $endDate]);
+        $data = Recovery::with([
+            'Reservation',
+            'Reservation.Client' =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.SClient'  =>  function ($Query) {
+                $Query->select('id', "last_name", 'first_name');
+            },
+            'Reservation.Agency' =>  function ($Query) {
+                $Query->select('id', "name");
+            }
+        ])->whereHas('Reservation', function ($query) use ($id) {
+            $query->where('vehicle', $id);
+        })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'DESC');
+
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50)->through(function ($carry) {
-            return collect([
-                'reference' => $carry->reference,
-                'client' => $carry->Client,
-                'sclient' => $carry->SClient,
-                'agency' => $carry->Agency,
-            ])->merge($carry->Recovery);
+            $carry->dropoff_date = $carry->Reservation->dropoff_date;
+            $carry->reference = $carry->Reservation->reference;
+            $carry->sclient = $carry->Reservation->SClient;
+            $carry->client = $carry->Reservation->Client;
+            $carry->agency = $carry->Reservation->Agency;
+            unset($carry->Reservation);
+            return $carry;
         });
         return response()->json($data);
     }

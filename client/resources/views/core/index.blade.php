@@ -172,16 +172,22 @@
             </div>
         </div>
         <div class="bg-x-white rounded-x-thin shadow-x-core">
-            <neo-datavisualizer id="data-popular" title="{{ __('Popular vehicles') }}"></neo-datavisualizer>
+            <neo-datavisualizer id="data-popular" header="{{ __('Popular vehicles') }}"></neo-datavisualizer>
         </div>
         <div class="bg-x-white rounded-x-thin shadow-x-core">
-            <neo-datavisualizer id="data-tickets" search title=" {{ __('Tickets list') }}">
-                <a slot="start" title="{{ __('Create') }}" href="{{ route('views.tickets.store') }}"
-                    aria-label="create_page_link"
-                    class="flex text-base px-2 py-1 font-x-thin items-center justify-center text-x-prime outline-none rounded-x-thin hover:text-x-white hover:bg-x-acent focus:text-x-white focus:bg-x-acent focus-within:text-x-white focus-within:bg-x-acent">
-                    {{ __('Open ticket') }}
-                </a>
-                <neo-switch slot="start" id="filter" active></neo-switch>
+            <neo-datavisualizer id="data-tickets" search header=" {{ __('Tickets list') }}">
+                <neo-tooltip slot="start" label="{{ __('Show all tickets') }}">
+                    <neo-switch id="filter" active></neo-switch>
+                </neo-tooltip>
+                <neo-tooltip slot="end" label="{{ __('Create') }}">
+                    <a href="{{ route('views.tickets.store') }}"
+                        class="flex w-8 h-8 items-center justify-center text-x-white outline-none rounded-x-thin bg-x-prime hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent">
+                        <svg class="block w-6 h-6 pointer-events-none" fill="currentcolor" viewBox="0 -960 960 960">
+                            <path
+                                d="M479.825-185q-18.45 0-31.637-12.625Q435-210.25 435-231v-203H230q-18.375 0-31.688-13.56Q185-461.119 185-479.86q0-20.14 13.312-32.64Q211.625-525 230-525h205v-205q0-19.775 13.358-32.388Q461.716-775 480.158-775t32.142 12.612Q526-749.775 526-730v205h204q18.8 0 32.4 12.675 13.6 12.676 13.6 32.316 0 19.641-13.6 32.825Q748.8-434 730-434H526v203q0 20.75-13.65 33.375Q498.699-185 479.825-185Z" />
+                        </svg>
+                    </a>
+                </neo-tooltip>
             </neo-datavisualizer>
         </div>
     </div>

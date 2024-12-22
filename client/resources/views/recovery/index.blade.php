@@ -12,8 +12,10 @@
 
 @section('content')
     <div class="bg-x-white rounded-x-thin shadow-x-core">
-        <neo-datavisualizer print search filter download title="{{ __('Recoveries list') }}">
-            <neo-switch slot="start" id="filter" active></neo-switch>
+        <neo-datavisualizer print search filter download header="{{ __('Recoveries list') }}">
+            <neo-tooltip slot="start" label="{{ __('Show all recoveries') }}">
+                <neo-switch id="filter" active></neo-switch>
+            </neo-tooltip>
             @include('shared.page.print')
         </neo-datavisualizer>
     </div>

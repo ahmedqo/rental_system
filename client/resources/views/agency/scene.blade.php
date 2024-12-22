@@ -184,18 +184,24 @@
             </div>
         </div>
         <div class="bg-x-white rounded-x-thin shadow-x-core">
-            <neo-datavisualizer id="data-reservations" search title=" {{ __('Reservations list') }}">
-                <neo-switch slot="start" id="filter-reservations" active></neo-switch>
+            <neo-datavisualizer id="data-reservations" search header=" {{ __('Reservations list') }}">
+                <neo-tooltip slot="start" label="{{ __('Show all reservations') }}">
+                    <neo-switch id="filter-reservations" active></neo-switch>
+                </neo-tooltip>
             </neo-datavisualizer>
         </div>
         <div class="bg-x-white rounded-x-thin shadow-x-core">
-            <neo-datavisualizer id="data-payments" search title=" {{ __('Payments list') }}">
-                <neo-switch slot="start" id="filter-payments" active></neo-switch>
+            <neo-datavisualizer id="data-payments" search header=" {{ __('Payments list') }}">
+                <neo-tooltip slot="start" label="{{ __('Show all payments') }}">
+                    <neo-switch id="filter-payments" active></neo-switch>
+                </neo-tooltip>
             </neo-datavisualizer>
         </div>
         <div class="bg-x-white rounded-x-thin shadow-x-core">
-            <neo-datavisualizer id="data-recoveries" search title=" {{ __('Recoveries list') }}">
-                <neo-switch slot="start" id="filter-recoveries" active></neo-switch>
+            <neo-datavisualizer id="data-recoveries" search header=" {{ __('Recoveries list') }}">
+                <neo-tooltip slot="start" label="{{ __('Show all recoveries') }}">
+                    <neo-switch id="filter-recoveries" active></neo-switch>
+                </neo-tooltip>
             </neo-datavisualizer>
         </div>
     </div>

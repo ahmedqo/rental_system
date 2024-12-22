@@ -29,7 +29,11 @@ class ReminderController extends Controller
 
     public function search_action(Request $Request)
     {
-        $data = Reminder::with('Vehicle')->where('company', Core::company('id'))->orderBy('id', 'DESC');
+        $data = Reminder::with([
+            'Vehicle' =>  function ($Query) {
+                $Query->select('id', "brand", 'model', 'year', 'registration_number');
+            },
+        ])->where('company', Core::company('id'))->orderBy('id', 'DESC');
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }

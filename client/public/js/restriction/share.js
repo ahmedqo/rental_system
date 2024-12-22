@@ -5,4 +5,7 @@ searchable($query("neo-autocomplete[name=client]"), $routes.search, function(dat
             name: row.last_name.toUpperCase() + " " + $capitalize(row.first_name) + (row.restriction ? " (" + $capitalize($trans('banned')) + ")" : "")
         }
     });
+}, {
+    link: $routes.storeClient,
+    text: $trans("Add new client")
 });

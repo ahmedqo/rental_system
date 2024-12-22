@@ -1,8 +1,4 @@
-TableVisualizer($query("neo-datavisualizer"), ({
-    csrf,
-    patch,
-    clear
-}) => [{
+TableVisualizer($query("neo-datavisualizer"), (props) => [{
     name: "full_name",
     text: $trans("Full name"),
     bodyRender: (row) => row.last_name.toUpperCase() + " " + $capitalize(row.first_name),
@@ -67,18 +63,4 @@ TableVisualizer($query("neo-datavisualizer"), ({
     bodyCsvRender: function(row) {
         return this.bodyRender(row);
     },
-}, {
-    name: "action",
-    text: $trans("Actions"),
-    headStyle: { width: 20, textAlign: "center" },
-    bodyStyle: { width: 20, textAlign: "center" },
-    bodyRender: (row) => `<action-menu target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-menu>`,
-    headPdfStyle: function() {
-        return this.headStyle
-    },
-    bodyPdfStyle: function() {
-        return this.bodyStyle;
-    },
-    bodyPdfRender: () => empty(),
-    bodyCsvRender: () => empty(),
-}]);
+}, actionColumn(props)]);

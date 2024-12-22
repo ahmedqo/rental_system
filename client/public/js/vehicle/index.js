@@ -1,8 +1,4 @@
-TableVisualizer($query("neo-datavisualizer"), ({
-    csrf,
-    patch,
-    clear
-}) => [{
+TableVisualizer($query("neo-datavisualizer"), ({ scene, ...props }) => [{
         name: "vehicle",
         text: $trans("Vehicle"),
         bodyRender: (row) => $capitalize($trans(row.brand)) + " " + $capitalize($trans(row.model)) + " " + row.year,
@@ -44,7 +40,7 @@ TableVisualizer($query("neo-datavisualizer"), ({
     }, {
         name: "registration",
         text: $trans("Regitration"),
-        bodyRender: (row) => `<div>${$capitalize($trans("Regitration number"))}: ${row.registration_number}</div><div>${$capitalize($trans("Regitration date"))}: ${$moment(row.registration_date, $core.format)}</div>`,
+        bodyRender: (row) => `<div>${$capitalize($trans("Regitration number"))}: &#x202B;${row.registration_number}&#x202C;</div><div>${$capitalize($trans("Regitration date"))}: ${$moment(row.registration_date, $core.format)}</div>`,
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: (row) => `${$capitalize($trans("Regitration number"))}: ${row.registration_number}, ${$capitalize($trans("Regitration date"))}: ${$moment(row.registration_date, $core.format)}`
     }, {
@@ -73,19 +69,6 @@ TableVisualizer($query("neo-datavisualizer"), ({
         bodyRender: (row) => `<div>${$capitalize($trans("Passenger capacity"))}: ${row.passenger_capacity}</div><div>${$capitalize($trans("Cargo capacity"))}: ${row.cargo_capacity}</div><div>${$capitalize($trans("Number of doors"))}: ${row.number_of_doors}</div>`,
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: (row) => `${$capitalize($trans("Passenger capacity"))}: ${row.passenger_capacity}, ${$capitalize($trans("Cargo capacity"))}: ${row.cargo_capacity}, ${$capitalize($trans("Number of doors"))}: ${row.number_of_doors}`
-    }, {
-        name: "action",
-        text: $trans("Actions"),
-        headStyle: { width: 20, textAlign: "center" },
-        bodyStyle: { width: 20, textAlign: "center" },
-        bodyRender: (row) => `<action-menu target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-menu>`,
-        headPdfStyle: function() {
-            return this.headStyle
-        },
-        bodyPdfStyle: function() {
-            return this.bodyStyle;
-        },
-        bodyPdfRender: () => empty(),
-        bodyCsvRender: () => empty(),
-    }
+    },
+    actionColumn(props)
 ], {}, true);

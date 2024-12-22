@@ -97,7 +97,7 @@
         display: block;
     }
 
-    {$ if @truty(@props.title) || @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
+    {$ if @truty(@props.header) || @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
         [part="topbar"] {
             gap: .5rem;
             width: 100%;
@@ -107,8 +107,41 @@
         }
     {$ endif $}
 
-    {$ if @truty(@props.title) $}
-        [part="title"] {
+    {$ if @props.print || @props.search || @props.filter || @props.download $}
+        [part="tooltip-wrapper"] {
+            display: inline-flex;
+            width: max-content;
+            position: relative;
+        }
+
+        [part="tooltip"] {
+            left: 50%;
+            opacity: 0;
+            display: flex;
+            font-weight: 700;
+            font-size: .75rem;
+            width: max-content;
+            position: absolute;
+            pointer-events: none;
+            padding:.1rem .25rem;
+            border-radius: .25rem;
+            z-index: {{ @Theme.layer() }};
+            color: {{ @Theme.colors("WHITE") }};
+            {{ @state.toolpos ? "bottom" : "top" }}: 100%;
+            background: {{ @Theme.colors("GRAY", 800) }};
+            {$ each _media into @Theme.MEDIA $}
+                {{ _media }}transform: translateX(-50%);
+                {{ _media }}transition: opacity 200ms ease-in-out;
+            {$ endeach $}
+        }
+
+        [part="tooltip-wrapper"]:hover [part="tooltip"] {
+            opacity: 1;
+        }
+    {$ endif $}
+
+    {$ if @truty(@props.header) $}
+        [part="header"] {
             margin: 0 auto;
             font-weight: 700;
             font-size: {{ @Theme.sizes("LARGE") }};
@@ -134,7 +167,7 @@
             border-style: solid;
             display: inline-flex;
             border-radius: .25rem;
-            padding: .4rem .75rem;
+            padding: .5rem .75rem;
             {$ if @props.outline $}
                 border-color: {{ @Theme.colors("BLACK") }};
             {$ else $}
@@ -499,7 +532,7 @@
     }
     
     @media (min-width: 1024px) {
-        {$ if @truty(@props.title) || @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
+        {$ if @truty(@props.header) || @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
             [part="topbar"] {
                 gap: 1rem;
                 flex-direction: row;
@@ -507,8 +540,8 @@
             }
         {$ endif $}
 
-        {$ if @truty(@props.title) $}
-            [part="title"] {
+        {$ if @truty(@props.header) $}
+            [part="header"] {
                 margin: 0;
                 font-size: {{ @Theme.sizes("XLARGE") }};
                 line-height: {{ @Theme.lines("XLARGE") }};
@@ -560,7 +593,7 @@
 </style>
 
 <template name="neo-datavisualizer">
-    {$ if @truty(@props.title) || @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
+    {$ if @truty(@props.header) || @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
         <div ref="topbar" part="topbar">
             {$ if @props.search && @state.search $}
                 <div ref="searchwrapper" part="search-wrapper">
@@ -572,18 +605,21 @@
                         <path d="M39.7 43.2L26.2894 29.8C25.2965 30.5641 24.1591 31.1635 22.8771 31.5981C21.5951 32.0327 20.1934 32.25 18.6719 32.25C14.8282 32.25 11.597 30.9383 8.9782 28.3149C6.35943 25.6914 5.05005 22.4998 5.05005 18.7399C5.05005 14.98 6.36177 11.7917 8.9852 9.175C11.6086 6.55833 14.8003 5.25 18.5602 5.25C22.3201 5.25 25.5084 6.56073 28.125 9.1822C30.7417 11.8037 32.05 14.9954 32.05 18.7575C32.05 20.2858 31.8334 21.675 31.4 22.925C30.9667 24.175 30.3334 25.3667 29.5 26.5L43 39.9L39.7 43.2ZM18.5721 27.7C21.1049 27.7 23.2261 26.841 24.9357 25.1229C26.6453 23.4049 27.5 21.2874 27.5 18.7706C27.5 16.2538 26.6443 14.1295 24.9327 12.3977C23.2212 10.6659 21.1025 9.8 18.5765 9.8C16.0228 9.8 13.8882 10.6659 12.1729 12.3977C10.4577 14.1295 9.60005 16.2538 9.60005 18.7706C9.60005 21.2874 10.4552 23.4049 12.1656 25.1229C13.876 26.841 16.0115 27.7 18.5721 27.7Z" />
                     </svg>
                 </div>
-            {$ elif @truty(@props.title) $}
-                <h1 ref="title" part="title">{{ @props.title }}</h1>
+            {$ elif @truty(@props.header) $}
+                <h1 ref="header" part="header">{{ @props.header }}</h1>
             {$ endif $}
             {$ if @props.print || @props.search || @props.filter || @props.download || @this.querySelector("[slot=tools-start]") || @this.querySelector("[slot=tools-end]") $}
                 <div ref="tools" part="tools">
                     <slot name="start"></slot>
                     {$ if @props.search $}
-                        <button aria-label="search_trigger" search title="{{ @trans('Search') }}" ref="btn" part="btn" @click="{{ @rules.toggle }}">
-                            <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
-                                <path d="M39.7 43.2L26.2894 29.8C25.2965 30.5641 24.1591 31.1635 22.8771 31.5981C21.5951 32.0327 20.1934 32.25 18.6719 32.25C14.8282 32.25 11.597 30.9383 8.9782 28.3149C6.35943 25.6914 5.05005 22.4998 5.05005 18.7399C5.05005 14.98 6.36177 11.7917 8.9852 9.175C11.6086 6.55833 14.8003 5.25 18.5602 5.25C22.3201 5.25 25.5084 6.56073 28.125 9.1822C30.7417 11.8037 32.05 14.9954 32.05 18.7575C32.05 20.2858 31.8334 21.675 31.4 22.925C30.9667 24.175 30.3334 25.3667 29.5 26.5L43 39.9L39.7 43.2ZM18.5721 27.7C21.1049 27.7 23.2261 26.841 24.9357 25.1229C26.6453 23.4049 27.5 21.2874 27.5 18.7706C27.5 16.2538 26.6443 14.1295 24.9327 12.3977C23.2212 10.6659 21.1025 9.8 18.5765 9.8C16.0228 9.8 13.8882 10.6659 12.1729 12.3977C10.4577 14.1295 9.60005 16.2538 9.60005 18.7706C9.60005 21.2874 10.4552 23.4049 12.1656 25.1229C13.876 26.841 16.0115 27.7 18.5721 27.7Z" />
-                            </svg>
-                        </button>         
+                        <div part="tooltip-wrapper" ref="tooltip-wrapper" @mouseenter="{{ @rules.toolpos }}">
+                            <button aria-label="search_trigger" search ref="btn" part="btn" @click="{{ @rules.toggle }}">
+                                <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+                                    <path d="M39.7 43.2L26.2894 29.8C25.2965 30.5641 24.1591 31.1635 22.8771 31.5981C21.5951 32.0327 20.1934 32.25 18.6719 32.25C14.8282 32.25 11.597 30.9383 8.9782 28.3149C6.35943 25.6914 5.05005 22.4998 5.05005 18.7399C5.05005 14.98 6.36177 11.7917 8.9852 9.175C11.6086 6.55833 14.8003 5.25 18.5602 5.25C22.3201 5.25 25.5084 6.56073 28.125 9.1822C30.7417 11.8037 32.05 14.9954 32.05 18.7575C32.05 20.2858 31.8334 21.675 31.4 22.925C30.9667 24.175 30.3334 25.3667 29.5 26.5L43 39.9L39.7 43.2ZM18.5721 27.7C21.1049 27.7 23.2261 26.841 24.9357 25.1229C26.6453 23.4049 27.5 21.2874 27.5 18.7706C27.5 16.2538 26.6443 14.1295 24.9327 12.3977C23.2212 10.6659 21.1025 9.8 18.5765 9.8C16.0228 9.8 13.8882 10.6659 12.1729 12.3977C10.4577 14.1295 9.60005 16.2538 9.60005 18.7706C9.60005 21.2874 10.4552 23.4049 12.1656 25.1229C13.876 26.841 16.0115 27.7 18.5721 27.7Z" />
+                                </svg>
+                            </button>    
+                            <label part="tooltip" ref="tooltip">{{ @trans('Search') }}</label> 
+                        </div>    
                     {$ endif $}
                     {$ if @props.print $}
                         {$ if @state.seen $}
@@ -596,27 +632,36 @@
                                 </div>
                             </div>
                         {$ endif $}
-                        <button aria-label="print_trigger" title="{{ @trans('Print') }}" ref="btn" part="btn" @click="{{ @rules.print }}">
-                            <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">                      
-                                <path d="M37.05 13H11V5H37.05V13ZM36.2 24.8C36.8 24.8 37.2917 24.6198 37.675 24.2594C38.0583 23.899 38.25 23.4208 38.25 22.825C38.25 22.2417 38.0604 21.75 37.6813 21.35C37.3021 20.95 36.8167 20.75 36.225 20.75C35.6083 20.75 35.1167 20.951 34.75 21.3531C34.3833 21.7552 34.2 22.2375 34.2 22.8C34.2 23.4 34.3833 23.8833 34.75 24.25C35.1167 24.6167 35.6 24.8 36.2 24.8ZM32.45 39.4V32.45H15.55V39.4H32.45ZM37.05 43.7H11V34.05H3V20.85C3 19.0617 3.60695 17.5396 4.82085 16.2837C6.03472 15.0279 7.52777 14.4 9.3 14.4H38.7C40.5083 14.4 42.0188 15.0279 43.2313 16.2837C44.4438 17.5396 45.05 19.0617 45.05 20.85V34.05H37.05V43.7Z" />
-                            </svg>
-                        </button>         
+                        <div part="tooltip-wrapper" ref="tooltip-wrapper" @mouseenter="{{ @rules.toolpos }}">
+                            <button aria-label="print_trigger" ref="btn" part="btn" @click="{{ @rules.print }}">
+                                <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">                      
+                                    <path d="M37.05 13H11V5H37.05V13ZM36.2 24.8C36.8 24.8 37.2917 24.6198 37.675 24.2594C38.0583 23.899 38.25 23.4208 38.25 22.825C38.25 22.2417 38.0604 21.75 37.6813 21.35C37.3021 20.95 36.8167 20.75 36.225 20.75C35.6083 20.75 35.1167 20.951 34.75 21.3531C34.3833 21.7552 34.2 22.2375 34.2 22.8C34.2 23.4 34.3833 23.8833 34.75 24.25C35.1167 24.6167 35.6 24.8 36.2 24.8ZM32.45 39.4V32.45H15.55V39.4H32.45ZM37.05 43.7H11V34.05H3V20.85C3 19.0617 3.60695 17.5396 4.82085 16.2837C6.03472 15.0279 7.52777 14.4 9.3 14.4H38.7C40.5083 14.4 42.0188 15.0279 43.2313 16.2837C44.4438 17.5396 45.05 19.0617 45.05 20.85V34.05H37.05V43.7Z" />
+                                </svg>
+                            </button>        
+                            <label part="tooltip" ref="tooltip">{{ @trans('Print') }}</label> 
+                        </div>     
                     {$ endif $}
                     {$ if @props.download $}
-                        <button aria-label="download_trigger" title="{{ @trans('Download') }}" ref="btn" part="btn" @click="{{ @rules.download }}">
-                            <a aria-label="download_link" ref="download" part="download" download="{{ @Str.kebab(@props.title) }}.csv"></a>
-                            <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
-                                <path d="M12.6 41.05C9.43333 41.05 6.70833 39.925 4.425 37.675C2.14167 35.425 1 32.6833 1 29.45C1 26.7167 1.85 24.25 3.55 22.05C5.25 19.85 7.45 18.5333 10.15 18.1C10.9167 15.1 12.4 12.6 14.6 10.6C16.8 8.6 19.3667 7.4 22.3 7V25.6L18.4 21.6L15.95 24.05L24 32.2L32.05 24.05L29.65 21.6L25.75 25.6V7C29.1833 7.43333 32.0833 8.95 34.45 11.55C36.8167 14.15 38.1 17.2667 38.3 20.9V22.1C40.8 22.3667 42.8583 23.375 44.475 25.125C46.0917 26.875 46.9 29.0333 46.9 31.6C46.9 34.2333 45.9833 36.4667 44.15 38.3C42.3167 40.1333 40.0833 41.05 37.45 41.05H12.6Z" />
-                            </svg>
-                        </button>         
+                        <div part="tooltip-wrapper" ref="tooltip-wrapper" @mouseenter="{{ @rules.toolpos }}">
+                            <button aria-label="download_trigger" ref="btn" part="btn" @click="{{ @rules.download }}">
+                                <a aria-label="download_link" ref="download" part="download" download="{{ @Str.kebab(@props.header) }}.csv"></a>
+                                <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+                                    <path d="M12.6 41.05C9.43333 41.05 6.70833 39.925 4.425 37.675C2.14167 35.425 1 32.6833 1 29.45C1 26.7167 1.85 24.25 3.55 22.05C5.25 19.85 7.45 18.5333 10.15 18.1C10.9167 15.1 12.4 12.6 14.6 10.6C16.8 8.6 19.3667 7.4 22.3 7V25.6L18.4 21.6L15.95 24.05L24 32.2L32.05 24.05L29.65 21.6L25.75 25.6V7C29.1833 7.43333 32.0833 8.95 34.45 11.55C36.8167 14.15 38.1 17.2667 38.3 20.9V22.1C40.8 22.3667 42.8583 23.375 44.475 25.125C46.0917 26.875 46.9 29.0333 46.9 31.6C46.9 34.2333 45.9833 36.4667 44.15 38.3C42.3167 40.1333 40.0833 41.05 37.45 41.05H12.6Z" />
+                                </svg>
+                            </button>       
+                            <label part="tooltip" ref="tooltip">{{ @trans('Download') }}</label> 
+                        </div>      
                     {$ endif $}
                     {$ if @props.filter $}
                         <div ref="filter" part="filter">
-                            <button aria-label="filter_trigger" title="{{ @trans('Columns') }}" ref="btn" part="btn" @click="{{ @rules.filter }}">
-                                <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
-                                    <path d="M7.55 39.25C6.55 39.25 5.70833 38.9 5.025 38.2C4.34167 37.5 4 36.6667 4 35.7V12.55C4 11.5696 4.34167 10.7328 5.025 10.0397C5.70833 9.34657 6.55 9 7.55 9H12.05C13.0167 9 13.8333 9.34657 14.5 10.0397C15.1667 10.7328 15.5 11.5696 15.5 12.55V35.7C15.5 36.6667 15.1667 37.5 14.5 38.2C13.8333 38.9 13.0167 39.25 12.05 39.25H7.55ZM21.3 39.25C20.3333 39.25 19.5 38.9 18.8 38.2C18.1 37.5 17.75 36.6667 17.75 35.7V12.55C17.75 11.5696 18.1 10.7328 18.8 10.0397C19.5 9.34657 20.3333 9 21.3 9H25.8C26.7667 9 27.5917 9.34657 28.275 10.0397C28.9583 10.7328 29.3 11.5696 29.3 12.55V35.7C29.3 36.6667 28.9583 37.5 28.275 38.2C27.5917 38.9 26.7667 39.25 25.8 39.25H21.3ZM35.05 39.25C34.05 39.25 33.2083 38.9 32.525 38.2C31.8417 37.5 31.5 36.6667 31.5 35.7V12.55C31.5 11.5696 31.8417 10.7328 32.525 10.0397C33.2083 9.34657 34.05 9 35.05 9H39.5C40.4804 9 41.3255 9.34657 42.0353 10.0397C42.7451 10.7328 43.1 11.5696 43.1 12.55V35.7C43.1 36.6667 42.7451 37.5 42.0353 38.2C41.3255 38.9 40.4804 39.25 39.5 39.25H35.05Z" />
-                                </svg>
-                            </button>
+                            <div part="tooltip-wrapper" ref="tooltip-wrapper" @mouseenter="{{ @rules.toolpos }}">
+                                <button aria-label="filter_trigger" ref="btn" part="btn" @click="{{ @rules.filter }}">
+                                    <svg ref="icon" part="icon" fill="currentColor" viewBox="0 0 48 48">
+                                        <path d="M7.55 39.25C6.55 39.25 5.70833 38.9 5.025 38.2C4.34167 37.5 4 36.6667 4 35.7V12.55C4 11.5696 4.34167 10.7328 5.025 10.0397C5.70833 9.34657 6.55 9 7.55 9H12.05C13.0167 9 13.8333 9.34657 14.5 10.0397C15.1667 10.7328 15.5 11.5696 15.5 12.55V35.7C15.5 36.6667 15.1667 37.5 14.5 38.2C13.8333 38.9 13.0167 39.25 12.05 39.25H7.55ZM21.3 39.25C20.3333 39.25 19.5 38.9 18.8 38.2C18.1 37.5 17.75 36.6667 17.75 35.7V12.55C17.75 11.5696 18.1 10.7328 18.8 10.0397C19.5 9.34657 20.3333 9 21.3 9H25.8C26.7667 9 27.5917 9.34657 28.275 10.0397C28.9583 10.7328 29.3 11.5696 29.3 12.55V35.7C29.3 36.6667 28.9583 37.5 28.275 38.2C27.5917 38.9 26.7667 39.25 25.8 39.25H21.3ZM35.05 39.25C34.05 39.25 33.2083 38.9 32.525 38.2C31.8417 37.5 31.5 36.6667 31.5 35.7V12.55C31.5 11.5696 31.8417 10.7328 32.525 10.0397C33.2083 9.34657 34.05 9 35.05 9H39.5C40.4804 9 41.3255 9.34657 42.0353 10.0397C42.7451 10.7328 43.1 11.5696 43.1 12.55V35.7C43.1 36.6667 42.7451 37.5 42.0353 38.2C41.3255 38.9 40.4804 39.25 39.5 39.25H35.05Z" />
+                                    </svg>
+                                </button>
+                                <label part="tooltip" ref="tooltip">{{ @trans('Columns') }}</label> 
+                            </div>    
                             {$ if @state.show $}
                                 <div ref="filtermodal" part="filter-modal">
                                     <div ref="filtercontent" part="filter-content" @click:propagation="{{ () => {} }}">
@@ -709,7 +754,7 @@
     </div>
     {$ if @props.print $}
         <section ref="page" part="page">
-            <style> body { margin: 0; } #page { width: 100% } @page { size: {{ @props.size }}; margin: {{ @props.margin }}; } #title { font-weight: 700; text-align: center; margin: 0 0 1rem 0; font-size: {{ @Theme.sizes("XLARGE") }}; line-height: {{ @Theme.lines("XLARGE") }}; } #wrapper { width: 100%; overflow-x: auto; border-width: 1px; border-style: solid; border-radius: .25rem; {$ if @props.outline $} border-color: {{ @Theme.colors("BLACK") }}; {$ else $} background: {{ @Theme.colors("WHITE") }}; border-color: {{ @Theme.colors("BLACK", 20) }}; {$ endif $} } #table { min-width: 100%; width: max-content; border-collapse: collapse; } .table-head-col { font-weight: 700; padding: .5rem 1rem; color: {{ @Theme.colors("BLACK") }}; font-size: {{ @Theme.sizes("SMALL") }}; line-height: {{ @Theme.lines("SMALL") }}; {$ if !@props.outline $} background: {{ @Theme.colors("LIGHT") }}; {$ endif $} } .table-head-col:first-of-type, .table-body-col:first-of-type { padding-inline-start: 1.5rem; } .table-head-col:last-of-type, .table-body-col:last-of-type { padding-inline-end: 1.5rem; } .table-body-col { padding: 0.5rem 1rem; font-size: {{ @Theme.sizes("BASE") }}; line-height: {{ @Theme.lines("BASE") }}; } #table-empty-col { padding: 1rem; } #table-empty-col-icon { width: 5rem; height: 5rem; display: block; margin: 1rem auto; color: {{ @Theme.colors("LIGHT") }}; } .table-body-row { border-top-width: 1px; border-top-style: solid; border-top-color: {{ @props.outline ? @Theme.colors("BLACK") : @Theme.colors("BLACK", 20) }}; }
+            <style> body { margin: 0; } #page { width: 100% } @page { size: {{ @props.size }}; margin: {{ @props.margin }}; } #header { font-weight: 700; text-align: center; margin: 0 0 1rem 0; font-size: {{ @Theme.sizes("XLARGE") }}; line-height: {{ @Theme.lines("XLARGE") }}; } #wrapper { width: 100%; overflow-x: auto; border-width: 1px; border-style: solid; border-radius: .25rem; {$ if @props.outline $} border-color: {{ @Theme.colors("BLACK") }}; {$ else $} background: {{ @Theme.colors("WHITE") }}; border-color: {{ @Theme.colors("BLACK", 20) }}; {$ endif $} } #table { min-width: 100%; width: max-content; border-collapse: collapse; } .table-head-col { font-weight: 700; padding: .5rem 1rem; color: {{ @Theme.colors("BLACK") }}; font-size: {{ @Theme.sizes("SMALL") }}; line-height: {{ @Theme.lines("SMALL") }}; {$ if !@props.outline $} background: {{ @Theme.colors("LIGHT") }}; {$ endif $} } .table-head-col:first-of-type, .table-body-col:first-of-type { padding-inline-start: 1.5rem; } .table-head-col:last-of-type, .table-body-col:last-of-type { padding-inline-end: 1.5rem; } .table-body-col { padding: 0.5rem 1rem; font-size: {{ @Theme.sizes("BASE") }}; line-height: {{ @Theme.lines("BASE") }}; } #table-empty-col { padding: 1rem; } #table-empty-col-icon { width: 5rem; height: 5rem; display: block; margin: 1rem auto; color: {{ @Theme.colors("LIGHT") }}; } .table-body-row { border-top-width: 1px; border-top-style: solid; border-top-color: {{ @props.outline ? @Theme.colors("BLACK") : @Theme.colors("BLACK", 20) }}; }
             </style>
             <slot ref="printStyles" name="styles" part="styles"></slot>
             <table id="page">
@@ -727,8 +772,8 @@
                         <td>
                             <main id="main">
                                 <slot ref="printTop" name="top" part="top"></slot>
-                                {$ if @truty(@props.title) $}
-                                    <h1 id="title">{{ @props.title }}</h1>
+                                {$ if @truty(@props.header) $}
+                                    <h1 id="header">{{ @props.header }}</h1>
                                 {$ endif $}
                                 <div id="wrapper">
                                     <table id="table">
@@ -799,7 +844,7 @@
 
 <script>
     export default {
-        attrs: ["title", "margin", "size", "outline", "print", "search", "filter", "download"],
+        attrs: ["header", "margin", "size", "outline", "print", "search", "filter", "download"],
         dense: {
             globals: [],
         },
@@ -811,7 +856,7 @@
             search: false,
             filter: false,
             print: false,
-            title: "",
+            header: "",
             size: "A4",
             cols: [],
             rows: [],
@@ -820,6 +865,7 @@
         },
         state: {
             uid: "uid_" + Neo.Helper.random(),
+            toolpos: null,
             expand: false,
             search: false,
             print: false,
@@ -925,6 +971,9 @@
             pos() {
                 this.state.show && (this.state.pos = window.innerHeight - this.getBoundingClientRect().top < this.refs.filtermodal.clientHeight);
             },
+            toolpos(e) {
+                this.state.toolpos = this.getBoundingClientRect().y - e.target.querySelector("[part=tooltip]").clientHeight > 0;
+            },
             createPage() {
                 this.state.seen = true;
                 Neo.Wrapper && Neo.Wrapper.rules.closed();
@@ -936,8 +985,8 @@
             },
             createFrame() {
                 const frame = document.createElement("iframe");
-                frame.setAttribute("part", "frame");
-                this.root.appendChild(frame);
+                frame.style.display = "none";
+                document.body.appendChild(frame);
                 return frame;
             },
             insertStyles(page) {
@@ -1002,7 +1051,7 @@
             updated(name, prev, next, type) {
                 Neo.Helper.option({
                     attrs: {
-                        "size,title,margin": () => {
+                        "size,header,margin": () => {
                             this.props[name] = next
                         },
                         "outline,print,search,filter,download": () => {
@@ -1027,7 +1076,7 @@
                         },
                     },
                     props: {
-                        "size,title,margin,print,outline,loading": () => {
+                        "size,header,margin,print,outline,loading": () => {
                             this.emit("change:" + name, { data: next });
                         },
                         "filter,search": () => {

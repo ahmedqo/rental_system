@@ -14,13 +14,17 @@
 
     {$ if @truty(@props.label) $}
         [part="label"] {
+            top: 0;
             width: 100%;
             display: block;
+            position: sticky;
             font-weight: 700;
             padding: .25rem .5rem;
             color: {{ @Theme.colors("BLACK") }};
             font-size: {{  @Theme.sizes("BASE") }};
             line-height: {{  @Theme.lines("BASE") }};
+            background: {{ @Theme.colors("WHITE") }};
+            border-bottom: 1px solid {{ @Theme.colors("BLACK", 20) }};
         }
     {$ endif $}
 </style>

@@ -2,15 +2,13 @@ const filter = $query("#filter"),
     data = $query("neo-datavisualizer");
 
 filter.addEventListener("change", e => {
+    filter.parentElement.label = e.detail.data ? $trans('Show all reservations') : $trans('Show pending reservations');
     TableVisualizer(data, exec, {
         search: $routes[e.detail.data ? 'filter' : 'entire']
     });
 });
 
-function exec({
-    patch,
-    print,
-}) {
+function exec(props) {
     return [{
         name: "reference",
         text: $trans("Reference"),
@@ -33,7 +31,7 @@ function exec({
         bodyPdfStyle: function(row) {
             return this.bodyStyle(row);
         },
-        bodyRender: (row) => row.vehicle ? ($capitalize($trans(row.vehicle.brand)) + " " + $capitalize($trans(row.vehicle.model)) + " " + row.vehicle.year + " (" + row.vehicle.registration_number + ")") : empty(),
+        bodyRender: (row) => row.vehicle ? ($capitalize($trans(row.vehicle.brand)) + " " + $capitalize($trans(row.vehicle.model)) + " " + row.vehicle.year + " (&#x202B;" + row.vehicle.registration_number + "&#x202C;)") : empty(),
         bodyPdfRender: function(row) {
             return this.bodyRender(row);
         },
@@ -149,23 +147,7 @@ function exec({
         },
         bodyPdfRender: function(row) { return this.bodyRender(row); },
         bodyCsvRender: function(row) { return this.bodyRender(row); },
-    }, {
-        name: "action",
-        text: $trans("Actions"),
-        headStyle: { width: 20, textAlign: "center" },
-        bodyStyle: function(row) {
-            return {...bgdate(row), width: 20, textAlign: "center" };
-        },
-        bodyPdfStyle: function(row) {
-            return this.bodyStyle(row);
-        },
-        bodyRender: (row) => `<action-menu target="${row.id}"patch="${patch}"print="${print}"></action-menu>`,
-        headPdfStyle: function() {
-            return this.headStyle
-        },
-        bodyPdfRender: () => empty(),
-        bodyCsvRender: () => empty(),
-    }];
+    }, actionColumn({...props, css: { body: bgdate } })];
 }
 
 TableVisualizer(data, exec, {

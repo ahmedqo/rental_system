@@ -189,15 +189,8 @@ neo-dropdown::part(content),
 neo-datepicker::part(content),
 neo-timepicker::part(content),
 neo-autocomplete::part(content) {
-    border: unset;
-}
-
-neo-select::part(content),
-neo-dropdown::part(content),
-neo-datepicker::part(content),
-neo-timepicker::part(content),
-neo-autocomplete::part(content) {
     box-shadow: var(--shadow);
+    border: unset;
 }
 
 neo-select-group {
@@ -228,12 +221,12 @@ neo-explorer,
 neo-datepicker,
 neo-timepicker,
 neo-autocomplete,
-neo-imagetransfer,
-neo-autocomplete::part(item) {
+neo-imagetransfer {
     padding: 1rem;
 }
 
-neo-select-item {
+neo-select-item,
+neo-autocomplete::part(item) {
     padding: .5rem 1rem;
 }
 
@@ -252,13 +245,13 @@ neo-datavisualizer::part(wrapper) {
     border: unset;
 }
 
-neo-datavisualizer::part(title) {
+neo-datavisualizer::part(header) {
     font-weight: var(--w-thin);
     font-size: 1.25rem;
     line-height: 1.75rem;
 }
 
-neo-datavisualizer::part(title),
+neo-datavisualizer::part(header),
 neo-datavisualizer::part(tools) {
     margin: 0;
 }
@@ -334,7 +327,7 @@ neo-datavisualizer.scene-table::part(topbar) {
     flex-wrap: wrap;
 }
 
-neo-datavisualizer.scene-table::part(title) {
+neo-datavisualizer.scene-table::part(header) {
     display: block;
     margin: 0;
     font-weight: var(--w-thin);
@@ -392,6 +385,8 @@ neo-datavisualizer.scene-table::part(tools) {
     neo-sidebar::part(content) {
         border: unset;
         background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
     }
     neo-topbar.main-topbar::part(content) {
         gap: 1rem;
@@ -456,4 +451,42 @@ neo-dropdown::part(content) {
     100% {
         transform: translateX(0px);
     }
+}
+
+neo-autocomplete::part(add-new) {
+    padding: .75rem;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+}
+
+neo-autocomplete::part(empty-data) {
+    color: rgb(var(--black) / .6);
+    font-size: 1.2rem;
+    font-weight: var(--w-thin);
+}
+
+neo-autocomplete::part(add-new-link) {
+    text-decoration: none;
+    padding: .5rem 1rem;
+    color: rgb(var(--prime));
+    font-size: 1rem;
+    font-weight: var(--w-thin);
+    border-radius: var(--r-thin);
+    outline: none;
+    display: flex;
+}
+
+neo-autocomplete::part(add-new-link):hover,
+neo-autocomplete::part(add-new-link):focus {
+    background-color: rgb(var(--prime) / .3);
+}
+
+#track {
+    transition: width 250ms ease;
+}
+
+neo-tab-trigger {
+    transition: background 250ms ease;
 }

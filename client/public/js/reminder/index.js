@@ -1,11 +1,7 @@
-TableVisualizer($query("neo-datavisualizer"), ({
-    csrf,
-    patch,
-    clear
-}) => [{
+TableVisualizer($query("neo-datavisualizer"), (props) => [{
     name: "vehicle",
     text: $trans("Vehicle"),
-    bodyRender: (row) => row.vehicle ? ($capitalize($trans(row.vehicle.brand)) + " " + $capitalize($trans(row.vehicle.model)) + " " + row.vehicle.year + " (" + row.vehicle.registration_number + ")") : empty(),
+    bodyRender: (row) => row.vehicle ? ($capitalize($trans(row.vehicle.brand)) + " " + $capitalize($trans(row.vehicle.model)) + " " + row.vehicle.year + " (&#x202B;" + row.vehicle.registration_number + "&#x202C;)") : empty(),
     bodyPdfRender: function(row) {
         return this.bodyRender(row);
     },
@@ -64,18 +60,4 @@ TableVisualizer($query("neo-datavisualizer"), ({
     bodyRender: (row) => $moment(row.view_issued_at, $core.format),
     bodyPdfRender: function(row) { return this.bodyRender(row); },
     bodyCsvRender: function(row) { return this.bodyRender(row); },
-}, {
-    name: "action",
-    text: $trans("Actions"),
-    headStyle: { width: 20, textAlign: "center" },
-    bodyStyle: { width: 20, textAlign: "center" },
-    bodyRender: (row) => `<action-menu target="${row.id}"csrf="${csrf}"patch="${patch}"clear="${clear}"></action-menu>`,
-    headPdfStyle: function() {
-        return this.headStyle
-    },
-    bodyPdfStyle: function() {
-        return this.bodyStyle;
-    },
-    bodyPdfRender: () => empty(),
-    bodyCsvRender: () => empty(),
-}]);
+}, actionColumn(props)]);
