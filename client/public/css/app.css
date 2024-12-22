@@ -391,9 +391,6 @@ neo-datavisualizer.scene-table::part(tools) {
     neo-topbar.main-topbar::part(content) {
         gap: 1rem;
     }
-    neo-datavisualizer::part(topbar) {
-        align-items: center;
-    }
     #notify::part(content) {
         max-height: unset;
     }

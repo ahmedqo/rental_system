@@ -70,14 +70,36 @@ class ClientController extends Controller
             'creances' => array_slice($columns, 0),
         ];
 
-        Reservation::with('Payment')->where('client', $id)
-            ->whereBetween('created_at', [$startDate, $endDate])
+        Payment::with([
+            "Reservation" => function ($Query) {
+                $Query->select('id', 'client');
+            },
+        ])->whereHas('Reservation', function ($query) use ($id) {
+            $query->where('client', $id);
+        })->whereBetween('created_at', [$startDate, $endDate])
             ->get()->groupBy(function ($model) {
                 return Core::groupKey($model);
             })->each(function ($group, $key) use (&$data) {
                 $group->each(function ($carry) use (&$data, &$key) {
-                    $data['creances'][$key] += $carry->Payment->rest;
-                    $data['payments'][$key] += $carry->Payment->paid;
+                    $data['creances'][$key] += $carry->rest;
+                });
+            });
+
+        Payment::with([
+            "Reservation" => function ($Query) {
+                $Query->select('id', 'client');
+            },
+        ])->whereHas('Reservation', function ($query) use ($id) {
+            $query->where('client', $id);
+        })->whereBetween('updated_at', [$startDate, $endDate])
+            ->get()->map(function ($carry) {
+                return collect(json_decode($carry->logs));
+            })->flatten(1)->groupBy(function ($model) {
+                $model->date = str_replace('GMT+0100 (GMT+01:00)', '', $model->date);
+                return Core::groupKey($model, prop: "date");
+            })->each(function ($group, $key) use (&$data) {
+                $group->each(function ($carry) use (&$data, &$key) {
+                    $data['payments'][$key] += $carry->amount;
                 });
             });
 
