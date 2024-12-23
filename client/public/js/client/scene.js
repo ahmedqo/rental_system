@@ -54,6 +54,7 @@ new Chart(donut, {
     const data = await getData($routes.chart);
     if (!zero(data['creances']) && !zero(data['payments'])) {
         chart.parentElement.innerHTML = notFound();
+        lchart.remove();
     } else {
         data['keys'] = data['keys'].map(e => $trans(e));
         new Chart(chart, {
