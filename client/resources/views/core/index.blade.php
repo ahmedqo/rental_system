@@ -408,7 +408,7 @@
                 <neo-tooltip slot="start" label="{{ __('Show all tickets') }}">
                     <neo-switch id="filter" active></neo-switch>
                 </neo-tooltip>
-                <neo-tooltip slot="end" label="{{ __('Create') }}">
+                <neo-tooltip slot="end" label="{{ __('Open ticket') }}">
                     <a href="{{ route('views.tickets.store') }}"
                         class="flex w-8 h-8 items-center justify-center text-x-white outline-none rounded-x-thin bg-x-prime hover:bg-x-acent focus:bg-x-acent focus-within:bg-x-acent">
                         <svg class="block w-6 h-6 pointer-events-none" fill="currentcolor" viewBox="0 -960 960 960">
