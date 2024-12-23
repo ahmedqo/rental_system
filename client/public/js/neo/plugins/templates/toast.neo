@@ -67,8 +67,10 @@
     {$ endeach $}
 
     :host {
+        gap: 1rem;
         width: 100%;
-        display: block;
+        display: flex;
+        flex-wrap: wrap;
         font-weight: 600;
         text-align: center;
         pointer-events: all;

@@ -86,10 +86,10 @@
         cycle: {
             created() {
                 Neo.Toaster = this;
-                this.toast = (content, theme, timer) => {
+                this.toast = (content, theme, timer, icon) => {
                     const toast = document.createElement("neo-toast");
                     toast.setProps({ timer: timer || 5000, theme: theme });
-                    toast.innerHTML = content;
+                    toast.innerHTML = (icon ? icon : "") + content;
                     this.appendChild(toast);
                 };
             },
