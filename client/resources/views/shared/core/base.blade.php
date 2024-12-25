@@ -10,20 +10,22 @@
     @yield('styles')
     <title>@yield('title')</title>
     @if (Core::setting())
-        <meta name="core"
-            content="{{ json_encode([
-                'user' => Auth::id(),
-                'company' => Core::company('id'),
-                'token' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-                'read' => route('actions.core.read'),
-                'notify' => route('actions.core.notify'),
-                'format' => Core::formatsList(Core::setting('date_format'), 0),
-                'currency' => Core::setting('currency'),
-            ]) }}">
         @php
             $colors = Core::themesList(Core::setting('theme_color'));
             \Carbon\Carbon::setLocale(Core::setting('language'));
+            $props = [
+                'user' => Auth::id(),
+                'company' => Core::company('id'),
+                'token' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            ];
         @endphp
+        <meta name="core"
+            content="{{ json_encode([
+                'read' => route('actions.core.read', $props),
+                'notify' => route('actions.core.notify', $props),
+                'format' => Core::formatsList(Core::setting('date_format'), 0),
+                'currency' => Core::setting('currency'),
+            ]) }}">
         <style>
             *,
             :root,

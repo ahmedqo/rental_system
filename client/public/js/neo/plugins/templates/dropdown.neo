@@ -137,10 +137,10 @@
                 position: absolute;
                 height: max-content;
                 background: transparent;
-                {{ @state.pos ? "bottom" : "top" }}: 0;
-                {$ if @props.position === "start" $}
+                {{ @state.pos.y }}: 0;
+                {$ if @state.pos.x === "start" $}
                     left: 0;
-                {$ elif @props.position === "end" $}
+                {$ elif @state.pos.x === "end" $}
                     right: 0;
                 {$ else $}
                     left: 50%;
@@ -181,15 +181,17 @@
 
 <script>
     export default {
-        attrs: ["label", "position"],
+        attrs: ["label"],
         props: {
-            position: "center",
             expand: false,
             label: "",
         },
         state: {
             show: false,
-            pos: false,
+            pos: {
+                x: "center",
+                y: "top",
+            },
         },
         rules: {
             toggle() {
@@ -201,8 +203,32 @@
                 }
             },
             pos() {
-                this.state.show && (this.state.pos = window.innerHeight - this.getBoundingClientRect().top < this.refs.modal.clientHeight);
-            },
+                if (!this.state.show) return;
+
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+
+                const modal = this.refs.modal;
+                const modalWidth = modal.clientWidth;
+                const modalHeight = modal.clientHeight;
+
+                const modalRect = this.getBoundingClientRect();
+                const top = modalRect.top;
+                const left = modalRect.left;
+                const right = viewportWidth - left - modalWidth;
+
+                var x = "center", y = viewportHeight - top < modalHeight ? "bottom" : "top";
+
+                if (left >= modalWidth && right >= modalWidth) {
+                    x = "center";
+                } else if (right >= modalWidth) {
+                    x = "start";
+                } else {
+                    x = "end";
+                }
+
+                this.state.pos = { x, y };
+            }
         },
         cycle: {
             created() {
@@ -228,7 +254,7 @@
             updated(name, prev, next, type) {
                 Neo.Helper.option({
                     attrs: {
-                        "label,position": () => {
+                        "label": () => {
                             this.props[name] = next;
                         }
                     },
@@ -244,7 +270,7 @@
                         },
                     },
                     props: {
-                        "label,position": () => {
+                        "label": () => {
                             this.emit("change:" + name, { 
                                 data: next 
                             });
