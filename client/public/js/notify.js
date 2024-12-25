@@ -18,7 +18,7 @@ var timer;
 notify.addEventListener("change:expand", e => {
     clearTimeout(timer);
     if (e.detail.data) {
-        fetch($core.read);
+        fetch($core.read + `?user=${$core.user}&company=${$core.company}&token=${$core.token}`);
         $query("svg", trigger).classList.remove("animate-ring", "duration-500");
     } else {
         timer = setTimeout(run, 1000);
@@ -28,7 +28,7 @@ notify.addEventListener("change:expand", e => {
 const run = async() => {
     if (timer) clearTimeout(timer);
 
-    const req = await fetch($core.notify);
+    const req = await fetch($core.notify + `?user=${$core.user}&company=${$core.company}&token=${$core.token}`);
     const res = await req.json();
 
     const sanitizeItems = (items) => {

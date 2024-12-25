@@ -8,9 +8,9 @@ use App\Models\Company;
 use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Reservation;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class CoreController extends Controller
 {
@@ -43,11 +43,13 @@ class CoreController extends Controller
         return view('core.notify');
     }
 
-    public function notify_action()
+    public function notify_action(Request $Request)
     {
-        $id = Auth::id();
+        if ((!$Request->user || !$Request->company) && $Request->token !== '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')
+            return false;
 
-        $data = Notification::where('company', Core::company('id'))->limit(5)
+        $id = $Request->user;
+        $data = Notification::where('company', $Request->company)->limit(5)
             ->orderBy('id', 'DESC')->get()->map(function ($Carry) use ($id) {
                 $Carry->content =  $Carry->content;
                 $Carry->ring = !str_contains($Carry->view, (string) $id);
@@ -57,10 +59,13 @@ class CoreController extends Controller
         return response()->json($data);
     }
 
-    public function read_action()
+    public function read_action(Request $Request)
     {
-        $id = Auth::id();
-        Notification::where('company', Core::company('id'))->where(function ($Query) use ($id) {
+        if ((!$Request->user || !$Request->company) && $Request->token !== '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')
+            return false;
+
+        $id = $Request->user;
+        $data = Notification::where('company', $Request->company)->where(function ($Query) use ($id) {
             $Query->whereNull('view')
                 ->orWhereRaw('view NOT LIKE ?', ['%' . $id . '%']);
         })->each(function ($Carry) use ($id) {

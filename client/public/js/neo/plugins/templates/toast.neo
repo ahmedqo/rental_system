@@ -73,7 +73,6 @@
         display: flex;
         flex-wrap: wrap;
         font-weight: 600;
-        text-align: center;
         pointer-events: all;
         align-items: center;
         border-radius: .25rem;
@@ -102,6 +101,10 @@
         {$ if @props.position === "end" $}
             margin-inline-start: auto;
         {$ endif $}
+    }
+
+    ::slotted(*) {
+        flex: 1;
     }
 
     @media (min-width: 1024px) {

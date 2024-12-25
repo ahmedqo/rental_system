@@ -12,6 +12,9 @@
     @if (Core::setting())
         <meta name="core"
             content="{{ json_encode([
+                'user' => Auth::id(),
+                'company' => Core::company('id'),
+                'token' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
                 'read' => route('actions.core.read'),
                 'notify' => route('actions.core.notify'),
                 'format' => Core::formatsList(Core::setting('date_format'), 0),

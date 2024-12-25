@@ -9,11 +9,6 @@ use Illuminate\Support\Str;
 
 class Core
 {
-    public static function encode($json)
-    {
-        return str_starts_with($json, '"') ? $json : json_encode($json);
-    }
-
     public static function getDates($period = null)
     {
         switch ($period ?? Core::setting('report_frequency')) {

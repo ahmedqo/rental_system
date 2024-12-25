@@ -22,7 +22,7 @@ class IsActive
             return redirect(RouteServiceProvider::GUEST)->withInput()->with([
                 'message' => __('Access denied'),
                 'type' => 'error'
-            ]);;
+            ]);
         }
         return $next($request);
     }
