@@ -148,7 +148,7 @@ class ReservationController extends Controller
             'status' => $payment->sum('amount') >= $total ? 'completed' : 'pending'
         ]);
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -215,7 +215,7 @@ class ReservationController extends Controller
             'status' => $payment->sum('amount') >= $total ? 'completed' : 'pending'
         ]);
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);

@@ -289,7 +289,7 @@ class AgencyController extends Controller
             'name' => strtolower($Request->name),
         ])->all());
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -319,7 +319,7 @@ class AgencyController extends Controller
             'name' => strtolower($Request->name),
         ])->all());
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);
@@ -329,7 +329,7 @@ class AgencyController extends Controller
     {
         Agency::findorfail($id)->delete();
 
-        return Redirect::route('views.agencies.index')->withInput()->with([
+        return Redirect::route('views.agencies.index')->with([
             'message' => __('Deleted successfully'),
             'type' => 'success'
         ]);

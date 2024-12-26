@@ -21,7 +21,7 @@ notify.addEventListener("change:expand", e => {
         fetch($core.read);
         $query("svg", trigger).classList.remove("animate-ring", "duration-500");
     } else {
-        timer = setTimeout(run, 1000);
+        timer = setTimeout(run, 3000);
     }
 });
 
@@ -43,7 +43,7 @@ const run = async() => {
         notifySegment.upgrade();
     }
 
-    timer = setTimeout(run, 1000);
+    timer = setTimeout(run, 60000);
 }
 
 run();

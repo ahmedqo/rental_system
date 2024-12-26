@@ -94,7 +94,7 @@ class CompanyController extends Controller
 
         Mailer::reset($Request->representative_email);
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -135,7 +135,7 @@ class CompanyController extends Controller
             $Company->Image()->create();
         }
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);

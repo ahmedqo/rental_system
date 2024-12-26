@@ -388,7 +388,7 @@ class VehicleController extends Controller
             'registration_number' => $Request->registration_type == 'WW' ? ($Request->registration_ww_part_1 . '-' . $Request->registration_ww_part_2) : ($Request->registration_vehicle_part_1 . '-' . $Request->registration_vehicle_part_2 . '-' . $Request->registration_vehicle_part_3)
         ])->all());
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Created successfully'),
             'type' => 'success'
         ]);
@@ -437,7 +437,7 @@ class VehicleController extends Controller
             'registration_number' => $Request->registration_type == 'WW' ? ($Request->registration_ww_part_1 . '-' . $Request->registration_ww_part_2) : ($Request->registration_vehicle_part_1 . '-' . $Request->registration_vehicle_part_2 . '-' . $Request->registration_vehicle_part_3)
         ])->all());
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);
@@ -447,7 +447,7 @@ class VehicleController extends Controller
     {
         Vehicle::findorfail($id)->delete();
 
-        return Redirect::route('views.vehicles.index')->withInput()->with([
+        return Redirect::route('views.vehicles.index')->with([
             'message' => __('Deleted successfully'),
             'type' => 'success'
         ]);

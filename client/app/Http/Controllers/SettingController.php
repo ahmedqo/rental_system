@@ -35,7 +35,7 @@ class SettingController extends Controller
         $Setting = Core::setting();
         $Setting->update($Request->all());
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);

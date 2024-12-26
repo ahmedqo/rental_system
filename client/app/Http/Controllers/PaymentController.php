@@ -111,7 +111,7 @@ class PaymentController extends Controller
             'status' => $payment->sum('amount') >= $Payment->total ? 'completed' : 'pending'
         ]);
 
-        return Redirect::back()->withInput()->with([
+        return Redirect::back()->with([
             'message' => __('Updated successfully'),
             'type' => 'success'
         ]);
