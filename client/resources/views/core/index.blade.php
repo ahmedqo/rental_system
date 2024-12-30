@@ -9,7 +9,7 @@
         'search' => route('actions.core.popular'),
         'chart' => route('actions.core.chart'),
     ]) !!}' />
-    <meta name="count" content="{!! json_encode([(float) $vals->paid - $vals->charges, (float) $vals->charges]) !!}" />
+    <meta name="count" content="{!! json_encode([(float) $vals->paid > 0 ? $vals->paid - $vals->charges : 0, (float) $vals->charges]) !!}" />
     <meta name="rtl" content="{{ Core::lang('ar') }}" />
 @endsection
 

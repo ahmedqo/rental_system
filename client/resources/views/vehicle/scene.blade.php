@@ -24,7 +24,7 @@
         'csrf' => csrf_token(),
         'chart' => route('actions.vehicles.chart', $data->id),
     ]) !!}' />
-    <meta name="count" content="{!! json_encode([(float) $vals->paid - $vals->charges, (float) $vals->charges]) !!}" />
+    <meta name="count" content="{!! json_encode([(float) $vals->paid > 0 ? $vals->paid - $vals->charges : 0, (float) $vals->charges]) !!}" />
     <meta name="rtl" content="{{ Core::lang('ar') }}" />
 @endsection
 

@@ -87,7 +87,7 @@ class Core
                 $endHour = $startHour + 2;
                 return sprintf('%02d:00 - %02d:00', $startHour, $endHour);
             case 'week':
-                return __($object->format('l'));
+                return __($object->startOfWeek(Carbon::MONDAY)->format('l'));
             case 'month':
                 return __('Week') . ' ' . Core::formatWeek($object->format('Y-m-d'));
             case 'year':
@@ -98,16 +98,11 @@ class Core
     public static function formatWeek($datestr)
     {
         $date = Carbon::parse($datestr);
-        $date->startOfWeek(Carbon::MONDAY);
-        $date->endOfWeek(Carbon::SUNDAY);
-        $dayOfWeek = $date->format('N');
-        $dayOfMonth = $date->format('j');
-        $startDayOfWeek = Carbon::parse($date->format('Y-m-01'));
-        $startDayOfWeek->startOfWeek(Carbon::MONDAY);
-        $startDayOfWeek->endOfWeek(Carbon::SUNDAY);
-        $startDayOfWeek = $startDayOfWeek->format('N');
-        return (int) ceil(($dayOfMonth + $startDayOfWeek - $dayOfWeek) / 7);
+        $firstMonday = Carbon::parse($date->format('Y-m-01'))->startOfWeek(Carbon::MONDAY);
+        $daysDifference = $date->diffInDays($firstMonday);
+        return (int) ceil(($daysDifference + 1) / 7);
     }
+
 
     public static function formatNumber($num)
     {
