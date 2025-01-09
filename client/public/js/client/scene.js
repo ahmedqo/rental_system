@@ -23,32 +23,39 @@ loaders.forEach(loader => {
     }, Math.floor(Math.random() * 500) + 500);
 });
 
-new Chart(donut, {
-    type: "doughnut",
-    data: {
-        labels: flip([$trans("Payments"), $trans("Creance")]),
-        datasets: [{
-            data: flip(counts),
-            borderWidth: 1,
-            backgroundColor: flip(["rgb(34 197 94)", "rgb(234 179 8)"]),
-            borderColor: flip(["rgb(34 197 94)", "rgb(234 179 8)"]),
-        }, ]
-    },
-    options: {
-        responsive: true,
-        cutout: '70%',
-        plugins: {
-            legend: {
-                display: false
-            },
+if (!zero(counts)) {
+    donut.parentElement.innerHTML = notFound();
+    setTimeout(() => {
+        ldonut.remove();
+    }, Math.floor(Math.random() * 500) + 500);
+} else {
+    new Chart(donut, {
+        type: "doughnut",
+        data: {
+            labels: flip([$trans("Payments"), $trans("Creance")]),
+            datasets: [{
+                data: flip(counts),
+                borderWidth: 1,
+                backgroundColor: flip(["rgb(34 197 94)", "rgb(234 179 8)"]),
+                borderColor: flip(["rgb(34 197 94)", "rgb(234 179 8)"]),
+            }, ]
         },
-        animation: {
-            onComplete: () => {
-                ldonut.remove();
+        options: {
+            responsive: true,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    display: false
+                },
+            },
+            animation: {
+                onComplete: () => {
+                    ldonut.remove();
+                }
             }
         }
-    }
-});
+    });
+}
 
 (async() => {
     const data = await getData($routes.chart);

@@ -58,12 +58,9 @@ class TicketController extends Controller
             ]);
         }
 
-        $now = now()->format('Y-m');
-        $reference = $now . Ticket::where('reference', 'like', $now . '%')->count() + 1;
-
         $Ticket = Ticket::create($Request->merge([
             'awaiting_response_from' => 'App\Models\Admin',
-            'reference' => $reference,
+            'reference' => Core::ref(Ticket::class),
             'status' => 'open'
         ])->all());
 

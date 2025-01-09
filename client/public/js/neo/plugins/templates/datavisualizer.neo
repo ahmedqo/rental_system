@@ -523,7 +523,7 @@
     }
 
     [part="table-body-row"]:hover [part="table-body-col"] {
-        background: {{ @Theme.colors("LIGHT", 50) }};
+        background: {{ @Theme.colors("LIGHT", 50) }} !important;
     }
 
     [part="page"],

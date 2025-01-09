@@ -106,9 +106,6 @@ class ReservationController extends Controller
             ]);
         }
 
-        $now = now()->format('Y-m');
-        $reference = $now . Reservation::where('reference', 'like', $now . '%')->count() + 1;
-
         $pickup = Carbon::parse($Request->pickup_date . ' ' . $Request->pickup_time);
         $dropoff = Carbon::parse($Request->dropoff_date . ' ' . $Request->dropoff_time);
         $rental_period_days = (int) ceil($pickup->diffInHours($dropoff) / 24);
@@ -120,7 +117,7 @@ class ReservationController extends Controller
         $Request->merge([
             $key => null,
             'pickup_date' => $pickup,
-            'reference' => $reference,
+            'reference' => Core::ref(Reservation::class),
             'condition' => $Request->condition,
             'dropoff_date' => $dropoff,
             'rental_period_days' => $rental_period_days,

@@ -245,113 +245,115 @@
                                 class="w-full h-full absolute inset-0 z-10 object-center invert-[.9]" />
                         @endif
                         <div class="w-full flex flex-col gap-2 md:gap-0">
-                            <div class="flex flex-col md:flex-row">
-                                <div class="flex flex-wrap items-center">
-                                    <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
-                                        {{ __('First Name') }}
+                            @if ($data->SClient)
+                                <div class="flex flex-col md:flex-row">
+                                    <div class="flex flex-wrap items-center">
+                                        <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
+                                            {{ __('First Name') }}
+                                        </div>
+                                        <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                                     </div>
-                                    <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
-                                </div>
-                                <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? ucfirst($data->SClient->first_name) : 'N/A' }}
-                                </div>
-                            </div>
-                            <div class="flex flex-col md:flex-row">
-                                <div class="flex flex-wrap items-center">
-                                    <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
-                                        {{ __('Last Name') }}
+                                    <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
+                                        {{ $data->SClient ? ucfirst($data->SClient->first_name) : 'N/A' }}
                                     </div>
-                                    <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                                 </div>
-                                <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? strtoupper($data->SClient->last_name) : 'N/A' }}
-                                </div>
-                            </div>
-                            <div class="flex flex-col md:flex-row">
-                                <div class="flex flex-wrap items-center">
-                                    <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
-                                        {{ __('Brith Date') }}
+                                <div class="flex flex-col md:flex-row">
+                                    <div class="flex flex-wrap items-center">
+                                        <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
+                                            {{ __('Last Name') }}
+                                        </div>
+                                        <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                                     </div>
-                                    <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
-                                </div>
-                                <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->birth_date)->translatedFormat($format_middle) : 'N/A' }}
-                                </div>
-                            </div>
-                            <div class="flex flex-col md:flex-row">
-                                <div class="flex flex-wrap items-center">
-                                    <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
-                                        {{ __('License number') }}
+                                    <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
+                                        {{ $data->SClient ? strtoupper($data->SClient->last_name) : 'N/A' }}
                                     </div>
-                                    <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                                 </div>
-                                <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? $data->SClient->license_number : 'N/A' }}
-                                </div>
-                            </div>
-                            <div class="flex flex-col md:flex-row">
-                                <div class="flex flex-wrap items-center">
-                                    <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
-                                        {{ __('Delivered On') }}
+                                <div class="flex flex-col md:flex-row">
+                                    <div class="flex flex-wrap items-center">
+                                        <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
+                                            {{ __('Brith Date') }}
+                                        </div>
+                                        <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                                     </div>
-                                    <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
-                                </div>
-                                <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->license_issued_at)->translatedFormat($format_middle) : 'N/A' }}
-                                    <span class="inline-block w-max px-1 text-sm text-x-black font-x-thin">
-                                        {{ __('At') }}
-                                    </span>
-                                    {{ $data->SClient ? ucfirst(__(strtolower($data->SClient->license_issued_in))) : 'N/A' }}
-                                </div>
-                            </div>
-                            <div class="flex flex-col md:flex-row">
-                                <div class="flex flex-wrap items-center">
-                                    <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
-                                        {{ $data->SClient ? ucfirst(__($data->SClient->identity_type)) : 'N/A' }}
+                                    <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
+                                        {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->birth_date)->translatedFormat($format_middle) : 'N/A' }}
                                     </div>
-                                    <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                                 </div>
-                                <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? $data->SClient->identity_number : 'N/A' }}
-                                </div>
-                            </div>
-                            <div class="flex flex-col md:flex-row">
-                                <div class="flex flex-wrap items-center">
-                                    <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
-                                        {{ __('Delivered On') }}
+                                <div class="flex flex-col md:flex-row">
+                                    <div class="flex flex-wrap items-center">
+                                        <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
+                                            {{ __('License number') }}
+                                        </div>
+                                        <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                                     </div>
-                                    <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
-                                </div>
-                                <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->identity_issued_at)->translatedFormat($format_middle) : 'N/A' }}
-                                    <span class="inline-block w-max px-1 text-sm text-x-black font-x-thin">
-                                        {{ __('At') }}
-                                    </span>
-                                    {{ $data->SClient ? ucfirst(__(strtolower($data->SClient->identity_issued_in))) : 'N/A' }}
-                                </div>
-                            </div>
-                            <div class="flex flex-col md:flex-row">
-                                <div class="flex flex-wrap items-center">
-                                    <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
-                                        {{ __('Phone') }}
+                                    <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
+                                        {{ $data->SClient ? $data->SClient->license_number : 'N/A' }}
                                     </div>
-                                    <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                                 </div>
-                                <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? $data->SClient->phone : 'N/A' }}
-                                </div>
-                            </div>
-                            <div class="flex flex-col md:flex-row">
-                                <div class="flex flex-wrap items-center">
-                                    <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
-                                        {{ __('Address') }}
+                                <div class="flex flex-col md:flex-row">
+                                    <div class="flex flex-wrap items-center">
+                                        <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
+                                            {{ __('Delivered On') }}
+                                        </div>
+                                        <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
                                     </div>
-                                    <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
+                                    <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
+                                        {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->license_issued_at)->translatedFormat($format_middle) : 'N/A' }}
+                                        <span class="inline-block w-max px-1 text-sm text-x-black font-x-thin">
+                                            {{ __('At') }}
+                                        </span>
+                                        {{ $data->SClient ? ucfirst(__(strtolower($data->SClient->license_issued_in))) : 'N/A' }}
+                                    </div>
                                 </div>
-                                <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? ucfirst($data->SClient->address) . ' ' . ucfirst(__($data->SClient->city)) . ', ' . $data->SClient->zipcode : 'N/A' }}
+                                <div class="flex flex-col md:flex-row">
+                                    <div class="flex flex-wrap items-center">
+                                        <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
+                                            {{ $data->SClient ? ucfirst(__($data->SClient->identity_type)) : 'N/A' }}
+                                        </div>
+                                        <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
+                                    </div>
+                                    <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
+                                        {{ $data->SClient ? $data->SClient->identity_number : 'N/A' }}
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="flex flex-col md:flex-row">
+                                    <div class="flex flex-wrap items-center">
+                                        <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
+                                            {{ __('Delivered On') }}
+                                        </div>
+                                        <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
+                                    </div>
+                                    <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
+                                        {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->identity_issued_at)->translatedFormat($format_middle) : 'N/A' }}
+                                        <span class="inline-block w-max px-1 text-sm text-x-black font-x-thin">
+                                            {{ __('At') }}
+                                        </span>
+                                        {{ $data->SClient ? ucfirst(__(strtolower($data->SClient->identity_issued_in))) : 'N/A' }}
+                                    </div>
+                                </div>
+                                <div class="flex flex-col md:flex-row">
+                                    <div class="flex flex-wrap items-center">
+                                        <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
+                                            {{ __('Phone') }}
+                                        </div>
+                                        <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
+                                    </div>
+                                    <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
+                                        {{ $data->SClient ? $data->SClient->phone : 'N/A' }}
+                                    </div>
+                                </div>
+                                <div class="flex flex-col md:flex-row">
+                                    <div class="flex flex-wrap items-center">
+                                        <div class="w-max md:w-[180px] pe-1 text-sm text-x-black font-x-thin">
+                                            {{ __('Address') }}
+                                        </div>
+                                        <div class="w-max md:w-4 text-sm text-x-black font-x-thin">:</div>
+                                    </div>
+                                    <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
+                                        {{ $data->SClient ? ucfirst($data->SClient->address) . ' ' . ucfirst(__($data->SClient->city)) . ', ' . $data->SClient->zipcode : 'N/A' }}
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -493,8 +495,22 @@
         $format_first = $format_middle . ' H:i';
     @endphp
     <neo-printer margin="0mm 0mm 0mm 0mm">
+        @if (Core::setting())
+            @php
+                $colors = Core::themesList(Core::setting('theme_color'));
+            @endphp
+            <style slot="styles">
+                *,
+                :root,
+                *::after,
+                *::before {
+                    --p-prime: {{ $colors[0] }};
+                    --p-acent: {{ $colors[1] }};
+                }
+            </style>
+        @endif
         <neo-paper class="flex flex-col h-[295.5mm] relative">
-            <div class="px-4 pt-4">
+            {{-- <div class="px-4 pt-4">
                 <neo-head
                     class="w-full flex flex-wrap items-center justify-between gap-4 p-2 border border-x-x-black border-y-x-black">
                     @if (Core::company())
@@ -505,8 +521,23 @@
                     <img id="logo" class="block h-[58px]"
                         src="{{ Core::company() ? Core::company('Image')->Link : asset('img/logo.png') }}?v={{ env('APP_VERSION') }}" />
                 </neo-head>
+            </div> --}}
+            <div class="pt-4">
+                <neo-head class="w-full flex flex-wrap items-end gap-4">
+                    <div class="h-8 bg-x-black bg-opacity-80 w-32"></div>
+                    <div class="flex flex-col w-max items-cente gap-1">
+                        <img id="logo" class="block h-[70px] w-max mx-auto"
+                            src="{{ Core::company() ? Core::company('Image')->Link : asset('img/logo.png') }}?v={{ env('APP_VERSION') }}" />
+                        @if (Core::company())
+                            <h1 class="text-2xl text-x-black font-x-huge text-center">
+                                {{ strtoupper(Core::company('name')) }}
+                            </h1>
+                        @endif
+                    </div>
+                    <div class="h-8 bg-[rgb(var(--p-prime))] flex-1"></div>
+                </neo-head>
             </div>
-            <div class="w-full flex flex-col gap-6 mt-10 mb-auto px-4">
+            <div class="w-full flex flex-col gap-6 mt-6 mb-auto px-4">
                 <div>
                     <div class="w-1/3 ms-auto flex gap-2 -mb-4 -mt-2">
                         <span class="text-x-black text-base font-x-thin">
@@ -530,7 +561,7 @@
                                 {{ __('Brand') }}
                             </td>
                             <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                            <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                            <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                 {{ $data->Vehicle ? ucfirst(__($data->Vehicle->brand)) : 'N/A' }}
                             </td>
                         </tr>
@@ -539,7 +570,7 @@
                                 {{ __('Registration number') }}
                             </td>
                             <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                            <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                            <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                 &#x202B;{{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}&#x202C;
                             </td>
                         </tr>
@@ -548,7 +579,7 @@
                                 {{ __('Pick-up Location') }}
                             </td>
                             <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                            <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                            <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                 {{ ($data->pickup_location ? ucfirst($data->pickup_location) : Core::company()) ? ucfirst(Core::company('address')) . ' ' . ucfirst(__(Core::company('city'))) . ' ' . Core::company('zipcode') : '' }}
                             </td>
                         </tr>
@@ -557,7 +588,7 @@
                                 {{ __('Drop-off Location') }}
                             </td>
                             <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                            <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                            <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                 {{ ($data->dropoff_location ? ucfirst($data->dropoff_location) : Core::company()) ? ucfirst(Core::company('address')) . ' ' . ucfirst(__(Core::company('city'))) . ' ' . Core::company('zipcode') : '' }}
                             </td>
                         </tr>
@@ -566,7 +597,7 @@
                                 {{ __('Date Hour') }}
                             </td>
                             <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                            <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                            <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                 {{ \Carbon\Carbon::parse($data->pickup_date)->format($format_first) }}
                             </td>
                         </tr>
@@ -575,7 +606,7 @@
                                 {{ __('Date Hour') }}
                             </td>
                             <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                            <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                            <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                 {{ \Carbon\Carbon::parse($data->dropoff_date)->format($format_first) }}
                             </td>
                         </tr>
@@ -584,7 +615,7 @@
                                 {{ __('Rental Duration') }}
                             </td>
                             <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                            <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                            <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                 {{ $data->rental_period_days }} {{ __('Days') }}
                             </td>
                         </tr>
@@ -604,7 +635,7 @@
                                     {{ __('First Name') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Client ? ucfirst($data->Client->first_name) : 'N/A' }}
                                 </td>
                             </tr>
@@ -613,7 +644,7 @@
                                     {{ __('Last Name') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Client ? strtoupper($data->Client->last_name) : 'N/A' }}
                                 </td>
                             </tr>
@@ -622,7 +653,7 @@
                                     {{ __('Brith Date') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Client ? \Carbon\Carbon::parse($data->Client->birth_date)->format($format_middle) : 'N/A' }}
                                 </td>
                             </tr>
@@ -631,7 +662,7 @@
                                     {{ __('License number') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Client ? $data->Client->license_number : 'N/A' }}
                                 </td>
                             </tr>
@@ -640,7 +671,7 @@
                                     {{ __('Delivered On') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Client ? \Carbon\Carbon::parse($data->Client->license_issued_at)->format($format_middle) : 'N/A' }}
                                     <span class="inline-block w-max px-1 text-xs text-x-black font-x-thin">
                                         {{ __('At') }}
@@ -653,7 +684,7 @@
                                     {{ $data->Client ? ucfirst(__($data->Client->identity_type)) : 'N/A' }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Client ? $data->Client->identity_number : 'N/A' }}
                                 </td>
                             </tr>
@@ -662,7 +693,7 @@
                                     {{ __('Delivered On') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Client ? \Carbon\Carbon::parse($data->Client->identity_issued_at)->format($format_middle) : 'N/A' }}
                                     <span class="inline-block w-max px-1 text-xs text-x-black font-x-thin">
                                         {{ __('At') }}
@@ -675,7 +706,7 @@
                                     {{ __('Phone') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Client ? $data->Client->phone : 'N/A' }}
                                 </td>
                             </tr>
@@ -684,7 +715,7 @@
                                     {{ __('Address') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Client ? ucfirst($data->Client->address) . ' ' . ucfirst(__($data->Client->city)) . ', ' . $data->Client->zipcode : 'N/A' }}
                                 </td>
                             </tr>
@@ -702,95 +733,97 @@
                                 class="w-full h-full absolute inset-0 z-10 object-center" />
                         @endif
                         <table class="w-full mt-2">
-                            <tr>
-                                <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
-                                    {{ __('First Name') }}
-                                </td>
-                                <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? ucfirst($data->SClient->first_name) : 'N/A' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
-                                    {{ __('Last Name') }}
-                                </td>
-                                <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? strtoupper($data->SClient->last_name) : 'N/A' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
-                                    {{ __('Brith Date') }}
-                                </td>
-                                <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->birth_date)->format($format_middle) : 'N/A' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
-                                    {{ __('License number') }}
-                                </td>
-                                <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? $data->SClient->license_number : 'N/A' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
-                                    {{ __('Delivered On') }}
-                                </td>
-                                <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->license_issued_at)->format($format_middle) : 'N/A' }}
-                                    <span class="inline-block w-max px-1 text-xs text-x-black font-x-thin">
-                                        {{ __('At') }}
-                                    </span>
-                                    {{ $data->SClient ? ucfirst(__(strtolower($data->SClient->license_issued_in))) : 'N/A' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
-                                    {{ $data->SClient ? ucfirst(__($data->SClient->identity_type)) : 'N/A' }}
-                                </td>
-                                <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? $data->SClient->identity_number : 'N/A' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
-                                    {{ __('Delivered On') }}
-                                </td>
-                                <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->identity_issued_at)->format($format_middle) : 'N/A' }}
-                                    <span class="inline-block w-max px-1 text-xs text-x-black font-x-thin">
-                                        {{ __('At') }}
-                                    </span>
-                                    {{ $data->SClient ? ucfirst(__(strtolower($data->SClient->identity_issued_in))) : 'N/A' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
-                                    {{ __('Phone') }}
-                                </td>
-                                <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? $data->SClient->phone : 'N/A' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
-                                    {{ __('Address') }}
-                                </td>
-                                <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
-                                    {{ $data->SClient ? ucfirst($data->SClient->address) . ' ' . ucfirst(__($data->SClient->city)) . ', ' . $data->SClient->zipcode : 'N/A' }}
-                                </td>
-                            </tr>
+                            @if ($data->SClient)
+                                <tr>
+                                    <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
+                                        {{ __('First Name') }}
+                                    </td>
+                                    <td class="w-4 text-xs text-x-black font-x-thin">:</td>
+                                    <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
+                                        {{ $data->SClient ? ucfirst($data->SClient->first_name) : 'N/A' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
+                                        {{ __('Last Name') }}
+                                    </td>
+                                    <td class="w-4 text-xs text-x-black font-x-thin">:</td>
+                                    <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
+                                        {{ $data->SClient ? strtoupper($data->SClient->last_name) : 'N/A' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
+                                        {{ __('Brith Date') }}
+                                    </td>
+                                    <td class="w-4 text-xs text-x-black font-x-thin">:</td>
+                                    <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
+                                        {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->birth_date)->format($format_middle) : 'N/A' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
+                                        {{ __('License number') }}
+                                    </td>
+                                    <td class="w-4 text-xs text-x-black font-x-thin">:</td>
+                                    <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
+                                        {{ $data->SClient ? $data->SClient->license_number : 'N/A' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
+                                        {{ __('Delivered On') }}
+                                    </td>
+                                    <td class="w-4 text-xs text-x-black font-x-thin">:</td>
+                                    <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
+                                        {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->license_issued_at)->format($format_middle) : 'N/A' }}
+                                        <span class="inline-block w-max px-1 text-xs text-x-black font-x-thin">
+                                            {{ __('At') }}
+                                        </span>
+                                        {{ $data->SClient ? ucfirst(__(strtolower($data->SClient->license_issued_in))) : 'N/A' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
+                                        {{ $data->SClient ? ucfirst(__($data->SClient->identity_type)) : 'N/A' }}
+                                    </td>
+                                    <td class="w-4 text-xs text-x-black font-x-thin">:</td>
+                                    <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
+                                        {{ $data->SClient ? $data->SClient->identity_number : 'N/A' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
+                                        {{ __('Delivered On') }}
+                                    </td>
+                                    <td class="w-4 text-xs text-x-black font-x-thin">:</td>
+                                    <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
+                                        {{ $data->SClient ? \Carbon\Carbon::parse($data->SClient->identity_issued_at)->format($format_middle) : 'N/A' }}
+                                        <span class="inline-block w-max px-1 text-xs text-x-black font-x-thin">
+                                            {{ __('At') }}
+                                        </span>
+                                        {{ $data->SClient ? ucfirst(__(strtolower($data->SClient->identity_issued_in))) : 'N/A' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
+                                        {{ __('Phone') }}
+                                    </td>
+                                    <td class="w-4 text-xs text-x-black font-x-thin">:</td>
+                                    <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
+                                        {{ $data->SClient ? $data->SClient->phone : 'N/A' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-[130px] pe-1 text-xs text-x-black font-x-thin">
+                                        {{ __('Address') }}
+                                    </td>
+                                    <td class="w-4 text-xs text-x-black font-x-thin">:</td>
+                                    <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
+                                        {{ $data->SClient ? ucfirst($data->SClient->address) . ' ' . ucfirst(__($data->SClient->city)) . ', ' . $data->SClient->zipcode : 'N/A' }}
+                                    </td>
+                                </tr>
+                            @endif
                         </table>
                     </div>
                 </div>
@@ -808,7 +841,7 @@
                                     {{ __('Fuel Level') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->fuel_level }} %
                                 </td>
                             </tr>
@@ -817,7 +850,7 @@
                                     {{ __('Starting Mileage') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->mileage }} {{ __('Km') }}
                                 </td>
                             </tr>
@@ -826,7 +859,7 @@
                                     {{ __('Advance') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Payment ? Core::formatNumber($data->Payment->paid) : '?' }}
                                     {{ Core::setting() ? Core::setting('currency') : '' }}
                                 </td>
@@ -838,7 +871,7 @@
                                     {{ __('Return Mileage') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Recovery ? $data->Recovery->mileage : '?' }}
                                     {{ __('Km') }}
                                 </td>
@@ -848,7 +881,7 @@
                                     {{ __('Creance') }}
                                 </td>
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
-                                <td class="text-xs text-x-black text-opacity-70 font-x-thin">
+                                <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Payment ? Core::formatNumber($data->Payment->rest) : '?' }}
                                     {{ Core::setting() ? Core::setting('currency') : '' }}
                                 </td>
@@ -916,9 +949,39 @@
                     </div>
                 </div>
             </div>
-            <div class="px-4 pb-4">
+            {{-- <div class="px-4 pb-4">
                 <neo-foot
-                    class="w-full flex flex-wrap items-center text-sm justify-center gap-2 p-2 border border-x-x-black border-y-x-black">
+                    class="w-full flex flex-wrap items-center text-sm justify-center p-2 border border-x-x-black border-y-x-black"  style="column-gap: .5rem">
+                    @if (Core::company())
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('ICE number') }}:</span>
+                            <span>{{ Core::company('ice_number') }}</span>
+                        </div>
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('Decision number') }}:</span>
+                            <span>{{ Core::company('license_number') }}</span>
+                        </div>
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('Phone') }}:</span>
+                            <span>{{ Core::company('phone') }}</span>
+                        </div>
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('Email') }}:</span>
+                            <span>{{ Core::company('email') }}</span>
+                        </div>
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('Address') }}:</span>
+                            <span>
+                                {{ ucfirst(Core::company('address')) . ' ' . ucfirst(__(Core::company('city'))) . ' ' . Core::company('zipcode') }}
+                            </span>
+                        </div>
+                    @endif
+                </neo-foot>
+            </div> --}}
+            <div class="pb-4 bg-x-black bg-opacity-80">
+                <neo-foot
+                    class="w-full flex flex-wrap items-center text-x-white text-sm justify-center bg-[rgb(var(--p-prime))] py-2"
+                    style="column-gap: .5rem">
                     @if (Core::company())
                         <div class="flex w-max gap-1">
                             <span class="font-x-thin">{{ __('ICE number') }}:</span>
@@ -947,7 +1010,7 @@
             </div>
         </neo-paper>
         <neo-paper class="flex flex-col h-[295.5mm] relative">
-            <div class="px-4 pt-4">
+            {{-- <div class="px-4 pt-4">
                 <neo-head
                     class="w-full flex flex-wrap items-center justify-between gap-4 p-2 border border-x-x-black border-y-x-black">
                     @if (Core::company())
@@ -958,8 +1021,23 @@
                     <img id="logo" class="block h-[58px]"
                         src="{{ Core::company() ? Core::company('Image')->Link : asset('img/logo.png') }}?v={{ env('APP_VERSION') }}" />
                 </neo-head>
+            </div> --}}
+            <div class="pt-4">
+                <neo-head class="w-full flex flex-wrap items-end gap-4">
+                    <div class="h-8 bg-x-black bg-opacity-80 w-32"></div>
+                    <div class="flex flex-col w-max items-cente gap-1">
+                        <img id="logo" class="block h-[70px] w-max mx-auto"
+                            src="{{ Core::company() ? Core::company('Image')->Link : asset('img/logo.png') }}?v={{ env('APP_VERSION') }}" />
+                        @if (Core::company())
+                            <h1 class="text-2xl text-x-black font-x-huge text-center">
+                                {{ strtoupper(Core::company('name')) }}
+                            </h1>
+                        @endif
+                    </div>
+                    <div class="h-8 bg-[rgb(var(--p-prime))] flex-1"></div>
+                </neo-head>
             </div>
-            <div class="w-full grid grid-rows-1 grid-cols-1 gap-6 mt-10 mb-auto px-4">
+            <div class="w-full grid grid-rows-1 grid-cols-1 gap-6 mt-6 mb-auto px-4">
                 <div class="w-full flex flex-col gap-1 rtl:mt-3">
                     <h1 class="text-2xl text-center text-x-black font-x-huge">
                         {{ __('COMMITMENT AGREEMENT') }}</h1>
@@ -973,7 +1051,7 @@
                             {{ __('I, the undersigned') }}
                         </span>
                         <span class="w-4 text-xs text-x-black font-x-thin">:</span>
-                        <span class="text-xs text-x-prime text-opacity-70 font-x-thin">
+                        <span class="text-xs text-[rgb(var(--p-prime))] text-opacity-70 font-x-thin">
                             {{ $data->Client ? strtoupper($data->Client->last_name) . ' ' . ucfirst($data->Client->first_name) : 'N/A' }}
                         </span>
                     </li>
@@ -982,7 +1060,7 @@
                             {{ __('Commit to') }}
                         </span>
                         <span class="w-4 text-xs text-x-black font-x-thin">:</span>
-                        <span class="text-xs text-x-prime text-opacity-70 font-x-thin">
+                        <span class="text-xs text-[rgb(var(--p-prime))] text-opacity-70 font-x-thin">
                             {{ Core::company() ? ucfirst(Core::company('name')) : '' }}
                         </span>
                     </li>
@@ -997,20 +1075,20 @@
                             {{ __('Registration number') }}
                         </span>
                         <span class="w-4 text-xs text-x-black font-x-thin">:</span>
-                        <span class="text-xs text-x-prime text-opacity-70 font-x-thin">
+                        <span class="text-xs text-[rgb(var(--p-prime))] text-opacity-70 font-x-thin">
                             &#x202B;{{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}&#x202C;
                         </span>
                         <span class="w-max px-1 text-xs text-x-black font-x-thin">
                             {{ __('rented on') }}
                         </span>
                         <span class="w-4 text-xs text-x-black font-x-thin">:</span>
-                        <span class="text-xs text-x-prime text-opacity-70 font-x-thin">
+                        <span class="text-xs text-[rgb(var(--p-prime))] text-opacity-70 font-x-thin">
                             {{ \Carbon\Carbon::parse($data->pickup_date)->format($format_middle) }}
                         </span>
                         <span class="w-max px-1 text-xs text-x-black font-x-thin">
                             {{ __('at') }}
                         </span>
-                        <span class="text-xs text-x-prime text-opacity-70 font-x-thin">
+                        <span class="text-xs text-[rgb(var(--p-prime))] text-opacity-70 font-x-thin">
                             {{ Core::company() ? ucfirst(Core::company('city')) : '' }}
                         </span>
                     </li>
@@ -1043,13 +1121,13 @@
                         <div class="flex flex-col">
                             <p class="text-xs text-x-black text-opacity-70 font-x-thin">
                                 {!! __(
-                                    'In the event of a violation of the no-smoking policy, I understand and accept that I will be required to pay a fixed fine of <span class="text-x-prime">:price</span> to cover the costs of deep cleaning and deodorizing the vehicle.',
+                                    'In the event of a violation of the no-smoking policy, I understand and accept that I will be required to pay a fixed fine of <span class="text-[rgb(var(--p-prime))]">:price</span> to cover the costs of deep cleaning and deodorizing the vehicle.',
                                     ['price' => '20,000 MAD'],
                                 ) !!}
                             </p>
                             <p class="text-xs text-x-black text-opacity-70 font-x-thin">
                                 {!! __(
-                                    'In the event of consuming alcoholic beverages in the vehicle, I also understand and accept that I will be required to pay a fixed fine of <span class="text-x-prime">:price</span> to cover the necessary cleaning and deodorizing costs.',
+                                    'In the event of consuming alcoholic beverages in the vehicle, I also understand and accept that I will be required to pay a fixed fine of <span class="text-[rgb(var(--p-prime))]">:price</span> to cover the necessary cleaning and deodorizing costs.',
                                     ['price' => '30,000 MAD'],
                                 ) !!}
                             </p>
@@ -1082,9 +1160,39 @@
                     </div>
                 </div>
             </div>
-            <div class="px-4 pb-4">
+            {{-- <div class="px-4 pb-4">
                 <neo-foot
-                    class="w-full flex flex-wrap items-center text-sm justify-center gap-2 p-2 border border-x-x-black border-y-x-black">
+                    class="w-full flex flex-wrap items-center text-sm justify-center p-2 border border-x-x-black border-y-x-black"  style="column-gap: .5rem">
+                    @if (Core::company())
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('ICE number') }}:</span>
+                            <span>{{ Core::company('ice_number') }}</span>
+                        </div>
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('Decision number') }}:</span>
+                            <span>{{ Core::company('license_number') }}</span>
+                        </div>
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('Phone') }}:</span>
+                            <span>{{ Core::company('phone') }}</span>
+                        </div>
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('Email') }}:</span>
+                            <span>{{ Core::company('email') }}</span>
+                        </div>
+                        <div class="flex w-max gap-1">
+                            <span class="font-x-thin">{{ __('Address') }}:</span>
+                            <span>
+                                {{ ucfirst(Core::company('address')) . ' ' . ucfirst(__(Core::company('city'))) . ' ' . Core::company('zipcode') }}
+                            </span>
+                        </div>
+                    @endif
+                </neo-foot>
+            </div> --}}
+            <div class="pb-4 bg-x-black bg-opacity-80">
+                <neo-foot
+                    class="w-full flex flex-wrap items-center text-x-white text-sm justify-center bg-[rgb(var(--p-prime))] py-2"
+                    style="column-gap: .5rem">
                     @if (Core::company())
                         <div class="flex w-max gap-1">
                             <span class="font-x-thin">{{ __('ICE number') }}:</span>
@@ -1161,7 +1269,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Nom') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ $data->Client ? strtoupper($data->Client->last_name) : 'N/A' }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1172,7 +1280,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Prénom') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ $data->Client ? ucfirst($data->Client->first_name) : 'N/A' }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1184,7 +1292,7 @@
                             {{ __('N° de la C.N.I.E') }}</br>
                             {{ __('Ou carte de séjour') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ $data->Client ? $data->Client->identity_number : 'N/A' }}
                         </div>
                         <div dir="rtl"
@@ -1197,7 +1305,8 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('N° du permis de conduire') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin border-x border-x-x-black">
+                        <div
+                            class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin border-x border-x-x-black">
                             {{ $data->Client ? $data->Client->license_number : 'N/A' }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1208,7 +1317,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Adresse') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ $data->Client ? ucfirst($data->Client->address) : 'N/A' }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1219,7 +1328,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Ville') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ $data->Client ? ucfirst(__($data->Client->city)) : 'N/A' }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1230,7 +1339,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Code postal') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ $data->Client ? $data->Client->zipcode : 'N/A' }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1241,7 +1350,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('N° de GSM') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ $data->Client ? $data->Client->phone : 'N/A' }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1252,7 +1361,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Adresse mail') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ $data->Client ? $data->Client->email : 'N/A' }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1264,7 +1373,7 @@
                             {{ __('Déclare avoir pris en location le véhicule') }}</br>
                             {{ __('Immatriculé sous le numéro') }}:
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             &#x202B;{{ $data->Vehicle ? strtoupper($data->Vehicle->registration_number) : 'N/A' }}&#x202C;
                         </div>
                         <div dir="rtl" class="p-1 w-[230px] text-xs text-x-black font-x-thin">
@@ -1276,7 +1385,7 @@
                         <div class="p-1 w-[230px] text-xs text-x-black font-x-thin">
                             {{ __('et appartenant à l\'agence de location') }}
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                         </div>
                         <div dir="rtl" class="p-1 w-[230px] text-xs text-x-black font-x-thin">
                             {{ __('والمملوكة لوكالة التأجير') }}
@@ -1285,7 +1394,7 @@
                     <div class="w-full flex flex-wrap border-b border-x-black">
                         <div class="p-1 w-max text-xs text-x-black font-x-thin">
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                         </div>
                         <div class="p-1 w-max text-xs text-x-black font-x-thin">
                         </div>
@@ -1293,7 +1402,7 @@
                     <div class="w-full flex flex-wrap border-b border-x-black">
                         <div class="p-1 w-max text-xs text-x-black font-x-thin">
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                         </div>
                         <div class="p-1 w-max text-xs text-x-black font-x-thin">
                         </div>
@@ -1311,7 +1420,7 @@
                             {{ __('Jour d\'emprunt') }}
                             ({{ Core::setting() ? Core::setting('date_format') : 'JJ/MM/AAAA' }})
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ \Carbon\Carbon::parse($data->pickup_date)->format($format_last) }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1323,7 +1432,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Heure d\'emprunt') }} (HH:MM)
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ \Carbon\Carbon::parse($data->pickup_date)->format('H:i') }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1343,7 +1452,7 @@
                             {{ __('Jour de restitution') }}
                             ({{ Core::setting() ? Core::setting('date_format') : 'JJ/MM/AAAA' }})
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ \Carbon\Carbon::parse($data->dropoff_date)->format($format_last) }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1355,7 +1464,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Heure de restitution') }} (HH:MM)
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ \Carbon\Carbon::parse($data->dropoff_date)->format('H:i') }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1367,7 +1476,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Fait à') }}:
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ Core::company() ? strtoupper(__(Core::company('city'))) : '' }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
@@ -1378,7 +1487,7 @@
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Le') }}:
                         </div>
-                        <div class="text-center p-1 flex-1 text-xs text-x-prime font-x-thin">
+                        <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ \Carbon\Carbon::parse($data->created_at)->format($format_last) }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">

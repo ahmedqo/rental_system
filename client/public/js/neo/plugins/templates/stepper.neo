@@ -84,7 +84,7 @@
 
 <template name="neo-stepper">
     <ul part="progress">
-        {$ each step into @range(@props.steps) $}
+        {$ each step into @range(@props.steps.length) $}
             <li tabindex="0" part="chip" @click="{{ (event) => @rules.exec(event, step) }}" @keydown:propagation="{{ (event) => @rules.exec(event, step) }}" class="{{ @when(step <= @props.current, @when(step == @props.current, "active", "validate"), "") }}">
                 {$ if step < @props.current $}
                     <svg part="icon" viewBox="0 -960 960 960">
@@ -112,7 +112,7 @@
     export default {
         props: {
             step: "",
-            steps: "",
+            steps: [],
             current: -1,
         },
        rules: {
@@ -122,34 +122,37 @@
                 }
             },
             change() {
-                const step = Array.from(this.children).find(step => step.step === this.props.step);
+                const step = this.steps.find(step => step.step === this.props.step);
                 if (step) {
-                    this.props.current = Array.from(this.children).indexOf(step);
+                    this.props.current = this.steps.indexOf(step);
                     step.active = true;
                 }
             },
             next() {
-                if (this.props.current + 1 > this.steps - 1) return;
+                if (this.props.current + 1 > this.steps.length - 1) return;
                 this.emit("next", {
-                    step: this.children[this.props.current]
+                    step: this.steps[this.props.current],
+                    next: this.steps[this.props.current + 1],
                 }, () => {
-                    this.props.step = this.children[this.props.current + 1].step;
+                    this.props.step = this.steps[this.props.current + 1].step;
                 })
             },
             prev() {
                 if (this.props.current - 1 < 0) return;
                 this.emit("prev", {
-                    step: this.children[this.props.current]
+                    step: this.steps[this.props.current],
+                    next: this.steps[this.props.current - 1],
                 }, () => {
-                    this.props.step = this.children[this.props.current - 1].step;
+                    this.props.step = this.steps[this.props.current - 1].step;
                 });
             },
             goto(index) {
-                if (index < 0 || index > this.steps - 1 || this.props.current === index) return;
+                if (index < 0 || index > this.steps.length - 1 || this.props.current === index) return;
                 this.emit(this.props.current < index ? "next" : "prev", {
-                    step: this.children[this.props.current]
+                    step: this.steps[this.props.current],
+                    next: this.steps[index],
                 }, () => {
-                    this.props.step = this.children[index].step;
+                    this.props.step = this.steps[index].step;
                 });
             }
         },
@@ -163,9 +166,8 @@
                 this.state.observer = new MutationObserver((mutationsList, observer) =>{
                     for(const mutation of mutationsList){
                         if (mutation.type === 'childList') {
-                            [...this.querySelectorAll(":scope>:not(neo-stepper-item)")]
-                                .map((other) => other.remove()); 
-                            this.props.steps = this.children.length; 
+                            [...this.querySelectorAll(":scope>:not(neo-stepper-item,[slot=top],[slot=bottom])")].map((other) => other.remove()); 
+                            this.props.steps = [...this.querySelectorAll("neo-stepper-item")]; 
                         } 
                     }             
                 });
@@ -176,7 +178,8 @@
                     this.removeAttribute("step");
                 }
 
-               this.props.steps = this.children.length;
+                [...this.querySelectorAll(":scope>:not(neo-stepper-item,[slot=top],[slot=bottom])")].map((other) => other.remove()); 
+                this.props.steps = [...this.querySelectorAll("neo-stepper-item")]; 
             },
             removed() {
                 this.state.observer.disconnect();
@@ -190,7 +193,7 @@
                             });
                         },
                         "step": () => {
-                            const step = Array.from(this.children).find(step => step.step === prev);
+                            const step = this.steps.find(step => step.step === prev);
                             if (step) step.active = false;
                             this.rules.change();
                             this.emit("change:" + name, { 
