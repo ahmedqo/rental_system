@@ -168,7 +168,7 @@
                         <neo-textbox rules="required"
                             errors='{"required": "{{ __('The daily rate field is required') }}"}' type="number"
                             placeholder="{{ __('Daily rate') }} (*)" name="daily_rate"
-                            value="{{ old('daily_rate', Core::formatNumber($data->Payment ? $data->Payment->daily_rate : null)) }}"></neo-textbox>
+                            value="{{ old('daily_rate', Core::formatNumber($data->Payment ? $data->Payment->daily_rate : null, true)) }}"></neo-textbox>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-x-black font-x-thin text-base">

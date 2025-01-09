@@ -195,7 +195,7 @@
                         <neo-textbox rules="required"
                             errors='{"required": "{{ __('The daily rate field is required') }}"}' type="number"
                             placeholder="{{ __('Daily rate') }} (*)" name="daily_rate"
-                            value="{{ old('daily_rate', Core::formatNumber((float) $data->daily_rate)) }}"></neo-textbox>
+                            value="{{ old('daily_rate', Core::formatNumber($data->daily_rate, true)) }}"></neo-textbox>
                     </div>
                 </neo-tab-outlet>
                 <neo-tab-outlet name="outlet-5" class="grid grid-cols-1 grid-rows-1 gap-6">
@@ -235,7 +235,7 @@
                         <neo-textbox rules="required"
                             errors='{"required": "{{ __('The horsepower tax field is required') }}"}' type="number"
                             placeholder="{{ __('Horsepower tax') }} (*)" name="horsepower_tax"
-                            value="{{ old('horsepower_tax', Core::formatNumber((float) $data->horsepower_tax)) }}"></neo-textbox>
+                            value="{{ old('horsepower_tax', Core::formatNumber($data->horsepower_tax, true)) }}"></neo-textbox>
                     </div>
                 </neo-tab-outlet>
                 <neo-tab-outlet name="outlet-6" class="grid grid-cols-1 grid-rows-1 gap-6">
@@ -271,7 +271,7 @@
                         <neo-textbox rules="required"
                             errors='{"required": "{{ __('The insurance cost field is required') }}"}' type="number"
                             placeholder="{{ __('Insurance cost') }} (*)" name="insurance_cost"
-                            value="{{ old('insurance_cost', Core::formatNumber((float) $data->insurance_cost)) }}"></neo-textbox>
+                            value="{{ old('insurance_cost', Core::formatNumber($data->insurance_cost, true)) }}"></neo-textbox>
                     </div>
                 </neo-tab-outlet>
                 <div class="w-full flex flex-wrap gap-6">

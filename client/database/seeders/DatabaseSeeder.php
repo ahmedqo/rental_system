@@ -91,7 +91,7 @@ class DatabaseSeeder extends Seeder
                 'registration_date' => now(),
                 'horsepower' => 'less than 8 cv',
                 'horsepower_tax' => 700,
-                'insurance_company' => 'company 1',
+                'insurance_company' => 'allianz morocco',
                 'insurance_issued_at' => now(),
                 'insurance_cost' => 5000,
 

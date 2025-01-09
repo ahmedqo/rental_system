@@ -104,7 +104,7 @@ class Core
     }
 
 
-    public static function formatNumber($num)
+    public static function formatNumber($num, $clean = false)
     {
         $formattedNumber = number_format((float) $num, 2);
         if (strpos($formattedNumber, '.') === false) {
@@ -117,7 +117,7 @@ class Core
                     break;
             }
         }
-        return $formattedNumber;
+        return $clean ? str_replace(",", "", $formattedNumber) : $formattedNumber;
     }
 
     public static function matchRoute($str)
@@ -208,7 +208,7 @@ class Core
 
     public static function methodsList()
     {
-        return ['credit card', 'cheque', 'cash'];
+        return ['credit card', 'check', 'cash'];
     }
 
     public static function alphaList()
@@ -293,7 +293,9 @@ class Core
 
     public static function insurancesList()
     {
-        return ['company 1', 'company 2'];
+        return [
+            'allianz morocco', 'atlanta', 'AXA insurance morocco', 'MCMA', 'RMA', 'saham insurance', 'sanad', 'wafa insurance', 'MAMDA', 'CAT', 'MATU', 'moroccan life', 'mutual attamine chaabi', 'AXA assistance morocco', 'chaabi assistance', 'morocco international assistance', 'saham assistance', 'wafa IMA assistance', 'RMA assistance', 'euler hermes acmar', 'coface', 'SMAEX', 'SCR', 'MAMDA RE'
+        ];
     }
 
     public static function fuelsList()

@@ -87,7 +87,7 @@ function getPeriod(pickupDate, dropoffDate) {
 
 
 vehicle.addEventListener("select", async e => {
-    dailyRate.value = +e.detail.data.daily_rate;
+    dailyRate.value = $money(+e.detail.data.daily_rate).replace(",", "");
     paymentSegment.upgrade();
 
     const data = await getData($routes.info.replace("XXX", e.detail.data.id));

@@ -41,7 +41,7 @@
                 </label>
                 <neo-textbox rules="required" errors='{"required": "{{ __('The cost field is required') }}"}'
                     placeholder="{{ __('Cost') }} (*)" name="cost"
-                    value="{{ old('cost', Core::formatNumber((float) $data->cost)) }}"></neo-textbox>
+                    value="{{ old('cost', Core::formatNumber($data->cost, true)) }}"></neo-textbox>
             </div>
             <div class="flex flex-col gap-1">
                 <label class="text-x-black font-x-thin text-base">
