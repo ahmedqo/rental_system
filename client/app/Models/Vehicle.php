@@ -6,6 +6,7 @@ use App\Functions\Core;
 use App\Traits\HasSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Vehicle extends Model
 {
@@ -92,5 +93,10 @@ class Vehicle extends Model
     public function Reminders()
     {
         return $this->hasMany(Reminder::class, 'vehicle');
+    }
+
+    public function Notifications(): MorphMany
+    {
+        return $this->MorphMany(Notification::class, 'target');
     }
 }

@@ -116,7 +116,15 @@
                         </label>
                         <neo-select rules="required" errors='{"required": "{{ __('The year field is required') }}"}'
                             placeholder="{{ __('Year') }} (*)" name="year">
-                            @for ($year = date('Y') - 4; $year <= date('Y'); $year++)
+                            @php
+                                $current = date('Y');
+                            @endphp
+                            @if ($data->year < $current - 4)
+                                <neo-select-item value="{{ $data->year }}" active disable>
+                                    {{ $data->year }}
+                                </neo-select-item>
+                            @endif
+                            @for ($year = $current - 4; $year <= $current; $year++)
                                 <neo-select-item value="{{ $year }}"
                                     {{ $year == old('year', $data->year) ? 'active' : '' }}>
                                     {{ $year }}

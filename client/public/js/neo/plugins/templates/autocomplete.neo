@@ -263,7 +263,7 @@
         <ul ref="content" part="content" @click:propagation="{{ () => {} }}">
             {$ if Array.isArray(@props.data) $}
                 {$ forelse result into @props.data $}
-                    <li ref="item" part="item" tabindex="0" @click:propagation="{{ (event) => @rules.select(event, result) }}" @keydown:propagation="{{ (event) => @rules.select(event, result) }}">
+                    <li ref="item" part="item" tabindex="0" @click:propagation="{{ (event) => @rules.select(event, @loop.index) }}" @keydown:propagation="{{ (event) => @rules.select(event, @loop.index) }}">
                         {{ @when(@props.item, () => @props.item(result, @loop), @rules.write(result, @props.setQuery)) }}
                     </li>
                 {$ empty $}
@@ -326,8 +326,9 @@
                 });
                 this.emit("input", { value: this.props.value, query: this.props.query });
             },
-            select(event, result) {
+            select(event, index) {
                 if (event.type === "click" || event.keyCode === 13) {
+                    const result = this.props.data[index];
                     this.emit("select", { data: result }, () => {
                         this.setProps({
                             query: this.rules.write(result, this.props.setQuery),

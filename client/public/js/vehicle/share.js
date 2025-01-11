@@ -73,9 +73,25 @@ function calculateTax() {
 fueltype.addEventListener("change", calculateTax);
 horsepower.addEventListener("change", calculateTax);
 
+function search(query, list) {
+    const value = new Set(query.toUpperCase().trim().split(/[-_.\\\/\s]/g));
+    return list.reduce((found, item) => {
+        const query_en = item.toUpperCase().trim(),
+            query_tr = $trans(item).toUpperCase().trim(),
+            score = [];
+        for (const niddle of value) {
+            if (query_en.includes(niddle) || query_tr.includes(niddle)) score.push(1);
+            else score.push(0);
+        }
+
+        if (score.includes(1)) found.push(item);
+        return found;
+    }, []);
+}
+
 brand.addEventListener("input", e => {
     brand.loading = true;
-    brand.data = Object.keys(Brands).filter(_brand => _brand.includes(e.target.query));
+    brand.data = search(e.target.query, Object.keys(Brands));
     brand.loading = false;
 });
 
@@ -83,14 +99,14 @@ model.addEventListener("input", e => {
     const str = brand.query;
     if (str.trim() && Brands[str]) {
         model.loading = true;
-        model.data = Brands[str].filter(_model => _model.includes(e.target.query));
+        model.data = search(e.target.query, Brands[str]);
         model.loading = false;
     }
 });
 
 insurance.addEventListener("input", e => {
     insurance.loading = true;
-    insurance.data = Insurances.filter(_insurance => _insurance.includes(e.target.query));
+    insurance.data = search(e.target.query, Insurances);
     insurance.loading = false;
 });
 
