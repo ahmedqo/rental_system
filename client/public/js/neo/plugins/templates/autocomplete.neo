@@ -276,7 +276,7 @@
 
 <script>
     export default {
-        attrs: ["label","loading", "outline", "disable", "placeholder","set-query", "set-value"],
+        attrs: ["label", "loading", "outline", "disable", "handfree", "placeholder", "set-query", "set-value"],
         props: {
             data: [],
             label: "",
@@ -289,6 +289,7 @@
             loading: false,
             outline: false,
             disable: false,
+            handfree: false,
             placeholder: "",
         },
         state: {
@@ -305,6 +306,7 @@
                 this.emit("blur", { value: this.props.value, query: this.props.query });
             },
             change() {
+                this.props.handfree && (this.props.value = this.props.query);
                 Neo.Helper.falsy(this.props.value) && (this.props.query = "");
                 this.emit("change", { value: this.props.value, query: this.props.query });
             },
@@ -386,7 +388,7 @@
                         "label,placeholder,set-query,set-value": () => {
                             this.props[Neo.Helper.Str.snake(name)] = next;
                         },
-                        "outline,disable,loading": () => {
+                        "outline,disable,loading,handfree": () => {
                             this.props[name] = Neo.Helper.truty(next) || this.hasAttribute(name) && !["false", "null", "undefined"].includes(this.getAttribute(name)); 
                         }
                     },
@@ -405,7 +407,7 @@
                         }
                     },
                     props: {
-                        "label,setQuery,setValue,outline,loading,placeholder": () => {
+                        "label,setQuery,setValue,outline,loading,placeholder,handfree": () => {
                             this.emit("change:" + name, { 
                                 data: next 
                             });

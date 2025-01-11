@@ -1,8 +1,9 @@
-const brand = $query("neo-select[name=brand]"),
-    model = $query("neo-select[name=model]"),
+const brand = $query("neo-autocomplete[name=brand]"),
+    model = $query("neo-autocomplete[name=model]"),
     fueltype = $query("neo-select[name=fuel_type]"),
     horsepower = $query("neo-select[name=horsepower]"),
-    horsepower_tax = $query("neo-textbox[name=horsepower_tax]");
+    horsepower_tax = $query("neo-textbox[name=horsepower_tax]"),
+    insurance = $query("neo-autocomplete[name=insurance_company]");
 
 const Brands = {
         "seat": ["alhambra", "altea", "altea xl", "arosa", "cordoba", "cordoba vario", "exeo", "ibiza", "ibiza st", "exeo st", "leon", "leon st", "inca", "mii", "toledo"],
@@ -45,18 +46,21 @@ const Brands = {
         "rover": ["200", "214", "218", "25", "400", "414", "416", "620", "75"],
         "smart": ["cabrio", "city-coupé", "compact pulse", "forfour", "fortwo cabrio", "fortwo coupé", "roadster"]
     },
+    Insurances = [
+        "allianz morocco", "atlanta", "AXA insurance morocco", "MCMA", "RMA", "saham insurance", "sanad", "wafa insurance", "MAMDA", "CAT", "MATU", "moroccan life", "mutual attamine chaabi", "AXA assistance morocco", "chaabi assistance", "morocco international assistance", "saham assistance", "wafa IMA assistance", "RMA assistance", "euler hermes acmar", "coface", "SMAEX", "SCR", "MAMDA RE"
+    ],
     Taxes = {
         gasoline: {
-            'less than 8 cv': 300,
-            'between 8 and 10 cv': 650,
-            'between 11 and 14 cv': 3000,
-            'grather than or equals to 15 cv': 8000
+            "less than 8 cv": 300,
+            "between 8 and 10 cv": 650,
+            "between 11 and 14 cv": 3000,
+            "grather than or equals to 15 cv": 8000
         },
         diesel: {
-            'less than 8 cv': 700,
-            'between 8 and 10 cv': 1500,
-            'between 11 and 14 cv': 6000,
-            'grather than or equals to 15 cv': 20000
+            "less than 8 cv": 700,
+            "between 8 and 10 cv": 1500,
+            "between 11 and 14 cv": 6000,
+            "grather than or equals to 15 cv": 20000
         }
     };
 
@@ -69,12 +73,32 @@ function calculateTax() {
 fueltype.addEventListener("change", calculateTax);
 horsepower.addEventListener("change", calculateTax);
 
-brand.addEventListener("change", e => {
-    model.reset();
-    model.disable = false;
-    var str = "";
-    Brands[e.detail.data].forEach(model => {
-        str += `<neo-select-item value="${model}">${$capitalize($trans(model))}</neo-select-item>`;
+brand.addEventListener("input", e => {
+    brand.loading = true;
+    brand.data = Object.keys(Brands).filter(_brand => _brand.includes(e.target.query));
+    brand.loading = false;
+});
+
+model.addEventListener("input", e => {
+    const str = brand.query;
+    if (str.trim() && Brands[str]) {
+        model.loading = true;
+        model.data = Brands[str].filter(_model => _model.includes(e.target.query));
+        model.loading = false;
+    }
+});
+
+insurance.addEventListener("input", e => {
+    insurance.loading = true;
+    insurance.data = Insurances.filter(_insurance => _insurance.includes(e.target.query));
+    insurance.loading = false;
+});
+
+[brand, model, insurance].map(auto => {
+    auto.addEventListener("change:query", e => {
+        auto.query = $trans(e.detail.data);
     });
-    model.innerHTML = str;
+    auto.item = (result) => {
+        return $trans(result);
+    }
 })

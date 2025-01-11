@@ -34,7 +34,7 @@ return new class extends Migration
             $table->date('registration_date');
             $table->enum('horsepower', Core::horsepowersList());
             $table->decimal('horsepower_tax', 15, 5);
-            $table->enum('insurance_company', Core::insurancesList());
+            $table->string('insurance_company');
             $table->date('insurance_issued_at');
             $table->decimal('insurance_cost', 15, 5);
             $table->timestamps();

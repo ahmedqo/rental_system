@@ -96,29 +96,19 @@
                         <label class="text-x-black font-x-thin text-base">
                             {{ __('Brand') }} (*)
                         </label>
-                        <neo-select rules="required" errors='{"required": "{{ __('The brand field is required') }}"}'
-                            search placeholder="{{ __('Brand') }} (*)" name="brand">
-                            @foreach (Core::brandModelList() as $brand => $model)
-                                <neo-select-item value="{{ $brand }}"
-                                    {{ $brand == old('brand', $data->brand) ? 'active' : '' }}>
-                                    {{ ucfirst(__($brand)) }}
-                                </neo-select-item>
-                            @endforeach
-                        </neo-select>
+                        <neo-autocomplete rules="required" errors='{"required": "{{ __('The brand field is required') }}"}'
+                            handfree placeholder="{{ __('Brand') }} (*)" name="brand"
+                            value="{{ old('brand', $data->brand) }}" query="{{ old('brand', __($data->brand)) }}">
+                        </neo-autocomplete>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-x-black font-x-thin text-base">
                             {{ __('Model') }} (*)
                         </label>
-                        <neo-select rules="required" errors='{"required": "{{ __('The model field is required') }}"}'
-                            search placeholder="{{ __('Model') }} (*)" name="model">
-                            @foreach (Core::brandModelList()[$data->brand] as $model)
-                                <neo-select-item value="{{ $model }}"
-                                    {{ $model == old('model', $data->model) ? 'active' : '' }}>
-                                    {{ ucfirst(__($model)) }}
-                                </neo-select-item>
-                            @endforeach
-                        </neo-select>
+                        <neo-autocomplete rules="required" errors='{"required": "{{ __('The model field is required') }}"}'
+                            handfree placeholder="{{ __('Model') }} (*)" name="model"
+                            value="{{ old('model', $data->model) }}" query="{{ old('model', __($data->model)) }}">
+                        </neo-autocomplete>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-x-black font-x-thin text-base">
@@ -243,16 +233,12 @@
                         <label class="text-x-black font-x-thin text-base">
                             {{ __('Insurance company') }} (*)
                         </label>
-                        <neo-select rules="required"
-                            errors='{"required": "{{ __('The insurance company field is required') }}"}'
-                            placeholder="{{ __('Insurance company') }} (*)" name="insurance_company">
-                            @foreach (Core::insurancesList() as $insurance_company)
-                                <neo-select-item value="{{ $insurance_company }}"
-                                    {{ $insurance_company == old('insurance_company', $data->insurance_company) ? 'active' : '' }}>
-                                    {{ ucfirst(__($insurance_company)) }}
-                                </neo-select-item>
-                            @endforeach
-                        </neo-select>
+                        <neo-autocomplete rules="required"
+                            errors='{"required": "{{ __('The insurance company field is required') }}"}' handfree
+                            placeholder="{{ __('Insurance company') }} (*)" name="insurance_company"
+                            value="{{ old('insurance_company', $data->insurance_company) }}"
+                            query="{{ old('insurance_company', __($data->insurance_company)) }}">
+                        </neo-autocomplete>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-x-black font-x-thin text-base">
