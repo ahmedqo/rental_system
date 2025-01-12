@@ -25,7 +25,7 @@ class Notification extends Model
     {
         $vars = json_decode($this->vars, true);
         if (isset($vars['date'])) $vars['date'] = Carbon::parse($vars['date'])->translatedFormat($setting ? Core::formatsList($setting->date_format, 1) : 'Y-m-d');
-        if (isset($vars['money'])) $vars['money'] = $vars['money'] . ' ' . $setting ? $setting->currency : 'MAD';
+        if (isset($vars['money'])) $vars['money'] = $vars['money'] . ' ' . ($setting ? $setting->currency : 'MAD');
 
         return __($this->text, $vars);
     }
