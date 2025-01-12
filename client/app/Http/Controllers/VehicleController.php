@@ -393,18 +393,19 @@ class VehicleController extends Controller
             'loan_issued_at' => null,
         ];
 
-        if ($Request->loan_amount) {
-            $data['monthly_installment'] = $Request->monthly_installment;
+        if ($Request->loan_amount && $Request->monthly_installment > 0) {
+            $data['monthly_installment'] = (float)$Request->monthly_installment;
             $data['loan_issued_at'] = $Request->loan_issued_at;
+            $data['loan_amount'] = (float)$Request->loan_amount;
 
-            $loan_period = $Request->loan_amount / $data['monthly_installment'];
-            $paid_period =  Carbon::parse($data['loan_issued_at'])->diffInMonths(Carbon::now());
+            $loan_period = ceil($data['loan_amount'] / $data['monthly_installment']);
+            $loan_ends = Carbon::parse($data['loan_issued_at'])->addMonths($loan_period);
 
-            $data['paid_period'] = min($paid_period, $loan_period);
-            $data['due_period'] = $loan_period - $data['paid_period'];
+            $data['due_period'] =  (float) Carbon::now()->diffInMonths($loan_ends, false);
+            $data['paid_period'] = max(0, $loan_period - $data['due_period']);
 
-            $data['paid_amount'] = $data['paid_period']  * $data['monthly_installment'];
-            $data['due_amount'] = $data['due_period'] * $data['monthly_installment'];
+            $data['paid_amount'] = $data['paid_period'] * $data['monthly_installment'];
+            $data['due_amount'] = max(0, $data['due_period']) * $data['monthly_installment'];
         }
 
         Vehicle::create($Request->merge($data)->all());
@@ -463,18 +464,19 @@ class VehicleController extends Controller
             'loan_issued_at' => null,
         ];
 
-        if ($Request->loan_amount) {
-            $data['monthly_installment'] = $Request->monthly_installment;
+        if ($Request->loan_amount && $Request->monthly_installment > 0) {
+            $data['monthly_installment'] = (float)$Request->monthly_installment;
             $data['loan_issued_at'] = $Request->loan_issued_at;
+            $data['loan_amount'] = (float)$Request->loan_amount;
 
-            $loan_period = $Request->loan_amount / $data['monthly_installment'];
-            $paid_period =  Carbon::parse($data['loan_issued_at'])->diffInMonths(Carbon::now());
+            $loan_period = ceil($data['loan_amount'] / $data['monthly_installment']);
+            $loan_ends = Carbon::parse($data['loan_issued_at'])->addMonths($loan_period);
 
-            $data['paid_period'] = max($paid_period, 1);
-            $data['due_period'] = $loan_period - $data['paid_period'];
+            $data['due_period'] =  (float) Carbon::now()->diffInMonths($loan_ends, false);
+            $data['paid_period'] = max(0, $loan_period - $data['due_period']);
 
-            $data['paid_amount'] = $data['paid_period']  * $data['monthly_installment'];
-            $data['due_amount'] = $data['due_period'] * $data['monthly_installment'];
+            $data['paid_amount'] = $data['paid_period'] * $data['monthly_installment'];
+            $data['due_amount'] = max(0, $data['due_period']) * $data['monthly_installment'];
         }
 
         $Vehicle->update($Request->merge($data)->all());
