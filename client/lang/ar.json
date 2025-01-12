@@ -378,7 +378,7 @@
     "The insurance cost field is required": "حقل تكلفة التأمين مطلوب",
     "Preview vehicle": "معاينة المركبة",
     "This vehicle has :num pending reservations where the dropoff date has passed": "هذه المركبة لديها :num حجوزات معلقة حيث تجاوز تاريخ التسليم",
-    "This vehicle has a loan of :loan_amount (:paid_amount paid) for a period of :loan_period months (:paid_period paid months), starting from :loan_issued_at, with a monthly installment of :monthly_installment": "هذه السيارة لديها قرض بقيمة :loan_amount (:paid_amount مدفوع) لمدة :loan_period شهر (:paid_period شهر مدفوع)، بدءًا من :loan_issued_at، مع قسط شهري قدره :monthly_installment",
+    "This vehicle has a loan of :loan_amount (:paid_amount paid) for a period of :loan_period months (:paid_period paid months), starting from :loan_issued_at, with a monthly installment of :monthly_installment": "هذا المركبة لديها قرض بقيمة :loan_amount (:paid_amount مدفوعة) لمدة :loan_period شهرًا (:paid_period شهرًا مدفوعة)، بدءًا من :loan_issued_at، مع قسط شهري قدره :monthly_installment",
     "New vehicle": "مركبة جديدة",
 
     "male": "ذكر",
