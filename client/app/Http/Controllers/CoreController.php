@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Reservation;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,9 +50,11 @@ class CoreController extends Controller
             return false;
 
         $id = $Request->user;
+        $settings = Setting::where('target_id', $id)->where('target_type', 'App\Models\User')->first();
+
         $data = Notification::where('company', $Request->company)->limit(5)
-            ->orderBy('id', 'DESC')->get()->map(function ($Carry) use ($id) {
-                $Carry->content =  $Carry->content;
+            ->orderBy('id', 'DESC')->get()->map(function ($Carry) use ($id, $settings) {
+                $Carry->content =  $Carry->Parse($settings);
                 $Carry->ring = !str_contains($Carry->view, (string) $id);
                 return $Carry;
             });
@@ -65,7 +68,7 @@ class CoreController extends Controller
             return false;
 
         $id = $Request->user;
-        $data = Notification::where('company', $Request->company)->where(function ($Query) use ($id) {
+        Notification::where('company', $Request->company)->where(function ($Query) use ($id) {
             $Query->whereNull('view')
                 ->orWhereRaw('view NOT LIKE ?', ['%' . $id . '%']);
         })->each(function ($Carry) use ($id) {

@@ -9,7 +9,7 @@
                 <div class="absolute h-1 w-full bg-x-white left-0 right-0 top-1/2 -translate-y-1/2 z-[-1]">
                     <div id="track" class="absolute h-full top-0 bottom-0 w-0 bg-x-prime"></div>
                 </div>
-                @for ($i = 1; $i <= 6; $i++)
+                @for ($i = 1; $i <= 7; $i++)
                     <neo-tab-trigger tabindex="0" slot="triggers" for="outlet-{{ $i }}"
                         class="flex w-8 h-8 aspect-square items-center justify-center text-lg font-x-thin text-x-black bg-x-white rounded-x-thin outline-none hover:bg-x-acent hover:text-x-white focus:bg-x-acent focus:text-x-white">
                         <span>{{ $i }}</span>
@@ -226,6 +226,38 @@
                 <neo-tab-outlet name="outlet-6" class="grid grid-cols-1 grid-rows-1 gap-6">
                     <div class="flex flex-col gap-1">
                         <label class="text-x-black font-x-thin text-base">
+                            {{ __('Loan amount') }}
+                        </label>
+                        <neo-textbox type="number" placeholder="{{ __('Loan amount') }}" name="loan_amount"
+                            value="{{ old('loan_amount') }}"></neo-textbox>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="required-label text-x-black font-x-thin text-base">
+                            {{ __('Monthly installment') }} {{ old('loan_amount') ? '(*)' : '' }}
+                        </label>
+                        <neo-textbox rules="required_with:loan_amount"
+                            errors='{"required_with": "{{ __('The monthly installment field is required') }}"}'
+                            type="number"
+                            placeholder="{{ __('Monthly installment') }} {{ old('loan_amount') ? '(*)' : '' }}"
+                            name="monthly_installment" class="required-input"
+                            value="{{ old('monthly_installment') }}"></neo-textbox>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="required-label text-x-black font-x-thin text-base">
+                            {{ __('Loan issued at') }} {{ old('loan_amount') ? '(*)' : '' }}
+                        </label>
+                        <neo-datepicker rules="required_with:loan_amount"
+                            errors='{"required_with": "{{ __('The loan issued at field is required') }}"}'
+                            {{ !Core::lang('ar') ? 'full-day=3' : '' }}
+                            placeholder="{{ __('Loan issued at') }} {{ old('loan_amount') ? '(*)' : '' }}"
+                            class="required-input" name="loan_issued_at"
+                            format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            value="{{ old('loan_issued_at') }}"></neo-datepicker>
+                    </div>
+                </neo-tab-outlet>
+                <neo-tab-outlet name="outlet-7" class="grid grid-cols-1 grid-rows-1 gap-6">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-x-black font-x-thin text-base">
                             {{ __('Insurance company') }} (*)
                         </label>
                         <neo-autocomplete rules="required"
@@ -240,8 +272,9 @@
                         </label>
                         <neo-datepicker rules="required"
                             errors='{"required": "{{ __('The insurance issued at field is required') }}"}'
-                            {{ !Core::lang('ar') ? 'full-day=3' : '' }} placeholder="{{ __('Insurance issued at') }} (*)"
-                            name="insurance_issued_at" format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            {{ !Core::lang('ar') ? 'full-day=3' : '' }}
+                            placeholder="{{ __('Insurance issued at') }} (*)" name="insurance_issued_at"
+                            format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
                             value="{{ old('insurance_issued_at') }}"></neo-datepicker>
                     </div>
                     <div class="flex flex-col gap-1">

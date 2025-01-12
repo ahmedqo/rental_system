@@ -2,6 +2,9 @@ const brand = $query("neo-autocomplete[name=brand]"),
     model = $query("neo-autocomplete[name=model]"),
     fueltype = $query("neo-select[name=fuel_type]"),
     horsepower = $query("neo-select[name=horsepower]"),
+    loan = $query("neo-textbox[name=loan_amount]"),
+    labels = $queryAll(".required-label"),
+    inputs = $queryAll(".required-input"),
     horsepower_tax = $query("neo-textbox[name=horsepower_tax]"),
     insurance = $query("neo-autocomplete[name=insurance_company]");
 
@@ -117,4 +120,19 @@ insurance.addEventListener("input", e => {
     auto.item = (result) => {
         return $trans(result);
     }
+});
+
+loan.addEventListener("change", e => {
+    const value = e.target.value.trim();
+    if (!value) {
+        labels.forEach(label => label.innerText = label.innerText.replace(" (*)", ""));
+        inputs.forEach(input => {
+            input.placeholder = input.placeholder.replace(" (*)", "");
+            input.classList.remove("outline", "outline-2", "-outline-offset-2", "outline-red-400");
+        });
+        return;
+    }
+
+    labels.forEach(label => !label.innerText.includes(" (*)") && (label.innerText = label.innerText + " (*)"));
+    inputs.forEach(input => !input.placeholder.includes(" (*)") && (input.placeholder = input.placeholder + " (*)"));
 })

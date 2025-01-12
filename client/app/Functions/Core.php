@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 
 class Core
 {
+    public static $Setting;
+    public static $Company;
+
     public static function getDates($period = null)
     {
         switch ($period ?? Core::setting('report_frequency')) {
@@ -142,16 +145,20 @@ class Core
 
     public static function company($prop = null)
     {
-        $Company = Auth::user()->Owner;
-        if ($prop) return $Company->{$prop};
-        return $Company;
+        if (!self::$Company) {
+            self::$Company = Auth::user()->Owner;
+        }
+
+        return $prop ? self::$Company->{$prop} : self::$Company;
     }
 
     public static function setting($prop = null)
     {
-        $Setting = Auth::user()->Setting;
-        if ($prop) return $Setting->{$prop};
-        return $Setting;
+        if (!self::$Setting) {
+            self::$Setting = Auth::user()->Setting;
+        }
+
+        return $prop ? self::$Setting->{$prop} : self::$Setting;
     }
 
     public static function notifications()
@@ -159,7 +166,7 @@ class Core
         $id = Auth::id();
         $data = Notification::where('company', Core::company('id'))
             ->orderBy('id', 'DESC')->get()->map(function ($Carry) use ($id) {
-                $Carry->content =  $Carry->content;
+                $Carry->content =  $Carry->Parse(Core::setting());
                 $Carry->ring = !str_contains($Carry->view, (string) $id);
                 return $Carry;
             });

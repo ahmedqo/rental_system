@@ -37,6 +37,15 @@ return new class extends Migration
             $table->string('insurance_company');
             $table->date('insurance_issued_at');
             $table->decimal('insurance_cost', 15, 5);
+
+            $table->decimal('loan_amount', 15, 5)->nullable();
+            $table->decimal('monthly_installment', 15, 5)->nullable();
+            $table->date('loan_issued_at')->nullable();
+
+            $table->integer('paid_period')->nullable();
+            $table->integer('due_period')->nullable();
+            $table->decimal('paid_amount', 15, 5)->nullable();
+            $table->decimal('due_amount', 15, 5)->nullable();
             $table->timestamps();
 
             $table->foreign('company')->references('id')->on('companies')->onUpdate('cascade')->onDelete('set null');

@@ -370,6 +370,9 @@ class VehicleController extends Controller
             'insurance_issued_at' => ['required', 'date'],
             'insurance_cost' => ['required', 'numeric'],
 
+            'monthly_installment' => ['required_with:loan_amount', 'numeric'],
+            'loan_issued_at' => ['required_with:loan_amount', 'date'],
+
             'registration_ww_part_1' => ['required_if:registration_type,WW', 'string'],
             'registration_ww_part_2' => ['required_if:registration_type,WW', 'string'],
             'registration_vehicle_part_1' => ['required_if:registration_type,vehicle', 'string'],
@@ -384,9 +387,27 @@ class VehicleController extends Controller
             ]);
         }
 
-        Vehicle::create($Request->merge([
-            'registration_number' => $Request->registration_type == 'WW' ? ($Request->registration_ww_part_1 . '-' . $Request->registration_ww_part_2) : ($Request->registration_vehicle_part_1 . '-' . $Request->registration_vehicle_part_2 . '-' . $Request->registration_vehicle_part_3)
-        ])->all());
+        $data = [
+            'registration_number' => $Request->registration_type == 'WW' ? ($Request->registration_ww_part_1 . '-' . $Request->registration_ww_part_2) : ($Request->registration_vehicle_part_1 . '-' . $Request->registration_vehicle_part_2 . '-' . $Request->registration_vehicle_part_3),
+            'monthly_installment' => null,
+            'loan_issued_at' => null,
+        ];
+
+        if ($Request->loan_amount) {
+            $data['monthly_installment'] = $Request->monthly_installment;
+            $data['loan_issued_at'] = $Request->loan_issued_at;
+
+            $loan_period = $Request->loan_amount / $data['monthly_installment'];
+            $paid_period =  Carbon::parse($data['loan_issued_at'])->diffInMonths(Carbon::now());
+
+            $data['paid_period'] = min($paid_period, $loan_period);
+            $data['due_period'] = $loan_period - $data['paid_period'];
+
+            $data['paid_amount'] = $data['paid_period']  * $data['monthly_installment'];
+            $data['due_amount'] = $data['due_period'] * $data['monthly_installment'];
+        }
+
+        Vehicle::create($Request->merge($data)->all());
 
         return Redirect::back()->with([
             'message' => __('Created successfully'),
@@ -417,6 +438,9 @@ class VehicleController extends Controller
             'insurance_issued_at' => ['required', 'date'],
             'insurance_cost' => ['required', 'numeric'],
 
+            'monthly_installment' => ['required_with:loan_amount', 'numeric'],
+            'loan_issued_at' => ['required_with:loan_amount', 'date'],
+
             'registration_ww_part_1' => ['required_if:registration_type,WW', 'string'],
             'registration_ww_part_2' => ['required_if:registration_type,WW', 'string'],
             'registration_vehicle_part_1' => ['required_if:registration_type,vehicle', 'string'],
@@ -433,9 +457,27 @@ class VehicleController extends Controller
 
         $Vehicle = Vehicle::findorfail($id);
 
-        $Vehicle->update($Request->merge([
-            'registration_number' => $Request->registration_type == 'WW' ? ($Request->registration_ww_part_1 . '-' . $Request->registration_ww_part_2) : ($Request->registration_vehicle_part_1 . '-' . $Request->registration_vehicle_part_2 . '-' . $Request->registration_vehicle_part_3)
-        ])->all());
+        $data = [
+            'registration_number' => $Request->registration_type == 'WW' ? ($Request->registration_ww_part_1 . '-' . $Request->registration_ww_part_2) : ($Request->registration_vehicle_part_1 . '-' . $Request->registration_vehicle_part_2 . '-' . $Request->registration_vehicle_part_3),
+            'monthly_installment' => null,
+            'loan_issued_at' => null,
+        ];
+
+        if ($Request->loan_amount) {
+            $data['monthly_installment'] = $Request->monthly_installment;
+            $data['loan_issued_at'] = $Request->loan_issued_at;
+
+            $loan_period = $Request->loan_amount / $data['monthly_installment'];
+            $paid_period =  Carbon::parse($data['loan_issued_at'])->diffInMonths(Carbon::now());
+
+            $data['paid_period'] = max($paid_period, 1);
+            $data['due_period'] = $loan_period - $data['paid_period'];
+
+            $data['paid_amount'] = $data['paid_period']  * $data['monthly_installment'];
+            $data['due_amount'] = $data['due_period'] * $data['monthly_installment'];
+        }
+
+        $Vehicle->update($Request->merge($data)->all());
 
         return Redirect::back()->with([
             'message' => __('Updated successfully'),

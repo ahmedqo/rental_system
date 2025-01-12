@@ -35,7 +35,7 @@
 
 @section('content')
     <div class="w-full items-start grid grid-rows-1 grid-cols-1 gap-6">
-        @if ($reminders->count() || $vals->ended)
+        @if ($reminders->count() || $vals->ended || $data->due_period > 0)
             <ul class="w-full flex flex-col gap-1">
                 @if ($vals->ended)
                     <li
@@ -58,10 +58,37 @@
                         </svg>
                         <span class="w-0 flex-1">
                             "{{ ucfirst(__($row->consumable_name)) }}" {{ __('at') }}
-                            "{{ $row->view_issued_at }}"
+                            "{{ \Carbon\Carbon::parse($row->view_issued_at)->translatedFormat(Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'Y-m-d') }}"
                         </span>
                     </li>
                 @endforeach
+                @if ($data->due_period > 0)
+                    @php
+                        $currency = Core::setting('currency');
+                    @endphp
+                    <li
+                        class="flex flex-wrap items-center gap-4 bg-blue-500 text-x-white p-4 text-base font-x-thin rounded-x-thin shadow-x-core">
+                        <svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M153-266v-274h121v274H153Zm267 0v-274h120v274H420ZM28-81v-136h904v136H28Zm658-185v-274h121v274H686ZM28-590v-146l452-228 452 228v146H28Z" />
+                        </svg>
+                        <span class="w-0 flex-1">
+                            {{ __(
+                                'This vehicle has a loan of :loan_amount (:paid_amount paid) for a period of :loan_period months (:paid_period paid months), starting from :loan_issued_at, with a monthly installment of :monthly_installment',
+                                [
+                                    'loan_issued_at' => \Carbon\Carbon::parse($data->loan_issued_at)->translatedFormat(
+                                        Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'Y-m-d',
+                                    ),
+                                    'monthly_installment' => Core::formatNumber($data->monthly_installment) . ' ' . $currency,
+                                    'loan_amount' => Core::formatNumber($data->loan_amount) . ' ' . $currency,
+                                    'paid_amount' => Core::formatNumber($data->paid_amount) . ' ' . $currency,
+                                    'loan_period' => $data->due_period + $data->paid_period,
+                                    'paid_period' => $data->paid_period,
+                                ],
+                            ) }}
+                        </span>
+                    </li>
+                @endif
             </ul>
         @endif
         <ul class="container mx-auto grid gap-6 grid-cols-2 grid-rows-1 lg:grid-cols-12 lg:grid-rows-6">

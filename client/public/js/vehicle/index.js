@@ -57,6 +57,13 @@ TableVisualizer($query("neo-datavisualizer"), ({ scene, ...props }) => [{
         bodyCsvRender: (row) => `${$capitalize($trans("Horsepower"))}: ${$capitalize($trans(row.horsepower))}, ${$capitalize($trans("Horsepower tax"))}: ${$money(+row.horsepower_tax, 2)} ${$core.currency}`
     }, {
         visible: false,
+        name: "loan",
+        text: $trans("Loan"),
+        bodyRender: (row) => `<div>${$capitalize($trans("Loan issued at"))}: ${row.loan_issued_at ? $moment(row.loan_issued_at, $core.format) : empty()}</div><div>${$capitalize($trans("Loan amount"))}: ${+row.loan_amount ? $money(+row.loan_amount, 2) + " " + $core.currency : empty()}</div><div>${$capitalize($trans("Monthly installment"))}: ${+row.monthly_installment ? $money(+row.monthly_installment, 2) + " " + $core.currency : empty()}</div>`,
+        bodyPdfRender: function(row) { return this.bodyRender(row); },
+        bodyCsvRender: (row) => `${$capitalize($trans("Loan issued at"))}: ${row.loan_issued_at ? $moment(row.loan_issued_at, $core.format) : empty()}, ${$capitalize($trans("Loan amount"))}: ${+row.loan_amount ? $money(+row.loan_amount, 2) + " " + $core.currency : empty()}, ${$capitalize($trans("Monthly installment"))}: ${+row.monthly_installment ? $money(+row.monthly_installment, 2) + " " + $core.currency : empty()}`
+    }, {
+        visible: false,
         name: "insurance",
         text: $trans("Insurance"),
         bodyRender: (row) => `<div>${$capitalize($trans("Insurance company"))}: ${$capitalize($trans(row.insurance_company))}</div><div>${$capitalize($trans("Insurance issued at"))}: ${$moment(row.insurance_issued_at, $core.format)}</div><div>${$capitalize($trans("Insurance cost"))}: ${$money(+row.insurance_cost, 2)} ${$core.currency}</div>`,

@@ -39,6 +39,15 @@ class Vehicle extends Model
         'insurance_issued_at',
         'insurance_cost',
 
+        'loan_amount',
+        'monthly_installment',
+        'loan_issued_at',
+
+        'paid_period',
+        'due_period',
+        'paid_amount',
+        'due_amount',
+
         'company',
     ];
 
@@ -63,6 +72,14 @@ class Vehicle extends Model
         'insurance_company',
         'insurance_issued_at',
         'insurance_cost',
+
+        'loan_amount',
+        'monthly_installment',
+        'loan_issued_at',
+        'paid_period',
+        'due_period',
+        'paid_amount',
+        'due_amount',
     ];
 
     protected static function booted()
@@ -78,7 +95,6 @@ class Vehicle extends Model
     {
         return $this->belongsTo(Company::class, 'company');
     }
-
 
     public function Reservations()
     {
