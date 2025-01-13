@@ -1,6 +1,7 @@
 <?php
 
 use App\Functions\Core;
+use App\Models\Charge;
 use App\Models\Notification;
 use App\Models\Reminder;
 use App\Models\Reservation;
@@ -18,23 +19,13 @@ function getTemplate($name, $extra = null)
         ],
         'vehicle' => [
             'service' => '<a href=":route" class="flex flex-wrap items-center gap-4 p-4 hover:bg-x-light"><span class="w-10 h-10 rounded-full bg-x-prime text-x-white flex items-center justify-center"><svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor"><path d="M614.5-284q25.5 0 43.5-18.38t18-43.5q0-25.12-18.12-43.62Q639.75-408 615-408q-26 0-44 18.38t-18 43.5q0 25.12 18 43.62 18 18.5 43.5 18.5ZM265-284q26 0 44-18.38t18-43.5q0-25.12-18-43.62-18-18.5-43.5-18.5T222-389.62q-18 18.38-18 43.5t18.13 43.62Q240.25-284 265-284Zm461-242q-83 0-141.5-58.5T526-726q0-84 59-142t141-58q83 0 141.5 58.5T926-726q0 83-58.5 141.5T726-526Zm-34-177h68v-160h-68v160Zm34.5 115q14.5 0 24-9t9.5-23.5q0-14.5-9.5-25t-24-10.5q-14.5 0-24.5 10.5t-10 25q0 14.5 10 23.5t24.5 9ZM115.81-41q-32.26 0-54.03-21.56Q40-84.13 40-116v-331.43L127-695q11-29 35.8-46.5Q187.6-759 218-759h231q-4 32-.5 65t13.5 64H241l-36 105h325q39 38 89.36 58 50.35 20 104.64 20 30.65 0 59.83-6Q813-459 840-472v355.83q0 32.21-21.78 53.69Q796.45-41 764.19-41H753.3q-32.3 0-54.8-20.7T676-113v-8H204v8q0 30.6-22.5 51.3Q159-41 126.7-41h-10.89Z"/></svg></span><span class="w-0 flex-1">":vehicle" has been in service since ":year" exceeding a duration of 5 years</span></a>',
-            'bank' => '<div class="flex flex-wrap items-center gap-4 p-4"><span class="w-10 h-10 rounded-full bg-x-prime text-x-white flex items-center justify-center"><svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor"><path d="M153-266v-274h121v274H153Zm267 0v-274h120v274H420ZM28-81v-136h904v136H28Zm658-185v-274h121v274H686ZM28-590v-146l452-228 452 228v146H28Z"/></svg></span><span class="w-0 flex-1">The monthly instalment of ":money" for ":vehicle" is due on ":date"</span></div>',
+            'loan' => '<div class="flex flex-wrap items-center gap-4 p-4"><span class="w-10 h-10 rounded-full bg-x-prime text-x-white flex items-center justify-center"><svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor"><path d="M153-266v-274h121v274H153Zm267 0v-274h120v274H420ZM28-81v-136h904v136H28Zm658-185v-274h121v274H686ZM28-590v-146l452-228 452 228v146H28Z"/></svg></span><span class="w-0 flex-1">The loan monthly instalment of ":money" for ":vehicle" is due on ":date"</span></div>',
+            'insurance' => '<div class="flex flex-wrap items-center gap-4 p-4"><span class="w-10 h-10 rounded-full bg-x-prime text-x-white flex items-center justify-center"><svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor"><path d="M660-160h40v-160h-40v160Zm20-200q8 0 14-6t6-14q0-8-6-14t-14-6q-8 0-14 6t-6 14q0 8 6 14t14 6Zm0 280q-83 0-141.5-58.5T480-280q0-83 58.5-141.5T680-480q83 0 141.5 58.5T880-280q0 83-58.5 141.5T680-80ZM480-600h200L480-800l200 200-200-200v200ZM200-80q-33 0-56.5-23.5T120-160v-640q0-33 23.5-56.5T200-880h320l240 240v92q-20-6-40-9t-40-3q-57 0-107.5 21.5T484-480H280v80h147q-9 19-15 39t-9 41H280v80h123q7 45 28 86.5T485-80H200Z"/></svg></span><span class="w-0 flex-1">The insurance monthly instalment of ":money" for ":vehicle" is due on ":date"</span></div>',
         ],
         'reminder' => '<div class="flex flex-wrap items-center gap-4 p-4"><span class="w-10 h-10 rounded-full bg-x-prime text-x-white flex items-center justify-center"><svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor"><path d="M739-423v-114h210v114H739Zm80 299L651-249l69-92 167 125-68 92Zm-99-495-69-92 168-125 68 92-167 125ZM129-161v-161h-6q-48-6-80-42.5T11-450v-60q0-52 37.5-90t90.5-38h131l247-149v614L270-322h-5v161H129Zm444-149v-340q42 28 67 73t25 97q0 52-25 97t-67 73Z" /></svg></span><span class="w-0 flex-1">":consumable" on ":vehicle" is due on ":date"</span></div>',
     ][$name];
 
     return $extra ? $template[$extra] : $template;
-}
-
-function makeNotification($Model, $text, $vars)
-{
-    $exists = $Model->Notifications()->where('text', $text)
-        ->where('vars', $vars)->exists();
-    if (!$exists)  $Model->Notifications()->create([
-        'company' => $Model->company,
-        'text' => $text,
-        'vars' => $vars,
-    ]);
 }
 
 Artisan::command('notifications:update-minutely', function () {
@@ -158,57 +149,141 @@ Artisan::command('notifications:update-hourly', function () {
 Artisan::command('notifications:update-daily', function () {
     $today = Carbon::today();
     $tomorrow = Carbon::tomorrow();
-    $template = getTemplate('vehicle', 'bank');
+    $template = getTemplate('vehicle');
 
     $Vehicles = Vehicle::with('Notifications:target_type,target_id,text,vars')
-        ->whereIn(DB::raw('DAY(loan_issued_at)'), [$today->day, $tomorrow->day])
-        ->where('due_period', '>', 0)->get();
+        ->whereIn(DB::raw('DAY(insurance_issued_at)'), [$today->day, $tomorrow->day])
+        ->orWhere(function ($query) use ($today, $tomorrow) {
+            $query->whereIn(DB::raw('DAY(loan_issued_at)'), [$today->day, $tomorrow->day])
+                ->where('due_period', '>', 0);
+        })->get();
 
     $Notifications = [];
     $Existings = [];
 
     $NotificationVehicles = [];
     $UpdatingVehicles = [];
+    $ChargeVehicles = [];
 
     foreach ($Vehicles as $Carry) {
-        $date = Carbon::parse($Carry->loan_issued_at)->day;
-        if ($date == $tomorrow->day) {
+        $loanDay = Carbon::parse($Carry->loan_issued_at)->day;
+        $insuranceDay = Carbon::parse($Carry->insurance_issued_at)->day;
+
+        // Prepare data variables
+        $isLoanTomorrow = $loanDay == $tomorrow->day;
+        $isInsuranceTomorrow = $insuranceDay == $tomorrow->day;
+        $isLoanToday = $loanDay == $today->day;
+        $isInsuranceToday = $insuranceDay == $today->day;
+
+        // Collect notification-related vehicles
+        if ($isLoanTomorrow || $isInsuranceTomorrow) {
             $NotificationVehicles[] = $Carry;
+            $Carry->is_loan = $isLoanTomorrow;
+            $Carry->is_insurance = $isInsuranceTomorrow;
             $Existings[$Carry->id] = $Carry->Notifications->pluck('vars', 'text')->toArray();
         }
 
-        if ($date == $today->day) {
+        // Collect updating vehicles
+        if ($isLoanToday) {
             $UpdatingVehicles[] = $Carry;
+        }
+
+        // Prepare charge-related data
+        $data = [
+            'money' => Core::formatNumber($Carry->monthly_installment),
+            'vehicle' => ucfirst(__($Carry->brand)) . ' ' . ucfirst(__($Carry->model)) . ' ' . ucfirst(__($Carry->year)) . ' (' . strtoupper($Carry->registration_number) . ')'
+        ];
+        $base = [
+            'company' => $Carry->company,
+            'vehicle' => $Carry->id,
+            'created_at' => $today,
+            'updated_at' => $today,
+        ];
+
+        $loanName = __('The loan monthly instalment of ":money" for ":vehicle"', $data);
+        $insuranceName = __('The insurance monthly instalment of ":money" for ":vehicle"', $data);
+
+        // Check and add charges
+        $existingCharges = Charge::where('vehicle', $Carry->id)->whereDate('created_at', $today)->pluck('name')->toArray();
+
+        if (!in_array($loanName, $existingCharges) && $isLoanToday) {
+            $ChargeVehicles[] = array_merge($base, [
+                'name' => $loanName,
+                'cost' => (float)$Carry->monthly_installment,
+            ]);
+        }
+
+        if (!in_array($insuranceName, $existingCharges) && $isInsuranceToday) {
+            $ChargeVehicles[] = array_merge($base, [
+                'name' => $insuranceName,
+                'cost' => (float)$Carry->insurance_cost,
+            ]);
         }
     }
 
     foreach ($NotificationVehicles as $Carry) {
-        $notificationVars = [
-            'money' => Core::formatNumber($Carry->monthly_installment),
+        $base = [
+            'target_type' => 'App\Models\Vehicle',
+            'target_id' => $Carry->id,
+            'company' => $Carry->company,
+            'created_at' => $today,
+            'updated_at' => $today,
+        ];
+
+        $basevars = [
             'vehicle' => [$Carry->brand, $Carry->model, $Carry->year, '(' . strtoupper($Carry->registration_number) . ')'],
             'date' => $tomorrow,
         ];
 
-        $notificationVarsJson = json_encode($notificationVars);
+        if ($Carry->is_loan) {
+            $notificationText = $template['loan'];
+            $notificationVars = array_merge($basevars, [
+                'money' => Core::formatNumber($Carry->monthly_installment),
+            ]);
 
-        if (
-            array_key_exists($template, $Existings[$Carry->id]) &&
-            $Existings[$Carry->id][$template] === $notificationVarsJson
-        ) {
-            continue;
+            $notificationVarsJson = json_encode($notificationVars);
+
+            if (
+                array_key_exists($notificationText, $Existings[$Carry->id]) &&
+                $Existings[$Carry->id][$notificationText] === $notificationVarsJson
+            ) {
+                continue;
+            }
+
+            $Notifications[] = array_merge($base, [
+                'text' => $notificationText,
+                'vars' => $notificationVarsJson,
+            ]);
         }
 
-        $Notifications[] = [
-            'target_type' => 'App\Models\Vehicle',
-            'target_id' => $Carry->id,
-            'company' => $Carry->company,
-            'text' => $template,
-            'vars' => $notificationVarsJson,
-        ];
+        if ($Carry->is_insurance) {
+            $notificationText = $template['insurance'];
+            $notificationVars = array_merge($basevars, [
+                'money' => Core::formatNumber($Carry->insurance_cost),
+            ]);
+
+            $notificationVarsJson = json_encode($notificationVars);
+
+            if (
+                array_key_exists($notificationText, $Existings[$Carry->id]) &&
+                $Existings[$Carry->id][$notificationText] === $notificationVarsJson
+            ) {
+                continue;
+            }
+
+            $Notifications[] = array_merge($base, [
+                'text' => $notificationText,
+                'vars' => $notificationVarsJson,
+            ]);
+        }
     }
 
     if (!empty($Notifications)) {
         Notification::insert($Notifications);
+    }
+
+    if (!empty($ChargeVehicles)) {
+        Charge::insert($ChargeVehicles);
     }
 
     foreach ($UpdatingVehicles as $Carry) {
@@ -226,6 +301,7 @@ Artisan::command('notifications:update-daily', function () {
         $data['paid_amount'] = $data['paid_period'] * $data['monthly_installment'];
         $data['due_amount'] = max(0, $data['due_period']) * $data['monthly_installment'];
 
+        unset($Carry->is_loan, $Carry->is_insurance);
         $Carry->update($data);
     }
 })->purpose('update notifications each day');
