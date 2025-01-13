@@ -434,6 +434,14 @@
   "The insurance cost field is required": "The insurance cost field is required",
   "Preview vehicle": "Preview vehicle",
   "This vehicle has :num pending reservations where the dropoff date has passed": "This vehicle has :num pending reservations where the dropoff date has passed",
-  "This vehicle has a loan of :loan_amount (:paid_amount paid) for a period of :loan_period months (:paid_period paid months), starting from :loan_issued_at, with a monthly installment of :monthly_installment": "This vehicle has a loan of :loan_amount (:paid_amount paid) for a period of :loan_period months (:paid_period paid months), starting from :loan_issued_at, with a monthly installment of :monthly_installment",
+  "is due on": "is due on",
+  "Loan": "Loan",
+  "Total amount": "Total amount",
+  "Paid amount": "Paid amount",
+  "Due amount": "Due amount",
+  "Total period": "Total period",
+  "Months": "Months",
+  "Paid period": "Paid period",
+  "Due period": "Due period",
   "New vehicle": "New vehicle"
 }

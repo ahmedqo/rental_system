@@ -169,13 +169,11 @@ Artisan::command('notifications:update-daily', function () {
         $loanDay = Carbon::parse($Carry->loan_issued_at)->day;
         $insuranceDay = Carbon::parse($Carry->insurance_issued_at)->day;
 
-        // Prepare data variables
         $isLoanTomorrow = $loanDay == $tomorrow->day;
         $isInsuranceTomorrow = $insuranceDay == $tomorrow->day;
         $isLoanToday = $loanDay == $today->day;
         $isInsuranceToday = $insuranceDay == $today->day;
 
-        // Collect notification-related vehicles
         if ($isLoanTomorrow || $isInsuranceTomorrow) {
             $NotificationVehicles[] = $Carry;
             $Carry->is_loan = $isLoanTomorrow;
@@ -183,16 +181,10 @@ Artisan::command('notifications:update-daily', function () {
             $Existings[$Carry->id] = $Carry->Notifications->pluck('vars', 'text')->toArray();
         }
 
-        // Collect updating vehicles
         if ($isLoanToday) {
             $UpdatingVehicles[] = $Carry;
         }
 
-        // Prepare charge-related data
-        $data = [
-            'money' => Core::formatNumber($Carry->monthly_installment),
-            'vehicle' => ucfirst(__($Carry->brand)) . ' ' . ucfirst(__($Carry->model)) . ' ' . ucfirst(__($Carry->year)) . ' (' . strtoupper($Carry->registration_number) . ')'
-        ];
         $base = [
             'company' => $Carry->company,
             'vehicle' => $Carry->id,
@@ -200,10 +192,9 @@ Artisan::command('notifications:update-daily', function () {
             'updated_at' => $today,
         ];
 
-        $loanName = __('The loan monthly instalment of ":money" for ":vehicle"', $data);
-        $insuranceName = __('The insurance monthly instalment of ":money" for ":vehicle"', $data);
+        $loanName = 'The loan monthly instalment';
+        $insuranceName = 'The insurance monthly instalment';
 
-        // Check and add charges
         $existingCharges = Charge::where('vehicle', $Carry->id)->whereDate('created_at', $today)->pluck('name')->toArray();
 
         if (!in_array($loanName, $existingCharges) && $isLoanToday) {

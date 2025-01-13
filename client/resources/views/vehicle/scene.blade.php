@@ -35,7 +35,7 @@
 
 @section('content')
     <div class="w-full items-start grid grid-rows-1 grid-cols-1 gap-6">
-        @if ($reminders->count() || $vals->ended || $data->due_period > 0)
+        @if ($reminders->count() || $vals->ended)
             <ul class="w-full flex flex-col gap-1">
                 @if ($vals->ended)
                     <li
@@ -62,33 +62,6 @@
                         </span>
                     </li>
                 @endforeach
-                @if ($data->due_period > 0)
-                    @php
-                        $currency = Core::setting('currency');
-                    @endphp
-                    <li
-                        class="flex flex-wrap items-center gap-4 bg-blue-500 text-x-white p-4 text-base font-x-thin rounded-x-thin shadow-x-core">
-                        <svg class="pointer-events-none w-6 h-6" viewBox="0 -960 960 960" fill="currentColor">
-                            <path
-                                d="M153-266v-274h121v274H153Zm267 0v-274h120v274H420ZM28-81v-136h904v136H28Zm658-185v-274h121v274H686ZM28-590v-146l452-228 452 228v146H28Z" />
-                        </svg>
-                        <span class="w-0 flex-1">
-                            {{ __(
-                                'This vehicle has a loan of :loan_amount (:paid_amount paid) for a period of :loan_period months (:paid_period paid months), starting from :loan_issued_at, with a monthly installment of :monthly_installment',
-                                [
-                                    'loan_issued_at' => \Carbon\Carbon::parse($data->loan_issued_at)->translatedFormat(
-                                        Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'Y-m-d',
-                                    ),
-                                    'monthly_installment' => Core::formatNumber($data->monthly_installment) . ' ' . $currency,
-                                    'loan_amount' => Core::formatNumber($data->loan_amount) . ' ' . $currency,
-                                    'paid_amount' => Core::formatNumber($data->paid_amount) . ' ' . $currency,
-                                    'loan_period' => $data->due_period + $data->paid_period,
-                                    'paid_period' => $data->paid_period,
-                                ],
-                            ) }}
-                        </span>
-                    </li>
-                @endif
             </ul>
         @endif
         <ul class="container mx-auto grid gap-6 grid-cols-2 grid-rows-1 lg:grid-cols-12 lg:grid-rows-6">
@@ -253,6 +226,143 @@
                 </div>
             </li>
         </ul>
+        @if ($data->due_period > 0)
+            <div class="bg-x-white rounded-x-thin shadow-x-core">
+                <div class="py-3 px-6 border-b border-x-shade">
+                    <h2 class="text-x-black font-x-thin text-xl">
+                        {{ __('Loan') }}
+                    </h2>
+                </div>
+                <ul class="grid grid-rows-1 grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                    <li
+                        class="p-4 gap-4 flex flex-col flex-wrap items-center lg:flex-row relative bg-x-white rounded-x-thin border border-x-shade">
+                        <div
+                            class="loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
+                            <neo-loader></neo-loader>
+                        </div>
+                        <svg class="lock w-10 aspect-square pointer-events-none text-blue-500" fill="currentcolor"
+                            viewBox="0 -960 960 960">
+                            <path
+                                d="M441-120v-86q-53-12-91.5-46T293-348l74-30q15 48 44.5 73t77.5 25q41 0 69.5-18.5T587-356q0-35-22-55.5T463-458q-86-27-118-64.5T313-614q0-65 42-101t86-41v-84h80v84q50 8 82.5 36.5T651-650l-74 32q-12-32-34-48t-60-16q-44 0-67 19.5T393-614q0 33 30 52t104 40q69 20 104.5 63.5T667-358q0 71-42 108t-104 46v84h-80Z" />
+                        </svg>
+                        <div class="flex flex-1 flex-col">
+                            <h2 class="text-center lg:text-end text-base lg:text-lg text-x-black font-x-thin">
+                                {{ __('Total amount') }}
+                            </h2>
+                            <p class="text-center lg:text-end text-base lg:text-base text-gray-800">
+                                {{ Core::formatNumber($data->loan_amount) }}
+                                {{ $currency }}
+                            </p>
+                        </div>
+                    </li>
+                    <li
+                        class="p-4 gap-4 flex flex-col flex-wrap items-center lg:flex-row relative bg-x-white rounded-x-thin border border-x-shade">
+                        <div
+                            class="loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
+                            <neo-loader></neo-loader>
+                        </div>
+                        <svg class="lock w-10 aspect-square pointer-events-none text-green-500" fill="currentcolor"
+                            viewBox="0 -960 960 960">
+                            <path
+                                d="M260-361v-40H160v-80h200v-80H200q-17 0-28.5-11.5T160-601v-160q0-17 11.5-28.5T200-801h60v-40h80v40h100v80H240v80h160q17 0 28.5 11.5T440-601v160q0 17-11.5 28.5T400-401h-60v40h-80Zm298 240L388-291l56-56 114 114 226-226 56 56-282 282Z" />
+                        </svg>
+                        <div class="flex flex-1 flex-col">
+                            <h2 class="text-center lg:text-end text-base lg:text-lg text-x-black font-x-thin">
+                                {{ __('Paid amount') }}
+                            </h2>
+                            <p class="text-center lg:text-end text-base lg:text-base text-gray-800">
+                                {{ Core::formatNumber($data->paid_amount) }}
+                                {{ $currency }}
+                            </p>
+                        </div>
+                    </li>
+                    <li
+                        class="p-4 gap-4 flex flex-col flex-wrap items-center lg:flex-row relative bg-x-white rounded-x-thin border border-x-shade">
+                        <div
+                            class="loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
+                            <neo-loader></neo-loader>
+                        </div>
+                        <svg class="lock w-10 aspect-square pointer-events-none text-yellow-500" fill="currentcolor"
+                            viewBox="0 -960 960 960">
+                            <path
+                                d="M520-120v-80h184L520-384v-112l240 240v-184h80v320H520ZM240-280v-40H120v-80h240v-120H200q-33 0-56.5-23.5T120-600v-120q0-33 23.5-56.5T200-800h40v-40h80v40h120v80H200v120h160q33 0 56.5 23.5T440-520v120q0 33-23.5 56.5T360-320h-40v40h-80Z" />
+                        </svg>
+                        <div class="flex flex-1 flex-col">
+                            <h2 class="text-center lg:text-end text-base lg:text-lg text-x-black font-x-thin">
+                                {{ __('Due amount') }}
+                            </h2>
+                            <p class="text-center lg:text-end text-base lg:text-base text-gray-800">
+                                {{ Core::formatNumber($data->loan_amount - $data->paid_amount) }}
+                                {{ $currency }}
+                            </p>
+                        </div>
+                    </li>
+                    <li
+                        class="p-4 gap-4 flex flex-col flex-wrap items-center lg:flex-row relative bg-x-white rounded-x-thin border border-x-shade">
+                        <div
+                            class="loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
+                            <neo-loader></neo-loader>
+                        </div>
+                        <svg class="lock w-10 aspect-square pointer-events-none text-blue-500" fill="currentcolor"
+                            viewBox="0 -960 960 960">
+                            <path
+                                d="M480-400q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z" />
+                        </svg>
+                        <div class="flex flex-1 flex-col">
+                            <h2 class="text-center lg:text-end text-base lg:text-lg text-x-black font-x-thin">
+                                {{ __('Total period') }}
+                            </h2>
+                            <p class="text-center lg:text-end text-base lg:text-base text-gray-800">
+                                {{ $data->due_period + $data->paid_period }}
+                                {{ __('Months') }}
+                            </p>
+                        </div>
+                    </li>
+                    <li
+                        class="p-4 gap-4 flex flex-col flex-wrap items-center lg:flex-row relative bg-x-white rounded-x-thin border border-x-shade">
+                        <div
+                            class="loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
+                            <neo-loader></neo-loader>
+                        </div>
+                        <svg class="lock w-10 aspect-square pointer-events-none text-green-500" fill="currentcolor"
+                            viewBox="0 -960 960 960">
+                            <path
+                                d="M438-226 296-368l58-58 84 84 168-168 58 58-226 226ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z" />
+                        </svg>
+                        <div class="flex flex-1 flex-col">
+                            <h2 class="text-center lg:text-end text-base lg:text-lg text-x-black font-x-thin">
+                                {{ __('Paid period') }}
+                            </h2>
+                            <p class="text-center lg:text-end text-base lg:text-base text-gray-800">
+                                {{ $data->paid_period }}
+                                {{ __('Months') }}
+                            </p>
+                        </div>
+                    </li>
+                    <li
+                        class="p-4 gap-4 flex flex-col flex-wrap items-center lg:flex-row relative bg-x-white rounded-x-thin border border-x-shade">
+                        <div
+                            class="loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
+                            <neo-loader></neo-loader>
+                        </div>
+                        <svg class="lock w-10 aspect-square pointer-events-none text-yellow-500" fill="currentcolor"
+                            viewBox="0 -960 960 960">
+                            <path
+                                d="M578-80q-17 0-28.5-11.5T538-120q0-17 11.5-28.5T578-160h113l-92-65q-14-10-16.5-25.5T589-280q9-14 25-16.5t30 6.5l93 64-39-106q-6-15 1-30t23-21q16-6 31 1t21 23l38 106 30-109q5-16 18.5-24.5T890-390q16 5 25 18.5t4 29.5L849-80H578Zm-378-80q-33 0-56.5-23.5T120-240v-480q0-33 23.5-56.5T200-800h40v-80h80v80h240v-80h80v80h40q33 0 56.5 23.5T760-720v244q-20-3-40-3t-40 3v-84H200v320h280q0 20 3 40t11 40H200Z" />
+                        </svg>
+                        <div class="flex flex-1 flex-col">
+                            <h2 class="text-center lg:text-end text-base lg:text-lg text-x-black font-x-thin">
+                                {{ __('Due period') }}
+                            </h2>
+                            <p class="text-center lg:text-end text-base lg:text-base text-gray-800">
+                                {{ $data->due_period }}
+                                {{ __('Months') }}
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        @endif
         <div class="bg-x-white rounded-x-thin shadow-x-core">
             <neo-datavisualizer id="data-reservations" search header=" {{ __('Reservations list') }}">
                 <neo-tooltip slot="start" label="{{ __('Show all reservations') }}">
