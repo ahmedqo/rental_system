@@ -29,18 +29,21 @@ const run = async() => {
     if (timer) clearTimeout(timer);
 
     const req = await fetch($core.notify);
-    const res = await req.json();
 
-    const sanitizeItems = (items) => {
-        return items.map(({ updated_at, created_at, ring, ...rest }) => rest);
-    };
+    if (req.ok) {
+        const res = await req.json();
 
-    const sanitizedNew = sanitizeItems(res);
-    const sanitizedCurrent = sanitizeItems(notifySegment.context.items || []);
+        const sanitizeItems = (items) => {
+            return items.map(({ updated_at, created_at, ring, ...rest }) => rest);
+        };
 
-    if (JSON.stringify(sanitizedNew) !== JSON.stringify(sanitizedCurrent)) {
-        notifySegment.context.items = res;
-        notifySegment.upgrade();
+        const sanitizedNew = sanitizeItems(res);
+        const sanitizedCurrent = sanitizeItems(notifySegment.context.items || []);
+
+        if (JSON.stringify(sanitizedNew) !== JSON.stringify(sanitizedCurrent)) {
+            notifySegment.context.items = res;
+            notifySegment.upgrade();
+        }
     }
 
     timer = setTimeout(run, 60000);

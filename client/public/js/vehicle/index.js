@@ -59,9 +59,9 @@ TableVisualizer($query("neo-datavisualizer"), ({ scene, ...props }) => [{
         visible: false,
         name: "loan",
         text: $trans("Loan"),
-        bodyRender: (row) => `<div>${$capitalize($trans("Loan issued at"))}: ${row.loan_issued_at ? $moment(row.loan_issued_at, $core.format) : empty()}</div><div>${$capitalize($trans("Loan amount"))}: ${+row.loan_amount ? $money(+row.loan_amount, 2) + " " + $core.currency : empty()}</div><div>${$capitalize($trans("Monthly installment"))}: ${+row.monthly_installment ? $money(+row.monthly_installment, 2) + " " + $core.currency : empty()}</div>`,
+        bodyRender: (row) => `<div>${$capitalize($trans("Loan amount"))}: ${+row.loan_amount ? $money(+row.loan_amount, 2) + " " + $core.currency : empty()}</div><div>${$capitalize($trans("Paid amount"))}: ${+row.paid_amount ? $money(+row.paid_amount, 2) + " " + $core.currency : empty()}</div><div>${$capitalize($trans("Due amount"))}: ${+row.due_amount ? $money(+row.due_amount, 2) + " " + $core.currency : empty()}</div>`,
         bodyPdfRender: function(row) { return this.bodyRender(row); },
-        bodyCsvRender: (row) => `${$capitalize($trans("Loan issued at"))}: ${row.loan_issued_at ? $moment(row.loan_issued_at, $core.format) : empty()}, ${$capitalize($trans("Loan amount"))}: ${+row.loan_amount ? $money(+row.loan_amount, 2) + " " + $core.currency : empty()}, ${$capitalize($trans("Monthly installment"))}: ${+row.monthly_installment ? $money(+row.monthly_installment, 2) + " " + $core.currency : empty()}`
+        bodyCsvRender: (row) => `${$capitalize($trans("Loan amount"))}: ${+row.loan_amount ? $money(+row.loan_amount, 2) + " " + $core.currency : empty()}, ${$capitalize($trans("Paid amount"))}: ${+row.paid_amount ? $money(+row.paid_amount, 2) + " " + $core.currency : empty()}, ${$capitalize($trans("Due amount"))}: ${+row.due_amount ? $money(+row.due_amount, 2) + " " + $core.currency : empty()}`
     }, {
         visible: false,
         name: "insurance",

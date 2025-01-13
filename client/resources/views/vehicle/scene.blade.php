@@ -57,7 +57,7 @@
                                 d="M739-423v-114h210v114H739Zm80 299L651-249l69-92 167 125-68 92Zm-99-495-69-92 168-125 68 92-167 125ZM129-161v-161h-6q-48-6-80-42.5T11-450v-60q0-52 37.5-90t90.5-38h131l247-149v614L270-322h-5v161H129Zm444-149v-340q42 28 67 73t25 97q0 52-25 97t-67 73Z" />
                         </svg>
                         <span class="w-0 flex-1">
-                            "{{ ucfirst(__($row->consumable_name)) }}" {{ __('at') }}
+                            "{{ ucfirst(__($row->consumable_name)) }}" {{ __('is due on') }}
                             "{{ \Carbon\Carbon::parse($row->view_issued_at)->translatedFormat(Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'Y-m-d') }}"
                         </span>
                     </li>
