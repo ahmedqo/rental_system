@@ -7,9 +7,9 @@
 
 @php
     $condition = collect(json_decode($data->condition));
-    $format_middle = Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'Y-m-d';
+    $format_middle = Core::preference() ? Core::formatsList(Core::preference('date_format'), 1) : 'Y-m-d';
     $format_first = $format_middle . ' H:i';
-    $format_last = Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'm/d/Y';
+    $format_last = Core::preference() ? Core::formatsList(Core::preference('date_format'), 1) : 'm/d/Y';
 @endphp
 
 @section('content')
@@ -396,7 +396,7 @@
                                 </div>
                                 <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
                                     {{ $data->Payment ? Core::formatNumber($data->Payment->paid) : '?' }}
-                                    {{ Core::setting() ? Core::setting('currency') : '' }}
+                                    {{ Core::preference() ? Core::preference('currency') : '' }}
                                 </div>
                             </div>
                         </div>
@@ -421,7 +421,7 @@
                                 </div>
                                 <div class="ps-2 md:ps-0 text-sm text-x-black text-opacity-70 font-x-thin">
                                     {{ $data->Payment ? Core::formatNumber($data->Payment->rest) : '?' }}
-                                    {{ Core::setting() ? Core::setting('currency') : '' }}
+                                    {{ Core::preference() ? Core::preference('currency') : '' }}
                                 </div>
                             </div>
                         </div>
@@ -495,9 +495,9 @@
         $format_first = $format_middle . ' H:i';
     @endphp
     <neo-printer margin="0mm 0mm 0mm 0mm">
-        @if (Core::setting())
+        @if (Core::preference())
             @php
-                $colors = Core::themesList(Core::setting('theme_color'));
+                $colors = Core::themesList(Core::preference('theme_color'));
             @endphp
             <style slot="styles">
                 *,
@@ -861,7 +861,7 @@
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
                                 <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Payment ? Core::formatNumber($data->Payment->paid) : '?' }}
-                                    {{ Core::setting() ? Core::setting('currency') : '' }}
+                                    {{ Core::preference() ? Core::preference('currency') : '' }}
                                 </td>
                             </tr>
                         </table>
@@ -883,7 +883,7 @@
                                 <td class="w-4 text-xs text-x-black font-x-thin">:</td>
                                 <td class="text-xs text-[rgb(var(--p-prime))] font-x-thin">
                                     {{ $data->Payment ? Core::formatNumber($data->Payment->rest) : '?' }}
-                                    {{ Core::setting() ? Core::setting('currency') : '' }}
+                                    {{ Core::preference() ? Core::preference('currency') : '' }}
                                 </td>
                             </tr>
                         </table>
@@ -1418,14 +1418,14 @@
                     <div class="w-full flex flex-wrap border-b border-x-black">
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Jour d\'emprunt') }}
-                            ({{ Core::setting() ? Core::setting('date_format') : 'JJ/MM/AAAA' }})
+                            ({{ Core::preference() ? Core::preference('date_format') : 'JJ/MM/AAAA' }})
                         </div>
                         <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ \Carbon\Carbon::parse($data->pickup_date)->format($format_last) }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('يوم الاستعارة') }}
-                            ({{ Core::setting() ? Core::setting('date_format') : 'JJ/MM/AAAA' }})
+                            ({{ Core::preference() ? Core::preference('date_format') : 'JJ/MM/AAAA' }})
                         </div>
                     </div>
                     <div class="w-full flex flex-wrap border-b border-x-black">
@@ -1450,14 +1450,14 @@
                     <div class="w-full flex flex-wrap border-b border-x-black">
                         <div class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('Jour de restitution') }}
-                            ({{ Core::setting() ? Core::setting('date_format') : 'JJ/MM/AAAA' }})
+                            ({{ Core::preference() ? Core::preference('date_format') : 'JJ/MM/AAAA' }})
                         </div>
                         <div class="text-center p-1 flex-1 text-xs text-[rgb(var(--p-prime))] font-x-thin">
                             {{ \Carbon\Carbon::parse($data->dropoff_date)->format($format_last) }}
                         </div>
                         <div dir="rtl" class="p-1 w-[200px] text-xs text-x-black font-x-thin">
                             {{ __('يوم التسليم') }}
-                            ({{ Core::setting() ? Core::setting('date_format') : 'JJ/MM/AAAA' }})
+                            ({{ Core::preference() ? Core::preference('date_format') : 'JJ/MM/AAAA' }})
                         </div>
                     </div>
                     <div class="w-full flex flex-wrap border-b border-x-black">

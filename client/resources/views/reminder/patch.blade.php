@@ -74,7 +74,7 @@
                 <neo-datepicker rules="required_unless:unit_of_measurement,mileage"
                     errors='{"required_unless": "{{ __('The reminder date is required') }}"}'
                     {{ !Core::lang('ar') ? 'full-day=3' : '' }} placeholder="{{ __('Reminder date') }} (*)"
-                    name="reminder_date" format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                    name="reminder_date" format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                     value="{{ old('reminder_date', $data->reminder_date) }}"></neo-datepicker>
             </div>
             <div class="flex flex-col gap-1">

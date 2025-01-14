@@ -1,8 +1,8 @@
 <img slot="top" id="backgroun-image"
     src="{{ Core::company() ? Core::company('Image')->Link : asset('img/logo.png') }}?v={{ env('APP_VERSION') }}" />
-@if (Core::setting())
+@if (Core::preference())
     @php
-        $colors = Core::themesList(Core::setting('theme_color'));
+        $colors = Core::themesList(Core::preference('theme_color'));
     @endphp
     <style slot="styles">
         *,

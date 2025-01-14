@@ -110,7 +110,7 @@ if (!zero(counts)) {
                     onComplete: () => {
                         lchart.remove();
                     }
-                }
+                },
             }
         });
     }

@@ -36,7 +36,7 @@
                         {{ __('Date') }}
                     </label>
                     <neo-textbox placeholder="{{ __('Date') }}"
-                        value="{{ \Carbon\Carbon::parse($data->created_at)->translatedFormat(Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'Y-m-d' . ' H:i') }}"
+                        value="{{ \Carbon\Carbon::parse($data->created_at)->translatedFormat(Core::preference() ? Core::formatsList(Core::preference('date_format'), 1) : 'Y-m-d' . ' H:i') }}"
                         disable></neo-textbox>
                 </div>
                 <div class="flex flex-col gap-1">
@@ -67,7 +67,7 @@
                                 </p>
                                 <div class="w-full h-px bg-x-light"></div>
                                 <p class="text-x-black text-xs w-max ms-auto px-2 py-1">
-                                    {{ \Carbon\Carbon::parse($comment->created_at)->translatedFormat(Core::setting() ? Core::formatsList(Core::setting('date_format'), 1) : 'Y-m-d') }}
+                                    {{ \Carbon\Carbon::parse($comment->created_at)->translatedFormat(Core::preference() ? Core::formatsList(Core::preference('date_format'), 1) : 'Y-m-d') }}
                                 </p>
                             </div>
                         </li>

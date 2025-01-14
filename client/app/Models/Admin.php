@@ -49,9 +49,26 @@ class Admin extends Authenticatable
         'password',
     ];
 
-    public function Setting(): MorphOne
+    protected static function booted()
     {
-        return $this->morphOne(Setting::class, 'target');
+        self::created(function ($Self) {
+            $Self->Preference()->create([
+                'language' => 'fr',
+                'currency' => 'MAD',
+                'report_frequency' => 'week',
+                'date_format' => 'YYYY-MM-DD',
+                'theme_color' => 'ocean tide',
+            ]);
+        });
+
+        self::deleted(function ($Self) {
+            $Self->Preference()->delete();
+        });
+    }
+
+    public function Preference(): MorphOne
+    {
+        return $this->morphOne(Preference::class, 'target');
     }
 
     public function Comment(): MorphOne

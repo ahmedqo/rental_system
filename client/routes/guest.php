@@ -35,7 +35,7 @@ Route::view('/', 'guest')->name('views.guest.index');
 //         $Company->Image()->create($company['image']);
 //         foreach ($company['users'] as $user) {
 //             $User = User::create($user);
-//             $User->Setting()->create([
+//             $User->Preference()->create([
 //                 'language' => 'fr',
 //                 'currency' => 'MAD',
 //                 'report_frequency' => 'week',

@@ -21,7 +21,7 @@ class Notification extends Model
         'view',
     ];
 
-    public function Parse($setting)
+    public function Parse($preference)
     {
         $vars = json_decode($this->vars, true);
         if (array_key_exists('vehicle', $vars)) {
@@ -31,9 +31,9 @@ class Notification extends Model
             $vars['vehicle'] = implode(" ", $vars['vehicle']);
         }
         if (array_key_exists('date', $vars))
-            $vars['date'] = Carbon::parse($vars['date'])->translatedFormat($setting ? Core::formatsList($setting->date_format, 1) : 'Y-m-d');
+            $vars['date'] = Carbon::parse($vars['date'])->translatedFormat($preference ? Core::formatsList($preference->date_format, 1) : 'Y-m-d');
         if (array_key_exists('money', $vars))
-            $vars['money'] = $vars['money'] . ' ' . ($setting ? $setting->currency : 'MAD');
+            $vars['money'] = $vars['money'] . ' ' . ($preference ? $preference->currency : 'MAD');
         if (array_key_exists('consumable', $vars))
             $vars['consumable'] = ucfirst(__($vars['consumable']));
 

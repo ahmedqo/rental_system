@@ -8,7 +8,7 @@ use App\Models\Company;
 use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Reservation;
-use App\Models\Setting;
+use App\Models\Preference;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,11 +50,11 @@ class CoreController extends Controller
             return false;
 
         $id = $Request->user;
-        $settings = Setting::where('target_id', $id)->where('target_type', 'App\Models\User')->first();
+        $preferences = Preference::where('target_id', $id)->where('target_type', 'App\Models\User')->first();
 
         $data = Notification::where('company', $Request->company)->limit(5)
-            ->orderBy('id', 'DESC')->get()->map(function ($Carry) use ($id, $settings) {
-                $Carry->content =  $Carry->Parse($settings);
+            ->orderBy('id', 'DESC')->get()->map(function ($Carry) use ($id, $preferences) {
+                $Carry->content =  $Carry->Parse($preferences);
                 $Carry->ring = !str_contains($Carry->view, (string) $id);
                 return $Carry;
             });
@@ -116,9 +116,9 @@ class CoreController extends Controller
         [$startDate, $endDate, $columns] = Core::getDates();
 
         $data = [
-            'charges' => array_slice($columns, 0),
-            'payments' => array_slice($columns, 0),
-            'creances' => array_slice($columns, 0),
+            'charges' => array_slice($columns, 0, null, true),
+            'payments' => array_slice($columns, 0, null, true),
+            'creances' => array_slice($columns, 0, null, true),
         ];
 
         Payment::where('company', Core::company('id'))

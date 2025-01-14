@@ -66,13 +66,13 @@
                     </a>
                 </li>
                 <li class="w-full">
-                    <a href="{{ route('views.settings.patch') }}"
-                        class="w-full flex flex-wrap gap-2 px-4 py-2 text-start items-center outline-none hover:text-x-white hover:bg-x-acent focus:text-x-white focus:bg-x-acent focus-within:text-x-white focus-within:bg-x-acent {{ request()->routeIs('views.settings.patch') ? 'bg-x-prime text-x-white' : 'text-x-black' }}">
+                    <a href="{{ route('views.preferences.patch') }}"
+                        class="w-full flex flex-wrap gap-2 px-4 py-2 text-start items-center outline-none hover:text-x-white hover:bg-x-acent focus:text-x-white focus:bg-x-acent focus-within:text-x-white focus-within:bg-x-acent {{ request()->routeIs('views.preferences.patch') ? 'bg-x-prime text-x-white' : 'text-x-black' }}">
                         <svg class="block w-6 h-6 pointer-events-none" fill="currentcolor" viewBox="0 -960 960 960">
                             <path
                                 d="m185-501-14-71q-7.45-4.06-14.73-8.03Q149-584 142-589l-69 21-56-98 54-47v-31l-54-47 56-99 69 22q7-5 14.27-8.97 7.28-3.97 14.73-8.03l14-71h116l15 71q7.45 4.06 14.73 8.03Q338-873 344-868l69-22 57 99-55 47q1 8.25 1 15.5t-1 15.5l55 47-57 98-69-21q-6 5-13.27 8.97-7.28 3.97-14.73 8.03l-15 71H185Zm58.21-156Q273-657 294-677.92t21-51q0-30.08-20.92-50.58t-51-20.5q-30.08 0-50.58 20.71t-20.5 50.5Q172-699 192.71-678t50.5 21ZM590 6l-19-93q-22-6-42.5-17.5T492-133l-87 31-63-107 71-63q-5-22-5-45t5-45l-71-63 63-107 87 31q16-17 36.5-28.5T571-547l19-93h126l19 93q22 6 42 17.5t35 28.5l88-31 63 107-71 63q5 22 5 45t-5 45l71 63-63 107-88-31q-15 17-35 28.5T735-87L716 6H590Zm63-214q45 0 76.5-32t31.5-77q0-45-31.71-77T653-426q-46 0-77.5 31.5T544-317q0 46 31.5 77.5T653-208Z" />
                         </svg>
-                        <span class="block flex-1 text-base text-start">{{ __('Settings') }}</span>
+                        <span class="block flex-1 text-base text-start">{{ __('Preferences') }}</span>
                     </a>
                 </li>
                 <li class="w-full">

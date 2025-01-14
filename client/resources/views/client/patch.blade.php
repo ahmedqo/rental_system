@@ -95,7 +95,7 @@
                         <neo-datepicker rules="required"
                             errors='{"required": "{{ __('The birth date field is required') }}"}'
                             {{ !Core::lang('ar') ? 'full-day=3' : '' }} placeholder="{{ __('Birth date') }} (*)"
-                            name="birth_date" format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            name="birth_date" format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                             value="{{ old('birth_date', $data->birth_date) }}"></neo-datepicker>
                     </div>
                     <div class="flex flex-col gap-1">
@@ -161,7 +161,8 @@
                         <neo-datepicker rules="required"
                             errors='{"required": "{{ __('The identity issued at field is required') }}"}'
                             {{ !Core::lang('ar') ? 'full-day=3' : '' }} placeholder="{{ __('Identity issued at') }} (*)"
-                            name="identity_issued_at" format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            name="identity_issued_at"
+                            format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                             value="{{ old('identity_issued_at', $data->identity_issued_at) }}"></neo-datepicker>
                     </div>
                     <div class="flex flex-col gap-1">
@@ -191,7 +192,7 @@
                         <neo-datepicker rules="required"
                             errors='{"required": "{{ __('The license issued at field is required') }}"}'
                             {{ !Core::lang('ar') ? 'full-day=3' : '' }} placeholder="{{ __('License issued at') }} (*)"
-                            name="license_issued_at" format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            name="license_issued_at" format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                             value="{{ old('license_issued_at', $data->license_issued_at) }}"></neo-datepicker>
                     </div>
                     <div class="flex flex-col gap-1">

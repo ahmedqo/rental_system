@@ -7,7 +7,7 @@
         'agency' => route('actions.agencies.search.all'),
         'vehicle' => route('actions.vehicles.search'),
         'info' => route('actions.vehicles.info', 'XXX'),
-
+    
         'storeClient' => route('actions.clients.store'),
         'storeAgency' => route('actions.agencies.store'),
         'storeVehicle' => route('actions.vehicles.store'),
@@ -104,7 +104,7 @@
                         <neo-datepicker rules="required"
                             errors='{"required": "{{ __('The pickup date field is required') }}"}'
                             {{ !Core::lang('ar') ? 'full-day=3' : '' }} placeholder="{{ __('Pickup date') }} (*)"
-                            name="pickup_date" format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            name="pickup_date" format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                             value="{{ old('pickup_date', '#now') }}"></neo-datepicker>
                     </div>
                     <div class="flex flex-col gap-1">
@@ -132,7 +132,7 @@
                         <neo-datepicker rules="required"
                             errors='{"required": "{{ __('The dropoff date field is required') }}"}'
                             {{ !Core::lang('ar') ? 'full-day=3' : '' }} placeholder="{{ __('Dropoff date') }} (*)"
-                            name="dropoff_date" format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            name="dropoff_date" format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                             value="{{ old('dropoff_date', '#now+1') }}"></neo-datepicker>
                     </div>
                     <div class="flex flex-col gap-1">

@@ -62,14 +62,6 @@ class UserController extends Controller
             'last_name' => strtolower($Request->last_name),
         ])->all());
 
-        $User->Setting()->create([
-            'language' => 'fr',
-            'currency' => 'MAD',
-            'report_frequency' => 'week',
-            'date_format' => 'YYYY-MM-DD',
-            'theme_color' => 'ocean tide',
-        ]);
-
         Mailer::reset($Request->email);
 
         return Redirect::back()->with([

@@ -40,14 +40,6 @@ class DatabaseSeeder extends Seeder
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
             ]);
 
-            $User->Setting()->create([
-                'language' => 'fr',
-                'currency' => 'MAD',
-                'report_frequency' => 'week',
-                'date_format' => 'YYYY-MM-DD',
-                'theme_color' => 'ocean tide',
-            ]);
-
             Client::create([
                 'identity_type' => 'cin',
                 'identity_number' => 'I9887',
@@ -106,14 +98,6 @@ class DatabaseSeeder extends Seeder
                 'email' => 'super@test.com',
                 'phone' => '212999999991',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
-            ]);
-
-            $Admin->Setting()->create([
-                'language' => 'fr',
-                'currency' => 'MAD',
-                'report_frequency' => 'week',
-                'date_format' => 'YYYY-MM-DD',
-                'theme_color' => 'ocean tide',
             ]);
         }
     }

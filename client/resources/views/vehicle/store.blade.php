@@ -83,7 +83,7 @@
                         <neo-datepicker rules="required"
                             errors='{"required": "{{ __('The registration date field is required') }}"}'
                             {{ !Core::lang('ar') ? 'full-day=3' : '' }} placeholder="{{ __('Registration date') }} (*)"
-                            name="registration_date" format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            name="registration_date" format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                             value="{{ old('registration_date') }}"></neo-datepicker>
                     </div>
                 </neo-tab-outlet>
@@ -251,7 +251,7 @@
                             {{ !Core::lang('ar') ? 'full-day=3' : '' }}
                             placeholder="{{ __('Loan issued at') }} {{ old('loan_amount') ? '(*)' : '' }}"
                             class="required-input" name="loan_issued_at"
-                            format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                             value="{{ old('loan_issued_at') }}"></neo-datepicker>
                     </div>
                 </neo-tab-outlet>
@@ -274,7 +274,7 @@
                             errors='{"required": "{{ __('The insurance issued at field is required') }}"}'
                             {{ !Core::lang('ar') ? 'full-day=3' : '' }}
                             placeholder="{{ __('Insurance issued at') }} (*)" name="insurance_issued_at"
-                            format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                             value="{{ old('insurance_issued_at') }}"></neo-datepicker>
                     </div>
                     <div class="flex flex-col gap-1">

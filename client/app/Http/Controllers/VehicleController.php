@@ -74,9 +74,9 @@ class VehicleController extends Controller
         [$startDate, $endDate, $columns] = Core::getDates();
 
         $data = [
-            'charges' => array_slice($columns, 0),
-            'payments' => array_slice($columns, 0),
-            'creances' => array_slice($columns, 0),
+            'charges' => array_slice($columns, 0, null, true),
+            'payments' => array_slice($columns, 0, null, true),
+            'creances' => array_slice($columns, 0, null, true),
         ];
 
         Payment::with([

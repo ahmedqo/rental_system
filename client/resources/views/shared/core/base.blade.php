@@ -9,10 +9,10 @@
     @include('shared.base.styles', ['type' => 'admin'])
     @yield('styles')
     <title>@yield('title')</title>
-    @if (Core::setting())
+    @if (Core::preference())
         @php
-            $colors = Core::themesList(Core::setting('theme_color'));
-            \Carbon\Carbon::setLocale(Core::setting('language'));
+            $colors = Core::themesList(Core::preference('theme_color'));
+            \Carbon\Carbon::setLocale(Core::preference('language'));
             $props = [
                 'user' => Auth::id(),
                 'company' => Core::company('id'),
@@ -23,8 +23,8 @@
             content="{{ json_encode([
                 'read' => route('actions.core.read', $props),
                 'notify' => route('actions.core.notify', $props),
-                'format' => Core::formatsList(Core::setting('date_format'), 0),
-                'currency' => Core::setting('currency'),
+                'format' => Core::formatsList(Core::preference('date_format'), 0),
+                'currency' => Core::preference('currency'),
             ]) }}">
         <style>
             *,

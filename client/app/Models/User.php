@@ -58,6 +58,20 @@ class User extends Authenticatable
                 $Self->company = Core::company('id');
             }
         });
+
+        self::created(function ($Self) {
+            $Self->Preference()->create([
+                'language' => 'fr',
+                'currency' => 'MAD',
+                'report_frequency' => 'week',
+                'date_format' => 'YYYY-MM-DD',
+                'theme_color' => 'ocean tide',
+            ]);
+        });
+
+        self::deleted(function ($Self) {
+            $Self->Preference()->delete();
+        });
     }
 
     public function Owner()
@@ -65,9 +79,9 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class, 'company');
     }
 
-    public function Setting(): MorphOne
+    public function Preference(): MorphOne
     {
-        return $this->morphOne(Setting::class, 'target');
+        return $this->morphOne(Preference::class, 'target');
     }
 
     public function Comment(): MorphOne

@@ -18,7 +18,7 @@ class Locale
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user() && Core::setting() && Core::setting('language')) app()->setLocale(Core::setting('language'));
+        if (Auth::user() && Core::preference() && Core::preference('language')) app()->setLocale(Core::preference('language'));
         else if (session()->has('locale')) app()->setLocale(session()->get('locale'));
         return $next($request);
     }

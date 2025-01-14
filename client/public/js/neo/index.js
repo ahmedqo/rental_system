@@ -528,6 +528,7 @@ const Neo = (function Neo() {
             }
 
             static trans = function trans(text, context = {}) {
+                if (typeof text !== "string") return text;
                 var dict = Neo.Locales[context["#locale"] || document.documentElement.lang || "en"];
                 return ((dict && dict[text]) || text).replace(/#([\w\d._-]+)/g, (full, key) => context[key] || full);
             }

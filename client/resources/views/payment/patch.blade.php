@@ -41,7 +41,7 @@
                             {{ __('Daily rate') }}
                         </label>
                         <neo-textbox disable placeholder="{{ __('Daily rate') }}" name="daily_rate"
-                            value="{{ Core::formatNumber($data->daily_rate, true) }} {{ Core::setting() ? Core::setting('currency') : '' }}">
+                            value="{{ Core::formatNumber($data->daily_rate, true) }} {{ Core::preference() ? Core::preference('currency') : '' }}">
                         </neo-textbox>
                     </div>
                     @if ($data->Reservation && $data->Reservation->client)

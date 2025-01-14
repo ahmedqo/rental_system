@@ -77,7 +77,7 @@
                             {{ __('Birth date') }}
                         </label>
                         <neo-datepicker {{ !Core::lang('ar') ? 'full-day=3' : '' }} placeholder="{{ __('Birth date') }}"
-                            name="birth_date" format="{{ Core::formatsList(Core::setting('date_format'), 0) }}"
+                            name="birth_date" format="{{ Core::formatsList(Core::preference('date_format'), 0) }}"
                             value="{{ old('birth_date') }}"></neo-datepicker>
                     </div>
                     <div class="flex flex-col gap-1">

@@ -89,6 +89,10 @@ class Vehicle extends Model
                 $Self->company = Core::company('id');
             }
         });
+
+        self::deleted(function ($Self) {
+            $Self->Notifications()->delete();
+        });
     }
 
     public function Owner()

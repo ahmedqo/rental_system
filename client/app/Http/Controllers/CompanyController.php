@@ -7,7 +7,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Functions\Mail as Mailer;
 use App\Models\Image;
-use App\Models\Setting;
+use App\Models\Preference;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -84,7 +84,7 @@ class CompanyController extends Controller
             'password' => Hash::make(Str::random(20)),
         ]);
 
-        $User->Setting()->create([
+        $User->Preference()->create([
             'language' => 'fr',
             'currency' => 'MAD',
             'report_frequency' => 'week',

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/guest.php';
 require __DIR__ . '/company.php';
-require __DIR__ . '/setting.php';
+require __DIR__ . '/preference.php';
 
 require __DIR__ . '/core.php';
 require __DIR__ . '/auth.php';

@@ -1,8 +1,8 @@
 @extends('shared.core.base')
-@section('title', __('Edit settings'))
+@section('title', __('Edit preferences'))
 
 @section('content')
-    <form validate action="{{ route('actions.settings.patch') }}" method="POST"
+    <form validate action="{{ route('actions.preferences.patch') }}" method="POST"
         class="w-full p-6 bg-x-white rounded-x-thin shadow-x-core">
         @csrf
         @method('patch')
