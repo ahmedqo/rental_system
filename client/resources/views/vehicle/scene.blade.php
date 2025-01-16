@@ -39,7 +39,7 @@
 @section('content')
     <div class="w-full items-start grid grid-rows-1 grid-cols-1 gap-6">
         <nav data-tabs
-            class="w-[calc(100%+3rem)] -mt-8 -mx-6 p-2 lg:w-max lg:max-w-full lg:mt-0 lg:mx-auto lg:rounded-x-thin bg-x-white shadow-x-core overflow-auto">
+            class="w-[calc(100%+2rem)] -mt-8 -mx-4 p-2 lg:w-max lg:max-w-full lg:mt-0 lg:mx-auto lg:rounded-x-thin bg-x-white shadow-x-core overflow-auto">
             <ul class="w-max flex gap-2">
                 <li>
                     <a data-for="overview"
