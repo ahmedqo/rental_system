@@ -477,3 +477,30 @@ Neo.load(function () {
         exec();
     });
 });
+
+Neo.load(function () {
+    const triggers = $queryAll("[data-tabs] a"),
+        tabs = $queryAll("[data-tab]");
+
+    triggers.forEach(trigger => {
+        trigger.addEventListener("click", e => {
+            e.preventDefault();
+
+            triggers.forEach(_trigger => {
+                _trigger.classList.remove("text-x-white", "bg-x-prime");
+                _trigger.classList.add("text-x-black");
+            });
+
+            trigger.classList.remove("text-x-black");
+            trigger.classList.add("text-x-white", "bg-x-prime");
+
+            tabs.forEach(tab => {
+                if(tab.dataset.tab === trigger.dataset.for) {
+                    tab.classList.remove("hidden");
+                } else {
+                    tab.classList.add("hidden");
+                }
+            });
+        });
+    });
+})

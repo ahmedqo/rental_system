@@ -147,17 +147,18 @@
                 </div>
             </li>
             <li
-                class="flex flex-col col-span-2 lg:col-span-3 lg:row-span-2 lg:row-start-1 lg:col-start-1 relative bg-x-white rounded-x-thin shadow-x-core">
+                class="flex flex-col col-span-2 lg:col-span-3 lg:row-span-2 relative bg-x-white rounded-x-thin shadow-x-core">
                 <div
                     class="donut-loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center z-10">
                     <neo-loader></neo-loader>
                 </div>
-                <div class="py-3 px-6 border-b border-x-shade lg:hidden">
+                <div class="py-3 px-6 border-b border-x-shade">
                     <h2 class="text-x-black font-x-thin text-lg">
                         {{ __('Profit rate') }}
                     </h2>
                 </div>
-                <div class="my-auto flex items-center w-full rounded-x-thin bg-x-white p-4 aspect-square relative">
+                <div
+                    class="my-auto mx-auto lg:w-10/12 flex items-center w-full rounded-x-thin bg-x-white p-4 aspect-square relative">
                     <div class="w-full h-full absolute inset-0 flex items-center justify-center pointer-events-none">
                         <h1 class="text-lg font-x-thin text-x-black pointer-events-auto">
                             {{ !+$vals->paid || +$vals->paid < 0 ? (!$vals->charges ? '0.00' : '-100.00') : Core::formatNumber(100 - ($vals->charges / ($vals->paid > 0 ? $vals->paid : 1)) * 100) }}%
@@ -167,7 +168,7 @@
                 </div>
             </li>
             <li
-                class="flex flex-col col-span-2 lg:col-span-9 lg:row-span-4 lg:row-start-1 lg:col-start-4 relative bg-x-white rounded-x-thin shadow-x-core">
+                class="flex flex-col col-span-2 lg:col-span-9 lg:row-span-4 lg:row-start-2 lg:col-start-1 relative bg-x-white rounded-x-thin shadow-x-core">
                 <div
                     class="chart-loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
                     <neo-loader></neo-loader>

@@ -4,6 +4,7 @@ const donut = $query("#donut"),
     ldonut = $query(".donut-loader"),
     lchart = $query(".chart-loader"),
     remove = [$query('meta[name=count]'), $query('meta[name=rtl]')],
+    loan = $query('meta[name=loan]'),
     counts = JSON.parse(remove[0].content),
     rtl = +remove[1].content;
 
@@ -51,6 +52,40 @@ if (!zero(counts)) {
             animation: {
                 onComplete: () => {
                     ldonut.remove();
+                }
+            }
+        }
+    });
+}
+
+if (loan) {
+    const data = JSON.parse(loan.content),
+        donutLoan = $query("#donut-loan"),
+        ldonutloan = $query(".donut-loan-loader");
+
+    loan.remove();
+    new Chart(donutLoan, {
+        type: "doughnut",
+        data: {
+            labels: flip([$trans("Paid amount"), $trans("Due amount")]),
+            datasets: [{
+                data: flip(data),
+                borderWidth: 1,
+                backgroundColor: flip(["rgb(34 197 94)", "rgb(234 179 8)"]),
+                borderColor: flip(["rgb(34 197 94)", "rgb(234 179 8)"]),
+            }, ]
+        },
+        options: {
+            responsive: true,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    display: false
+                },
+            },
+            animation: {
+                onComplete: () => {
+                    ldonutloan.remove();
                 }
             }
         }
