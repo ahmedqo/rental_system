@@ -20,6 +20,40 @@
 
 @section('content')
     <div class="w-full items-start grid grid-rows-1 grid-cols-1 gap-6">
+        @if ($vals->loan->total > 0)
+            <div
+                class="p-4 gap-4 lg:gap-10 flex flex-col flex-wrap items-center lg:flex-row relative bg-x-white rounded-x-thin shadow-x-core">
+                <div
+                    class="loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
+                    <neo-loader></neo-loader>
+                </div>
+                <svg class="block w-10 aspect-square pointer-events-none text-blue-500" fill="currentcolor"
+                    viewBox="0 -960 960 960">
+                    <path
+                        d="M153-266v-274h121v274H153Zm267 0v-274h120v274H420ZM28-81v-136h904v136H28Zm658-185v-274h121v274H686ZM28-590v-146l452-228 452 228v146H28Z" />
+                </svg>
+                <div class="flex w-full flex-1 flex-col gap-2">
+                    <h2 class="text-center lg:text-end text-lg text-x-black font-x-thin">
+                        {{ __('Loan') }}
+                    </h2>
+                    @php
+                        $size = ($vals->loan->paid / $vals->loan->total) * 100;
+                    @endphp
+                    <div class="w-full h-4 bg-x-light rounded-full flex flex-wrap">
+                        <div class="h-full bg-x-prime rounded-full relative" style="width: {{ $size }}%">
+                            <neo-tooltip class="w-full h-full absolute inset-0"
+                                label="{{ Core::formatNumber($vals->loan->paid) }} {{ $currency }}">
+                            </neo-tooltip>
+                        </div>
+                        <div class="h-full rounded-full relative" style="width: {{ 100 - $size }}%">
+                            <neo-tooltip class="w-full h-full absolute inset-0"
+                                label="{{ Core::formatNumber($vals->loan->rest) }} {{ $currency }}">
+                            </neo-tooltip>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <ul class="container mx-auto grid gap-6 grid-cols-2 grid-rows-1 lg:grid-cols-12 lg:grid-flow-row">
             <li
                 class="lg:col-span-3 p-4 gap-4 flex flex-col flex-wrap items-center lg:flex-row relative bg-x-white rounded-x-thin shadow-x-core">

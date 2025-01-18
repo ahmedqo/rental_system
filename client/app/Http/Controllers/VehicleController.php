@@ -391,6 +391,7 @@ class VehicleController extends Controller
             'registration_number' => $Request->registration_type == 'WW' ? ($Request->registration_ww_part_1 . '-' . $Request->registration_ww_part_2) : ($Request->registration_vehicle_part_1 . '-' . $Request->registration_vehicle_part_2 . '-' . $Request->registration_vehicle_part_3),
             'monthly_installment' => null,
             'loan_issued_at' => null,
+            'loan_amount' => null,
         ];
 
         if ($Request->loan_amount && $Request->monthly_installment > 0) {
@@ -462,6 +463,7 @@ class VehicleController extends Controller
             'registration_number' => $Request->registration_type == 'WW' ? ($Request->registration_ww_part_1 . '-' . $Request->registration_ww_part_2) : ($Request->registration_vehicle_part_1 . '-' . $Request->registration_vehicle_part_2 . '-' . $Request->registration_vehicle_part_3),
             'monthly_installment' => null,
             'loan_issued_at' => null,
+            'loan_amount' => null,
         ];
 
         if ($Request->loan_amount && $Request->monthly_installment > 0) {

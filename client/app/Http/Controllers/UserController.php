@@ -6,6 +6,7 @@ use App\Functions\Core;
 use App\Functions\Mail as Mailer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -26,17 +27,29 @@ class UserController extends Controller
 
     public function patch_view($id)
     {
-        $data = User::findorfail($id);
+        //$cacheKey = Core::addCache(User::class, 'company/' . Core::company('id') . '/users/' . $id, true);
+
+        //$data = Cache::rememberForever($cacheKey, function () use ($id) {
+        return User::findorfail($id);
+        //});
+
         return view('user.patch', compact('data'));
     }
 
     public function search_action(Request $Request)
     {
+        //  $cacheKey = Core::addCache(User::class, 'company/' . Core::company('id') . '/users/' . ($Request->search ? ('search/' . $Request->search) : 'list') . '/pages/' . ($Request->cursor ?: 'first'));
+
+        // $data = Cache::rememberForever($cacheKey, function () use ($Request) {
         $data = User::where('company', Core::company('id'))->orderBy('id', 'DESC');
+
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
-        $data = $data->cursorPaginate(50);
+
+        return $data->cursorPaginate(50);
+        //   });
+
         return response()->json($data);
     }
 

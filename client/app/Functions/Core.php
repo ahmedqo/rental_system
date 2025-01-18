@@ -5,12 +5,14 @@ namespace App\Functions;
 use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class Core
 {
     public static $Preference;
     public static $Company;
+    public static $Cache = [];
 
     public static function getDates($period = null)
     {
@@ -465,5 +467,56 @@ class Core
 
         $num = $lastRef ? (int) substr($lastRef, strlen($prefix)) + 1 : 1;
         return $prefix . str_pad($num, 3, '0', STR_PAD_LEFT);
+    }
+
+    public static function addCache($model, $key, $single = false)
+    {
+        $Cache = json_decode(Cache::get('Cache'), true) ?? [];
+
+        $type = $single ? "singles" : "groupes";
+
+        if (!isset($Cache[$model])) {
+            $Cache[$model] = [
+                'singles' => [],
+                'groupes' => [],
+            ];
+        }
+
+        if (!in_array($key, $Cache[$model][$type])) {
+            $Cache[$model][$type][] = $key;
+            Cache::forget('Cache');
+            Cache::rememberForever('Cache', fn () => json_encode($Cache));
+        }
+
+        return $key;
+    }
+
+    public static function delCache($model, $key = null)
+    {
+        $Cache = json_decode(Cache::get('Cache'), true) ?? [];
+
+        if (!isset($Cache[$model])) {
+            return;
+        }
+
+        if (is_array($key)) {
+        }
+
+        if ($key === null) {
+            foreach ($Cache[$model]['groupes'] as $groupKey) {
+                Cache::forget($groupKey);
+            }
+            $Cache[$model]['groupes'] = [];
+        } else {
+            $Cache[$model]['singles'] =
+                array_filter(
+                    $Cache[$model]['singles'],
+                    fn ($item) => $item !== $key
+                );
+            Cache::forget($key);
+        }
+
+        Cache::forget('Cache');
+        Cache::rememberForever('Cache', fn () => json_encode($Cache));
     }
 }

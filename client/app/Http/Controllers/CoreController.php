@@ -9,6 +9,7 @@ use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\Preference;
+use App\Models\Vehicle;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,13 @@ class CoreController extends Controller
             ];
 
         $vals->charges = Charge::where('company', Core::company('id'))->whereBetween('created_at', [$startDate, $endDate])->sum('cost');
+
+        $vals->loan = Vehicle::where('company', Core::company('id'))->where('loan_amount', '!=', null)->selectRaw('
+                SUM(loan_amount) as total,
+                SUM(paid_amount) as paid,
+                SUM(due_amount) as rest
+            ')->first();
+
         return view('core.index', compact('vals'));
     }
 

@@ -59,6 +59,11 @@ class User extends Authenticatable
             }
         });
 
+        // self::saved(function ($Self) {
+        //     Core::delCache(User::class);
+        //     Core::delCache(User::class, 'company/' . Core::company('id') . '/users/' . $Self->id);
+        // });
+
         self::created(function ($Self) {
             $Self->Preference()->create([
                 'language' => 'fr',
@@ -71,6 +76,8 @@ class User extends Authenticatable
 
         self::deleted(function ($Self) {
             $Self->Preference()->delete();
+            // Core::delCache(User::class);
+            // Core::delCache(User::class, 'company/' . Core::company('id') . '/users/' . $Self->id);
         });
     }
 
