@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Functions\Core;
+use App\Traits\HasCache;
 use App\Traits\HasSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    use HasFactory, HasSearch;
+    use HasFactory, HasSearch, HasCache;
 
     /**
      * The attributes that are mass assignable.
@@ -73,6 +74,24 @@ class Payment extends Model
             if (is_null($Self->company)) {
                 $Self->company = Core::company('id');
             }
+        });
+
+        self::saved(function ($Self) {
+            Payment::delCache(
+                tags: ['many'],
+                keys: [
+                    'company_' . Core::company('id') . '_payments_solo_' . $Self->id,
+                ],
+            );
+        });
+
+        self::deleted(function ($Self) {
+            Payment::delCache(
+                tags: ['many'],
+                keys: [
+                    'company_' . Core::company('id') . '_payments_solo_' . $Self->id
+                ],
+            );
         });
     }
 

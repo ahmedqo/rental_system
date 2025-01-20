@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Functions\Core;
+use App\Traits\HasCache;
 use App\Traits\HasSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Vehicle extends Model
 {
-    use HasFactory, HasSearch;
+    use HasFactory, HasSearch, HasCache;
 
     /**
      * The attributes that are mass assignable.
@@ -90,8 +91,19 @@ class Vehicle extends Model
             }
         });
 
+        self::saved(function ($Self) {
+            Vehicle::delCache(
+                tags: ['many'],
+                keys: ['company_' . Core::company('id') . '_vehicles_solo_' . $Self->id],
+            );
+        });
+
         self::deleted(function ($Self) {
             $Self->Notifications()->delete();
+            Vehicle::delCache(
+                tags: ['many'],
+                keys: ['company_' . Core::company('id') . '_vehicles_solo_' . $Self->id],
+            );
         });
     }
 

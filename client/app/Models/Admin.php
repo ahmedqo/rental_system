@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Functions\Core;
+use App\Traits\HasCache;
 use App\Traits\HasSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -12,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Admin extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasSearch;
+    use HasApiTokens, HasFactory, Notifiable, HasSearch, HasCache;
 
     /**
      * The attributes that are mass assignable.
@@ -61,8 +62,20 @@ class Admin extends Authenticatable
             ]);
         });
 
+        self::saved(function ($Self) {
+            Admin::delCache(
+                tags: ['many'],
+                keys: ['admins_solo_' . $Self->id],
+            );
+        });
+
+
         self::deleted(function ($Self) {
             $Self->Preference()->delete();
+            Admin::delCache(
+                tags: ['many'],
+                keys: ['admins_solo_' . $Self->id],
+            );
         });
     }
 

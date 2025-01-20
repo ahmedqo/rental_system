@@ -152,10 +152,12 @@ Artisan::command('notifications:update-daily', function () {
     $template = getTemplate('vehicle');
 
     $Vehicles = Vehicle::with('Notifications:target_type,target_id,text,vars')
-        ->whereIn(DB::raw('DAY(insurance_issued_at)'), [$today->day, $tomorrow->day])
+        ->where(function ($query) use ($today, $tomorrow) {
+            $query->whereRaw('DAY(insurance_issued_at) = ? OR DAY(insurance_issued_at) = ?', [$today->day, $tomorrow->day]);
+        })
         ->orWhere(function ($query) use ($today, $tomorrow) {
-            $query->whereIn(DB::raw('DAY(loan_issued_at)'), [$today->day, $tomorrow->day])
-                ->where('due_period', '>', 0);
+            $query->whereNotNull('loan_amount')
+                ->whereRaw('DAY(loan_issued_at) = ? OR DAY(loan_issued_at) = ?', [$today->day, $tomorrow->day]);
         })->get();
 
     $Notifications = [];
@@ -165,19 +167,20 @@ Artisan::command('notifications:update-daily', function () {
     $UpdatingVehicles = [];
     $ChargeVehicles = [];
 
-    foreach ($Vehicles as $Carry) {
-        $loanDay = Carbon::parse($Carry->loan_issued_at)->day;
-        $insuranceDay = Carbon::parse($Carry->insurance_issued_at)->day;
+    foreach ($Vehicles as $key => $Carry) {
+        $loanDay = $Carry->loan_issued_at ? Carbon::parse($Carry->loan_issued_at)->day : false;
+        $insuranceDay = $Carry->insurance_issued_at ? Carbon::parse($Carry->insurance_issued_at)->day : false;
 
         $isLoanTomorrow = $loanDay == $tomorrow->day;
         $isInsuranceTomorrow = $insuranceDay == $tomorrow->day;
         $isLoanToday = $loanDay == $today->day;
         $isInsuranceToday = $insuranceDay == $today->day;
 
+        $Carry->is_loan = $isLoanToday;
+        $Carry->is_insurance = $isInsuranceToday;
+
         if ($isLoanTomorrow || $isInsuranceTomorrow) {
             $NotificationVehicles[] = $Carry;
-            $Carry->is_loan = $isLoanTomorrow;
-            $Carry->is_insurance = $isInsuranceTomorrow;
             $Existings[$Carry->id] = $Carry->Notifications->pluck('vars', 'text')->toArray();
         }
 

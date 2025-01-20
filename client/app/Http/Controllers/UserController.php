@@ -27,28 +27,20 @@ class UserController extends Controller
 
     public function patch_view($id)
     {
-        //$cacheKey = Core::addCache(User::class, 'company/' . Core::company('id') . '/users/' . $id, true);
-
-        //$data = Cache::rememberForever($cacheKey, function () use ($id) {
-        return User::findorfail($id);
-        //});
+        $data =  User::findorfail($id);
 
         return view('user.patch', compact('data'));
     }
 
     public function search_action(Request $Request)
     {
-        //  $cacheKey = Core::addCache(User::class, 'company/' . Core::company('id') . '/users/' . ($Request->search ? ('search/' . $Request->search) : 'list') . '/pages/' . ($Request->cursor ?: 'first'));
-
-        // $data = Cache::rememberForever($cacheKey, function () use ($Request) {
         $data = User::where('company', Core::company('id'))->orderBy('id', 'DESC');
 
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
 
-        return $data->cursorPaginate(50);
-        //   });
+        $data = $data->cursorPaginate(50);
 
         return response()->json($data);
     }

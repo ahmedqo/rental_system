@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Functions\Core;
 use App\Models\Restriction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 
@@ -23,6 +24,7 @@ class RestrictionController extends Controller
     public function patch_view($id)
     {
         $data = Restriction::findorfail($id);
+
         return view('restriction.patch', compact('data'));
     }
 
@@ -37,6 +39,7 @@ class RestrictionController extends Controller
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50);
+
         return response()->json($data);
     }
 

@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\Recovery;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -27,16 +28,23 @@ class ClientController extends Controller
 
     public function patch_view($id)
     {
+        //'company:' . Core::company('id') . '/clients:'  . md5($id)
+        // client
         $data = Client::findorfail($id);
+
         return view('client.patch', compact('data'));
     }
 
     public function scene_view($id)
     {
+        // 'company:' . Core::company('id') . '/clients:' . $id . '/scene
+        // client restriction
         $data = Client::with('Restriction')->findorfail($id);
 
         [$startDate, $endDate, $columns] = Core::getDates();
 
+        // 'company:' . Core::company('id') . '/clients:' . $id . '/data
+        // reservation preference
         $vals = Reservation::where('reservations.client', $id)
             ->whereBetween('reservations.created_at', [$startDate, $endDate])
             ->join('payments', 'reservations.id', '=', 'payments.reservation')
@@ -70,6 +78,8 @@ class ClientController extends Controller
             'creances' => array_slice($columns, 0, null, true),
         ];
 
+        // 'company:' . Core::company('id') . '/clients:' . $id . '/chart
+        // payment reservation preference
         Payment::with([
             "Reservation" => function ($Query) {
                 $Query->select('id', 'client');
@@ -114,6 +124,8 @@ class ClientController extends Controller
 
     public function search_action(Request $Request)
     {
+        //'company:' . Core::company('id') . '/clients' . ($Request->search ? ('/search:' . $Request->search) : ':all') . ('/cursor:' . $Request->cursor ?? md5('0000000001'))
+        // client resstriction
         $data = Client::with([
             'Restriction'  =>  function ($Query) {
                 $Query->select('client');
@@ -123,11 +135,14 @@ class ClientController extends Controller
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50);
+
         return response()->json($data);
     }
 
     public function search_all_action(Request $Request)
     {
+        //'clients' . ($Request->search ? ('/search:' . $Request->search) : ':all') . ('/cursor:' . $Request->cursor ?? md5('0000000001'))
+        // client resstriction
         $data = Client::with([
             'Restriction'  =>  function ($Query) {
                 $Query->select('client');
@@ -137,6 +152,7 @@ class ClientController extends Controller
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50);
+
         return response()->json($data);
     }
 
@@ -144,6 +160,8 @@ class ClientController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
+        // 'company:' . Core::company('id') . '/clients:' . $id . '/reservations/pending' . ($Request->search ? ('/search:' . $Request->search) : ':all') . ('/cursor:' . $Request->cursor ?? md5('0000000001'))
+        // reservation vehicle preference
         $data = Reservation::with([
             'Vehicle' =>  function ($Query) {
                 $Query->select('id', "brand", 'model', 'year', 'registration_number');
@@ -153,6 +171,7 @@ class ClientController extends Controller
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50);
+
         return response()->json($data);
     }
 
@@ -160,6 +179,8 @@ class ClientController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
+        // 'company:' . Core::company('id') . '/clients:' . $id . '/reservations' . ($Request->search ? ('/search:' . $Request->search) : ':all') . ('/cursor:' . $Request->cursor ?? md5('0000000001'))
+        // reservation vehicle preference
         $data = Reservation::with([
             'Vehicle' =>  function ($Query) {
                 $Query->select('id', "brand", 'model', 'year', 'registration_number');
@@ -169,6 +190,7 @@ class ClientController extends Controller
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50);
+
         return response()->json($data);
     }
 
@@ -176,6 +198,8 @@ class ClientController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
+        // 'company:' . Core::company('id') . '/clients:' . $id . '/payments/pending' . ($Request->search ? ('/search:' . $Request->search) : ':all') . ('/cursor:' . $Request->cursor ?? md5('0000000001'))
+        // payment reservation vehicle preference
         $data = Payment::with([
             'Reservation',
             'Reservation.Vehicle' =>  function ($Query) {
@@ -202,6 +226,8 @@ class ClientController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
+        // 'company:' . Core::company('id') . '/clients:' . $id . '/payments' . ($Request->search ? ('/search:' . $Request->search) : ':all') . ('/cursor:' . $Request->cursor ?? md5('0000000001'))
+        // payment reservation vehicle preference
         $data = Payment::with([
             'Reservation',
             'Reservation.Vehicle' =>  function ($Query) {
@@ -228,6 +254,8 @@ class ClientController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
+        // 'company:' . Core::company('id') . '/clients:' . $id . '/recoveries/pending' . ($Request->search ? ('/search:' . $Request->search) : ':all') . ('/cursor:' . $Request->cursor ?? md5('0000000001'))
+        // recovery reservation vehicle preference
         $data = Recovery::with([
             'Reservation',
             'Reservation.Vehicle' =>  function ($Query) {
@@ -254,6 +282,8 @@ class ClientController extends Controller
     {
         [$startDate, $endDate, $columns] = Core::getDates();
 
+        // 'company:' . Core::company('id') . '/clients:' . $id . '/recoveries' . ($Request->search ? ('/search:' . $Request->search) : ':all') . ('/cursor:' . $Request->cursor ?? md5('0000000001'))
+        // recovery reservation vehicle preference
         $data = Recovery::with([
             'Reservation',
             'Reservation.Vehicle' =>  function ($Query) {

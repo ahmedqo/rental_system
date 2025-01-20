@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Functions\Core;
+use App\Traits\HasCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Storage;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCache;
 
     /**
      * The attributes that are mass assignable.
@@ -38,9 +40,20 @@ class Company extends Model
             $Self->Image()->create();
         });
 
+        self::saved(function ($Self) {
+            Company::delCache(
+                tags: ['many'],
+                keys: ['companies_solo_' . $Self->id],
+            );
+        });
+
         self::deleted(function ($Self) {
             Storage::disk('public')->delete(implode('/', [Image::$STORAGE, $Self->Image->storage]));
             $Self->Image->delete();
+            Company::delCache(
+                tags: ['many'],
+                keys: ['companies_solo_' . $Self->id],
+            );
         });
     }
 

@@ -4,11 +4,8 @@
 @section('content')
     <div class="w-full items-start grid grid-rows-1 grid-cols-1 gap-1">
         <ul class="w-full flex flex-col gap-1">
-            @php
-                $notifications = Core::notifications();
-            @endphp
-            @if (count($notifications))
-                @foreach ($notifications as $single)
+            @if (count($data))
+                @foreach ($data as $single)
                     <li
                         class="rounded-x-thin text-x-black text-base font-x-thin shadow-x-core {{ $single->ring ? 'bg-x-prime bg-opacity-20' : 'bg-x-white ' }}">
                         {!! $single->content !!}

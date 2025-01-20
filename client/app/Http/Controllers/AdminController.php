@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Functions\Mail as Mailer;
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -25,16 +26,18 @@ class AdminController extends Controller
     public function patch_view($id)
     {
         $data = Admin::findorfail($id);
+
         return view('user.patch', compact('data'));
     }
 
     public function search_action(Request $Request)
     {
-        $data = Admin::orderBy('id', 'DESC');
+        $data =  Admin::orderBy('id', 'DESC');
         if ($Request->search) {
             $data = $data->search(urldecode($Request->search));
         }
         $data = $data->cursorPaginate(50);
+
         return response()->json($data);
     }
 

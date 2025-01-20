@@ -2,40 +2,61 @@
 
 namespace App\Traits;
 
-
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Str;
-use Exception;
 use Illuminate\Support\Facades\Cache;
 
 trait HasCache
 {
-    public static function addKeys($key)
+    protected static function addCache($key, $tag = '')
     {
-        if (!in_array($key, self::$cachableList)) self::$cachableList[] = $key;
-        return $key;
-    }
+        $Cache = json_decode(Cache::get('Cache'), true) ?? [];
+        $Cache[self::class] = $Cache[self::class] ?? [];
 
-    public static function addKey($key)
-    {
-        if (!in_array($key, self::$cachableSingle)) self::$cachableSingle[] = $key;
-        return $key;
-    }
-
-    public static function delKeys()
-    {
-        foreach (self::$cachableList as $key) {
-            Cache::forget($key);
+        if (array_search($key, array_column($Cache[self::class], 0)) === false) {
+            $Cache[self::class][] = [$key, $tag];
+            Cache::forget('Cache');
+            Cache::rememberForever('Cache', fn () => json_encode($Cache));
         }
 
-        self::$cachableList = [];
+        return $key;
     }
 
-    public static function delKey($key)
+    public static function delCache($keys = null, $tags = null)
     {
-        static::$cachableSingle = array_reduce(static::$cachableSingle, function ($carry, $item) use ($key) {
-            if ($item !== $key) $carry[] = $item;
-            return $carry;
-        }, []);
+        $Cache = json_decode(Cache::get('Cache'), true) ?? [];
+
+        if (!isset($Cache[self::class])) {
+            return;
+        }
+
+        if ($keys !== null) {
+            foreach ($keys as $key) {
+                $Cache[self::class] = array_filter(
+                    $Cache[self::class],
+                    fn ($item) => $item[0] !== $key
+                );
+                Cache::forget($key);
+            }
+        }
+
+        if ($tags !== null) {
+            foreach ($tags as $tag) {
+                $matchingKeys = array_map(
+                    fn ($item) => $item[0],
+                    array_filter($Cache[self::class], fn ($item) => $item[1] === $tag)
+                );
+
+                $Cache[self::class] = array_filter(
+                    $Cache[self::class],
+                    fn ($item) => $item[1] !== $tag
+                );
+
+                foreach ($matchingKeys as $key) {
+                    Cache::forget($key);
+                }
+            }
+        }
+
+        Cache::forget('Cache');
+        Cache::rememberForever('Cache', fn () => json_encode($Cache));
     }
 }

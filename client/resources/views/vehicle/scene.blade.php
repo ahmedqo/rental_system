@@ -124,7 +124,7 @@
                 <div
                     class="p-4 gap-4 lg:gap-10 flex flex-col flex-wrap items-center lg:flex-row relative bg-x-white rounded-x-thin shadow-x-core">
                     <div
-                        class="loader w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
+                        class="loader z-[1] w-full h-full rounded-x-thin bg-x-white absolute inset-0 flex items-center justify-center">
                         <neo-loader></neo-loader>
                     </div>
                     <svg class="block w-10 aspect-square pointer-events-none text-blue-500" fill="currentcolor"

@@ -13,6 +13,7 @@ use App\Models\Vehicle;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CoreController extends Controller
 {
@@ -49,7 +50,24 @@ class CoreController extends Controller
 
     public function notify_view()
     {
-        return view('core.notify');
+        $id = Auth::id();
+        $data = Notification::where('company', Core::company('id'))
+            ->orderBy('id', 'DESC')->get()->map(function ($Carry) use ($id) {
+                $Carry->content =  $Carry->Parse(Core::preference());
+                $Carry->ring = !str_contains($Carry->view, (string) $id);
+                return $Carry;
+            });
+
+        Notification::where('company', Core::company('id'))->where(function ($Query) use ($id) {
+            $Query->whereNull('view')
+                ->orWhereRaw('view NOT LIKE ?', ['%' . $id . '%']);
+        })->each(function ($Carry) {
+            $Carry->update([
+                'view' => $Carry->view ? $Carry->view . ',' . Auth::user()->id : (string) Auth::user()->id
+            ]);
+        });
+
+        return view('core.notify', compact('data'));
     }
 
     public function notify_action(Request $Request)

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Functions\Core;
+use App\Traits\HasCache;
 use App\Traits\HasSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -12,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasSearch;
+    use HasApiTokens, HasFactory, Notifiable, HasSearch, HasCache;
 
     /**
      * The attributes that are mass assignable.
@@ -59,10 +60,12 @@ class User extends Authenticatable
             }
         });
 
-        // self::saved(function ($Self) {
-        //     Core::delCache(User::class);
-        //     Core::delCache(User::class, 'company/' . Core::company('id') . '/users/' . $Self->id);
-        // });
+        self::saved(function ($Self) {
+            User::delCache(
+                tags: ['many'],
+                keys: ['company_' . Core::company('id') . '_users_solo_' . $Self->id],
+            );
+        });
 
         self::created(function ($Self) {
             $Self->Preference()->create([
@@ -76,8 +79,10 @@ class User extends Authenticatable
 
         self::deleted(function ($Self) {
             $Self->Preference()->delete();
-            // Core::delCache(User::class);
-            // Core::delCache(User::class, 'company/' . Core::company('id') . '/users/' . $Self->id);
+            User::delCache(
+                tags: ['many'],
+                keys: ['company_' . Core::company('id') . '_users_solo_' . $Self->id],
+            );
         });
     }
 

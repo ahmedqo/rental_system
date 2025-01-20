@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCache;
 
     protected $fillable = [
         'ticket',

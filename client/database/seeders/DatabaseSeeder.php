@@ -14,6 +14,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // $arr = [];
+        // for ($i = 0; $i < 100; $i++) {
+        //     $arr[] = [
+        //         'registration_type' => 'WW',
+        //         'registration_number' => 'WW-12345',
+        //         'brand' => 'smart',
+        //         'model' => 'cabrio',
+        //         'year' => '2010',
+        //         'daily_rate' => 350,
+
+        //         'passenger_capacity' => 4,
+        //         'mileage' => 10500,
+        //         'number_of_doors' => 5,
+        //         'cargo_capacity' => 4,
+        //         'transmission_type' => 'manual',
+        //         'fuel_type' => 'diesel',
+
+        //         'registration_date' => now(),
+        //         'horsepower' => 'less than 8 cv',
+        //         'horsepower_tax' => 700,
+        //         'insurance_company' => 'allianz morocco',
+        //         'insurance_issued_at' => now(),
+        //         'insurance_cost' => 5000,
+
+        //         'company' => 1,
+        //     ];
+        // }
+
+        // Vehicle::insert($arr);
+
         if (!Company::where('email', 'admin@test.com')->orWhere('name', 'my company')->limit(1)->first()) {
             $Company = Company::create([
                 'name' => 'my company',

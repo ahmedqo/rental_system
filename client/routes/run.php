@@ -29,8 +29,8 @@ Route::get('/clean/{password}', function ($password) {
     return 'done';
 });
 
-Route::get('/notification-update', function () {
+Route::get('/notifications-update', function () {
     Log::info("update:notification at " . now());
-    Artisan::call('notification:update');
+    Artisan::call('notifications:update');
     return 'done';
 });

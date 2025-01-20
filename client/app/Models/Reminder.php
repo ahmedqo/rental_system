@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Functions\Core;
+use App\Traits\HasCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasSearch;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Reminder extends Model
 {
-    use HasFactory, HasSearch;
+    use HasFactory, HasSearch, HasCache;
 
     /**
      * The attributes that are mass assignable.
@@ -52,8 +53,19 @@ class Reminder extends Model
             }
         });
 
+        self::saved(function ($Self) {
+            Reminder::delCache(
+                tags: ['many'],
+                keys: ['company_' . Core::company('id') . '_reminders_solo_' . $Self->id],
+            );
+        });
+
         self::deleted(function ($Self) {
             $Self->Notifications()->delete();
+            Reminder::delCache(
+                tags: ['many'],
+                keys: ['company_' . Core::company('id') . '_reminders_solo_' . $Self->id],
+            );
         });
     }
 

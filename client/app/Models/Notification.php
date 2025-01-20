@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Functions\Core;
+use App\Traits\HasCache;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Notification extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCache;
 
     protected $fillable = [
         'company',

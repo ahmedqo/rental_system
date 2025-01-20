@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Functions\Core;
+use App\Traits\HasCache;
 use App\Traits\HasSearch;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Reservation extends Model
 {
-    use HasFactory, HasSearch;
+    use HasFactory, HasSearch, HasCache;
 
     /**
      * The attributes that are mass assignable.
@@ -81,8 +82,23 @@ class Reservation extends Model
             }
         });
 
+        self::saved(function ($Self) {
+            Reservation::delCache(
+                tags: ['many'],
+                keys: [
+                    'company_' . Core::company('id') . '_reservations_solo_' . $Self->id,
+                ],
+            );
+        });
+
         self::deleted(function ($Self) {
             $Self->Notifications()->delete();
+            Reservation::delCache(
+                tags: ['many'],
+                keys: [
+                    'company_' . Core::company('id') . '_reservations_solo_' . $Self->id,
+                ],
+            );
         });
     }
 
