@@ -177,11 +177,12 @@ Artisan::command('notifications:update-daily', function () {
         $isLoanToday = $loanDay == $today->day;
         $isInsuranceToday = $insuranceDay == $today->day;
 
-        $Carry->is_loan = $isLoanToday;
-        $Carry->is_insurance = $isInsuranceToday;
-
         if ($isLoanTomorrow || $isInsuranceTomorrow) {
-            $NotificationVehicles[] = $Carry;
+            $NotificationVehicles[] = (object) [
+                'Vehicle' => $Carry,
+                'loan' => $isLoanTomorrow,
+                'insurance' => $isInsuranceTomorrow
+            ];
             $Existings[$Carry->id] = $Carry->Notifications->pluck('vars', 'text')->toArray();
         }
 
@@ -217,30 +218,31 @@ Artisan::command('notifications:update-daily', function () {
     }
 
     foreach ($NotificationVehicles as $Carry) {
+        [$Vehicle, $loan, $insurance] = $Carry;
         $base = [
             'target_type' => 'App\Models\Vehicle',
-            'target_id' => $Carry->id,
-            'company' => $Carry->company,
+            'target_id' => $Vehicle->id,
+            'company' => $Vehicle->company,
             'created_at' => $today,
             'updated_at' => $today,
         ];
 
         $basevars = [
-            'vehicle' => [$Carry->brand, $Carry->model, $Carry->year, '(' . strtoupper($Carry->registration_number) . ')'],
+            'vehicle' => [$Vehicle->brand, $Vehicle->model, $Vehicle->year, '(' . strtoupper($Vehicle->registration_number) . ')'],
             'date' => $tomorrow,
         ];
 
-        if ($Carry->is_loan) {
+        if ($loan) {
             $notificationText = $template['loan'];
             $notificationVars = array_merge($basevars, [
-                'money' => Core::formatNumber($Carry->monthly_installment),
+                'money' => Core::formatNumber($Vehicle->monthly_installment),
             ]);
 
             $notificationVarsJson = json_encode($notificationVars);
 
             if (
-                array_key_exists($notificationText, $Existings[$Carry->id]) &&
-                $Existings[$Carry->id][$notificationText] === $notificationVarsJson
+                array_key_exists($notificationText, $Existings[$Vehicle->id]) &&
+                $Existings[$Vehicle->id][$notificationText] === $notificationVarsJson
             ) {
                 continue;
             }
@@ -251,17 +253,17 @@ Artisan::command('notifications:update-daily', function () {
             ]);
         }
 
-        if ($Carry->is_insurance) {
+        if ($insurance) {
             $notificationText = $template['insurance'];
             $notificationVars = array_merge($basevars, [
-                'money' => Core::formatNumber($Carry->insurance_cost),
+                'money' => Core::formatNumber($Vehicle->insurance_cost),
             ]);
 
             $notificationVarsJson = json_encode($notificationVars);
 
             if (
-                array_key_exists($notificationText, $Existings[$Carry->id]) &&
-                $Existings[$Carry->id][$notificationText] === $notificationVarsJson
+                array_key_exists($notificationText, $Existings[$Vehicle->id]) &&
+                $Existings[$Vehicle->id][$notificationText] === $notificationVarsJson
             ) {
                 continue;
             }
@@ -296,7 +298,6 @@ Artisan::command('notifications:update-daily', function () {
         $data['paid_amount'] = $data['paid_period'] * $data['monthly_installment'];
         $data['due_amount'] = max(0, $data['due_period']) * $data['monthly_installment'];
 
-        unset($Carry->is_loan, $Carry->is_insurance);
         $Carry->update($data);
     }
 })->purpose('update notifications each day');
