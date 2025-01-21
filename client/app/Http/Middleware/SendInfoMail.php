@@ -23,9 +23,7 @@ class SendInfoMail
 
         if (Cache::get($cacheKey) !== $today) {
             Cache::put($cacheKey, $today, now()->endOfDay());
-            Artisan::call("notify:send", [
-                'path' => $request->path()
-            ]);
+            Artisan::call("notify:send");
         }
 
         return $next($request);

